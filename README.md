@@ -1,2 +1,2 @@
 # icis
-Icis App Development
+Icis com.icis.demo.App Development
