@@ -10,7 +10,6 @@ public class OfferController {
     public HttpResponse hndPostOffer(){
         return null;
     }
-
     public HttpResponse hndDeleteOffer(){
         return null;
     }
