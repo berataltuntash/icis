@@ -29,9 +29,13 @@ public class OfferService {
         return null;
     }
     public boolean isOfferValid(Offer offer){
-        return false;
+        if (offer.getExpirationDate().before(new Date())) {
+            return false;
+        }
+        return true;
     }
     public void deleteofferById(int id){
+        offerDAO.deleteById(id);
     }
     public boolean processOfferFromCompany(String description, Date expireDate){
         Offer offer = new Offer();

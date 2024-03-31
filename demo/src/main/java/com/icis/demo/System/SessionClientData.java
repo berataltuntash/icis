@@ -1,10 +1,11 @@
 package com.icis.demo.System;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableCaching
+@Cacheable("session")
 public class SessionClientData {
 
     private String userId;
