@@ -2,6 +2,8 @@ package com.icis.demo.Utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icis.demo.Entity.DocumentFillable;
+import com.icis.demo.Entity.DocumentStorable;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -24,7 +26,16 @@ public class DocumentUtil {
         }
     }
 
-    public void createDocument(){
-
+    public DocumentFillable createDocumentFillable(String type){
+        switch (type){
+            case "applicationletter":
+                return new DocumentFillable();
+            case "survey":
+                return new DocumentFillable();
+            case "companyform":
+                return new DocumentFillable();
+            default:
+                return new DocumentFillable();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.icis.demo.Service;
 
 import com.icis.demo.DAO.StudentDAO;
+import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.Student;
 import com.icis.demo.Utils.EncryptionUtil;
 import com.icis.demo.Utils.JWTUtil;
@@ -95,5 +96,54 @@ public class AuthorizationService {
         }
 
         return false;
+    }
+
+    // This method is for signing up a new company
+    public boolean isAuthorized(String name, String email, String password, String password2) {
+        if (name == null ||email == null || password == null || password2 == null) {
+            return false;
+        }
+
+        if(!password.equals(password2)){
+            return false;
+        }
+
+        String token = JWTUtil.createJWTToken(name);
+        String encryptedPassword = null;
+        try{
+            encryptedPassword = EncryptionUtil.encryptPassword(password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        System.setProperty("LOGGED_IN_USER_ID", name);
+        System.setProperty("LOGGED_IN_USER_ROLE", "student");
+
+        userService.getUser(name, email, encryptedPassword);
+        return true;
+
+    }
+
+    // This method is for logging in a company
+    public boolean isAuthorized (String email, String password) {
+
+        if (password == null) {
+            return false;
+        }
+
+        String token = JWTUtil.createJWTToken(email);
+        Company company = userService.getUser(email, password);
+        try{
+            if(company.getPassword() == EncryptionUtil.encryptPassword(password)){
+                System.setProperty("LOGGED_IN_USER_ID", email);
+                System.setProperty("LOGGED_IN_USER_ROLE", "student");
+                return true;
+            }
+            else {
+                return false;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -45,8 +45,38 @@ public class SessionController {
         }
     }
 
+    @PostMapping("/signupcompany")
+    public HttpStatus hndSignUp(@RequestParam String name,
+                                @RequestParam String email,
+                                @RequestParam String password,
+                                @RequestParam String password2){
+        boolean success = authorizationService.isAuthorized(name,email,password, password2);
+        System.out.println("Log in success: " + success);
+        if (success) {
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+
+    @PostMapping("/logincompany")
+    public HttpStatus hndLogin(@RequestParam String email,
+                               @RequestParam String password) {
+
+        boolean success = authorizationService.isAuthorized(email, password);
+        System.out.println("Log in success: " + success);
+        if (success) {
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
+
+
+    @PostMapping("/logout")
     public HttpStatus hndLogout() {
-        return null;
+        authorizationService.removeSession();
+        return HttpStatus.OK;
     }
 
 }

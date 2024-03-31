@@ -18,14 +18,20 @@ public class Company {
     private String location;
     @Column(name = "status")
     private String status;
+    @Column(name = "email")
+    private String email;
     @Column(name = "date")
     private Date date;
+    @Column(name = "password")
+    private String password;
 
-    public Company(String companyName, String location, List<Offer> offers, String status, Date date) {
+    public Company(String companyName, String location, List<Offer> offers, String status, Date date, String email, String password) {
         this.companyName = companyName;
         this.location = location;
         this.status = status;
         this.date = date;
+        this.email = email;
+        this.password = password;
     }
 
     public Company() {
@@ -69,5 +75,21 @@ public class Company {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

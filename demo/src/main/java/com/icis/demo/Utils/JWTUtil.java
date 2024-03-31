@@ -1,5 +1,6 @@
 package com.icis.demo.Utils;
 
+import com.icis.demo.System.SessionClientData;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,6 +28,8 @@ public class JWTUtil {
                 .setExpiration(new Date(currentTime + 1000*60*60*24)) // Token expires in 24 hours
                 .signWith(secretKey)
                 .compact();
+
+        SessionClientData sessionClientData = new SessionClientData(username, "Windows", "1.0", token);
 
         System.setProperty("JWT_TOKEN", token);
         return token;

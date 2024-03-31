@@ -22,12 +22,15 @@ public class Offer {
     private Date shareDate;
     @Column(name = "expiration_date")
     private Date expirationDate;
+    @Column(name = "description")
+    private String description;
 
-    public Offer(String status, int companyId,  Date shareDate, Date expirationDate) {
+    public Offer(String status, int companyId,  Date shareDate, Date expirationDate, String description) {
         this.status = status;
         this.companyId = companyId;
         this.shareDate = shareDate;
         this.expirationDate = expirationDate;
+        this.description = description;
     }
 
     public Offer() {
@@ -71,5 +74,13 @@ public class Offer {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

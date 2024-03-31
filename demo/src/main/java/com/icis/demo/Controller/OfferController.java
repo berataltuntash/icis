@@ -5,13 +5,10 @@ import com.icis.demo.Service.OfferService;
 import com.icis.demo.Utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,11 +16,12 @@ import java.util.List;
 public class OfferController {
     private JWTUtil JWTUtil;
     private OfferService offerService;
-    @Value("${jwt.token}")
+
+    @Value("${JWT_TOKEN}")
     private String secretKey;
-    @Value("${logged.in.user.id }")
+    @Value("${LOGGED_IN_USER_ID}")
     private String userId;
-    @Value("${logged.in.user.role}")
+    @Value("${LOGGED_IN_USER_ROLE}")
     private String role;
 
     public OfferController(JWTUtil JWTUtil, OfferService offerService) {
@@ -31,8 +29,16 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    public HttpResponse hndPostOffer(){
-        return null;
+    @PostMapping("/postoffer")
+    public HttpStatus hndPostOffer(@RequestParam String description,
+                                   @RequestParam Date expireDate) {
+        boolean result = JWTUtil.validateJWTToken(secretKey, userId);
+        if (result) {
+            offerService.processOfferFromCompany(description, expireDate);
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
     public HttpResponse hndDeleteOffer(){
         return null;
@@ -43,15 +49,27 @@ public class OfferController {
         if (role.equals("student")) {
             boolean result = JWTUtil.validateJWTToken(secretKey, userId);
             List<Offer> offerList = offerService.getListOfFilteredOffers();
-
+            if (result) {
+                return HttpStatus.OK;
+            } else {
+                return HttpStatus.BAD_REQUEST;
+            }
         }
-        return null;
+        return HttpStatus.BAD_REQUEST;
     }
     public HttpResponse hndShowOfferDetails(){
         return null;
     }
-    public HttpResponse hndApplyOffer() {
-        return null;
+    @PostMapping("/applyofferstudent")
+    public HttpStatus hndApplyOffer(@RequestParam String companyEmail,
+                                    @RequestParam String type) {
+        boolean result = JWTUtil.validateJWTToken(secretKey, userId);
+        if (result) {
+            offerService.processStudentDocuments(companyEmail, type);
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
     public HttpResponse hndApproveOffer(){
         return null;
@@ -62,4 +80,5 @@ public class OfferController {
     public HttpResponse hndDisapproveOffer() {
         return null;
     }
+
 }

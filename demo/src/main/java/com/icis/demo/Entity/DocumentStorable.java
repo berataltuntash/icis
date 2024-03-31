@@ -1,11 +1,10 @@
 package com.icis.demo.Entity;
 
 import jakarta.persistence.*;
-import org.springframework.stereotype.Repository;
 
 @Entity
-@Table(name = "document")
-public class Document {
+@Table(name = "documentStorable")
+public class DocumentStorable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,13 +17,13 @@ public class Document {
     @Column(name = "data")
     private String data;
 
-    public Document(int applicationId, String name, String data) {
+    public DocumentStorable(int applicationId, String name, String data) {
         this.applicationId = applicationId;
         this.name = name;
         this.data = data;
     }
 
-    public Document() {
+    public DocumentStorable() {
     }
 
     public int getId() {
