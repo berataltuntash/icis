@@ -10,15 +10,15 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "application_id")
+    @JoinColumn(name = "application_id")
     @ManyToOne(targetEntity = Application.class)
     private int applicationId;
     @Column(name = "name")
     private String name;
     @Column(name = "data")
-    private Data data;
+    private String data;
 
-    public Document(int applicationId, String name, Data data) {
+    public Document(int applicationId, String name, String data) {
         this.applicationId = applicationId;
         this.name = name;
         this.data = data;
@@ -51,11 +51,11 @@ public class Document {
         this.name = name;
     }
 
-    public Data getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

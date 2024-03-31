@@ -23,14 +23,17 @@ public class Student {
     private Date lastAccessTime;
     @Column(name = "grade")
     private int grade;
+    @Column(name = "email")
+    private String email;
 
-    public Student(int departmentId, String name, String surname, String password, Date lastAccessTime, int grade) {
+    public Student(int departmentId, String name, String surname, String password, Date lastAccessTime, int grade, String email) {
         this.departmentId = departmentId;
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.lastAccessTime = lastAccessTime;
         this.grade = grade;
+        this.email = email;
     }
 
     public Student() {
@@ -90,5 +93,13 @@ public class Student {
 
     public void setGrade(int grade) {
         this.grade = grade;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

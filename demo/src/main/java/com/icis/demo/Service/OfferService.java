@@ -1,5 +1,6 @@
 package com.icis.demo.Service;
 
+import com.icis.demo.DAO.OfferDAO;
 import com.icis.demo.Entity.Document;
 import com.icis.demo.Entity.Offer;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,12 @@ import java.util.List;
 
 @Service
 public class OfferService {
+
+    OfferDAO offerDAO;
+
+    public OfferService(OfferDAO offerDAO){
+        this.offerDAO = offerDAO;
+    }
     public List<Offer> getListOfFilteredOffers(){
         return null;
     }

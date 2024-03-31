@@ -1,10 +1,13 @@
 package com.icis.demo.Controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.http.HttpResponse;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class ProfileController {
 
     public HttpResponse hndUploadDocument(){
@@ -26,3 +29,4 @@ public class ProfileController {
         return null;
     }
 }
+

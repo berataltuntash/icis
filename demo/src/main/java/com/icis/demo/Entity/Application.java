@@ -11,10 +11,10 @@ public class Application {
     private int id;
     @Column(name = "status")
     private String status;
-    @Column(name = "offer")
+    @JoinColumn(name = "offer")
     @ManyToOne(targetEntity = Offer.class)
     private int offer;
-    @Column(name = "student_id")
+    @JoinColumn(name = "student_id")
     @ManyToOne(targetEntity = Student.class)
     private int studentId;
 

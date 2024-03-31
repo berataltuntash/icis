@@ -1,16 +1,19 @@
 package com.icis.demo.Utils;
 
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+@Component
 public class EncryptionUtil {
     private static final String ALGORITHM = "AES";
     private static final int KEY_SIZE = 128;
 
-    public String encrypt(String text) throws Exception {
+    public static String encryptPassword(String text) throws Exception {
         String key = generateKey();
         byte[] decodedKey = Base64.getDecoder().decode(key);
 

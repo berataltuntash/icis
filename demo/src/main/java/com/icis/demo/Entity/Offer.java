@@ -15,7 +15,7 @@ public class Offer {
     private int id;
     @Column(name = "status")
     private String status;
-    @Column(name = "company_id")
+    @JoinColumn(name = "company_id")
     @ManyToOne(targetEntity = Company.class)
     private int companyId;
     @Column(name = "share_date")
