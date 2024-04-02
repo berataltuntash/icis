@@ -70,13 +70,19 @@ public class UserService {
         return student;
     }
 
-    public void getUser(String name, String email, String encryptedPassword) {
+    public void createCompanyUser(String name, String email, String encryptedPassword, String jwtToken) {
         Company company = new Company();
         company.setCompanyName(name);
         company.setEmail(email);
         company.setStatus("pending");
         company.setPassword(encryptedPassword);
         companyDAO.save(company);
+
+        OnlineUser onlineUser = new OnlineUser();
+        onlineUser.setEmail(email);
+        onlineUser.setJwtToken(jwtToken);
+        onlineUser.setUsername(name);
+        onlineUserDAO.save(onlineUser);
     }
 
     public Company getUser(String email, String password){

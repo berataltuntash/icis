@@ -1,7 +1,5 @@
 package com.icis.demo.Utils;
 
-import com.icis.demo.System.SessionClientData;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
