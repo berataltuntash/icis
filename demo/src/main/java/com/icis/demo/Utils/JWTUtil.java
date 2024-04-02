@@ -29,9 +29,6 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
 
-        SessionClientData sessionClientData = new SessionClientData(username, "Windows", "1.0", token);
-
-        System.setProperty("JWT_TOKEN", token);
         return token;
     }
 

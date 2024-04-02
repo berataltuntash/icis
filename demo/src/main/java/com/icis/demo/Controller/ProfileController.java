@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.http.HttpResponse;
@@ -14,11 +15,9 @@ import java.net.http.HttpResponse;
 @RequestMapping("/api")
 public class ProfileController {
     private UserService userService;
-
     public ProfileController(UserService userService) {
         this.userService = userService;
     }
-
     public HttpResponse hndUploadDocument(){
         return null;
     }
@@ -32,13 +31,9 @@ public class ProfileController {
     }
 
     @PostMapping("/approvecompany")
-    public HttpStatus hndApproveCompany(){
-        userService.processCompanyRequest(true);
-        return HttpStatus.OK;
-    }
-    public HttpStatus hndDisapproveCompany(){
-        userService.processCompanyRequest(false);
-        return HttpStatus.OK;
+    public HttpResponse hndApproveCompany(@RequestParam boolean approve){
+        userService.processCompanyRequest(approve, "company");
+        return null;
     }
 }
 

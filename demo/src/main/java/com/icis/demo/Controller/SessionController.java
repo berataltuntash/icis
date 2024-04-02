@@ -1,8 +1,9 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Service.AuthorizationService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
@@ -17,66 +18,54 @@ public class SessionController {
     }
 
     @PostMapping("/signupstudent")
-    public HttpStatus hndSignUp(@RequestParam("name") String name,
-                                @RequestParam("surname") String surname,
-                                @RequestParam("email") String email,
-                                @RequestParam("studentNumber") int studentNumber,
-                                @RequestParam("password") String password,
-                                @RequestParam("password2") String password2){
-        boolean success = authorizationService.isAuthorized(name, surname,email, studentNumber, password, password2);
-        System.out.println("Sign up success: " + success);
+    public ResponseEntity<?> hndSignUp(@RequestParam("name") String name,
+                                    @RequestParam("surname") String surname,
+                                    @RequestParam("email") String email,
+                                    @RequestParam("studentNumber") int studentNumber,
+                                    @RequestParam("password") String password,
+                                    HttpServletResponse response) {
+
+        boolean success = authorizationService.isAuthorizedSignUpStudent(name, surname,email, studentNumber, password, response);
+
         if (success) {
-            return HttpStatus.OK;
+            return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful.");
         } else {
-            return HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
         }
     }
 
     @PostMapping("/loginstudent")
-    public HttpStatus hndLogin(@RequestParam("id") int id,
-                               @RequestParam("password") String password) {
+    public HttpResponse hndLogin(@RequestParam("id") int id,
+                                 @RequestParam("email") String email,
+                                 @RequestParam("password") String password,
+                                 HttpServletResponse response) {
 
-        boolean success = authorizationService.isAuthorized(id, password);
-        System.out.println("Log in success: " + success);
-        if (success) {
-            return HttpStatus.OK;
-        } else {
-            return HttpStatus.BAD_REQUEST;
-        }
+        boolean success = authorizationService.isAuthorizedLoginStudent(id, email, password,response);
+        return null;
     }
 
     @PostMapping("/signupcompany")
-    public HttpStatus hndSignUp(@RequestParam String name,
-                                @RequestParam String email,
-                                @RequestParam String password,
-                                @RequestParam String password2){
+    public HttpResponse hndSignUp(@RequestParam String name,
+                                  @RequestParam String email,
+                                  @RequestParam String password,
+                                  @RequestParam String password2){
         boolean success = authorizationService.isAuthorized(name,email,password, password2);
-        System.out.println("Log in success: " + success);
-        if (success) {
-            return HttpStatus.OK;
-        } else {
-            return HttpStatus.BAD_REQUEST;
-        }
+        return null;
     }
 
     @PostMapping("/logincompany")
-    public HttpStatus hndLogin(@RequestParam String email,
-                               @RequestParam String password) {
+    public HttpResponse hndLogin(@RequestParam String email,
+                                 @RequestParam String password) {
 
         boolean success = authorizationService.isAuthorized(email, password);
-        System.out.println("Log in success: " + success);
-        if (success) {
-            return HttpStatus.OK;
-        } else {
-            return HttpStatus.BAD_REQUEST;
-        }
+        return null;
     }
 
 
     @PostMapping("/logout")
-    public HttpStatus hndLogout() {
+    public HttpResponse hndLogout() {
         authorizationService.removeSession();
-        return HttpStatus.OK;
+        return null;
     }
 
 }

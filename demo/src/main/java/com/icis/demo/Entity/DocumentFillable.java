@@ -2,8 +2,6 @@ package com.icis.demo.Entity;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "documentFillable")
 public class DocumentFillable {
     @Column(name = "name")
     private String name;

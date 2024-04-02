@@ -1,6 +1,7 @@
 package com.icis.demo.Service;
 
 import com.icis.demo.DAO.CompanyDAO;
+import com.icis.demo.DAO.OnlineUserDAO;
 import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.*;
 import com.icis.demo.Utils.DocumentUtil;
@@ -10,13 +11,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private StudentDAO studentDAO;
     private CompanyDAO companyDAO;
-
     private DocumentUtil documentUtil;
+    private OnlineUserDAO onlineUserDAO;
 
-    public UserService(StudentDAO studentDAO, DocumentUtil documentUtil, CompanyDAO companyDAO) {
+    public UserService(StudentDAO studentDAO, DocumentUtil documentUtil, CompanyDAO companyDAO, OnlineUserDAO onlineUserDAO) {
         this.studentDAO = studentDAO;
         this.documentUtil = documentUtil;
         this.companyDAO = companyDAO;
+        this.onlineUserDAO = onlineUserDAO;
     }
 
     public boolean isUserEligible(int id){
@@ -44,7 +46,7 @@ public class UserService {
         return documentFillable;
     }
 
-    public void getUser(String name,String surname,String email, int studentNumber, String password){
+    public void createStudentUser(String name,String surname,String email, int studentNumber, String password, String jwtToken){
         Student student = new Student();
         student.setName(name);
         student.setSurname(surname);
@@ -52,9 +54,15 @@ public class UserService {
         student.setId(studentNumber);
         student.setPassword(password);
         studentDAO.save(student);
+
+        OnlineUser onlineUser = new OnlineUser();
+        onlineUser.setEmail(email);
+        onlineUser.setJwtToken(jwtToken);
+        onlineUser.setUsername(name);
+        onlineUserDAO.save(onlineUser);
     }
 
-    public Student getUser(int id, String password){
+    public Student getStudentUser(int id, String password){
         Student student = studentDAO.findById(id).orElse(null);
         if(student==null){
             return new Student();
@@ -89,7 +97,10 @@ public class UserService {
             company.setStatus("rejected");
             companyDAO.delete(company);
         }
+    }
 
+    public OnlineUser getOnlineUser(String email){
+        return onlineUserDAO.findOnlineUserByEmail(email);
     }
 
 }

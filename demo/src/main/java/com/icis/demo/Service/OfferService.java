@@ -17,9 +17,6 @@ public class OfferService {
     UserService userService;
     MailUtil mailUtil;
 
-    @Value("${LOGGED_IN_USER_ID}")
-    private String userId;
-
     public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil) {
         this.offerDAO = offerDAO;
         this.userService = userService;

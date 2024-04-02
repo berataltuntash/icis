@@ -2,10 +2,13 @@ package com.icis.demo.Service;
 
 import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.Company;
+import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Entity.Student;
 import com.icis.demo.Utils.EncryptionUtil;
 import com.icis.demo.Utils.JWTUtil;
 import com.icis.demo.Utils.OBSUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,25 +36,19 @@ public class AuthorizationService {
 
     }
 
-    // This method is for signing up a new student
-    public boolean isAuthorized(String name,String surname,String email,
-                                int studentNumber,String password, String password2) {
-
-        if (name == null || surname == null || email == null || password == null || password2 == null) {
-            return false;
-        }
-
-        if(!password.equals(password2)){
-            return false;
-        }
-
-        if(studentNumber<99999999 || studentNumber>1000000000){
-            return false;
-        }
+    public boolean isAuthorizedSignUpStudent(String name,String surname,String email, int studentNumber,
+                                             String password,HttpServletResponse response) {
 
         if(OBSUtil.isRealStudent(name,surname, email, studentNumber)){
-            String idStr = Integer.toString(studentNumber);
-            String token = JWTUtil.createJWTToken(idStr);
+            String jwtToken = JWTUtil.createJWTToken(email);
+            Cookie jwtCookie = new Cookie("jwt", jwtToken);
+            Cookie emailCookie = new Cookie("email", email);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
+            response.addCookie(emailCookie);
+
             String encryptedPassword = null;
             try{
                 encryptedPassword = EncryptionUtil.encryptPassword(password);
@@ -59,32 +56,32 @@ public class AuthorizationService {
                 throw new RuntimeException(e);
             }
 
-            System.setProperty("LOGGED_IN_USER_ID", idStr);
-            System.setProperty("LOGGED_IN_USER_ROLE", "student");
+            userService.createStudentUser(name,surname, email,studentNumber, encryptedPassword,jwtToken);
 
-            userService.getUser(name,surname, email,studentNumber, encryptedPassword);
             return true;
         }
         return false;
     }
 
-    // This method is for logging in a student
-    public boolean isAuthorized (int id, String password) {
-
-        if (password == null) {
-            return false;
-        }
-
+    public boolean isAuthorizedLoginStudent (int id,String email, String password,
+                                             HttpServletResponse response) {
         boolean result = userService.isUserEligible(id);
 
         if (result) {
-            String idStr = Integer.toString(id);
-            String token = JWTUtil.createJWTToken(idStr);
-            Student student = userService.getUser(id, password);
+            String jwtToken = JWTUtil.createJWTToken(email);
+            Cookie jwtCookie = new Cookie("jwt", jwtToken);
+            Cookie emailCookie = new Cookie("email", email);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
+            response.addCookie(emailCookie);
+
+            Student student = userService.getStudentUser(id, password);
+            OnlineUser onlineUser = userService.getOnlineUser(email);
+
             try{
                 if(student.getPassword() == EncryptionUtil.encryptPassword(password)){
-                    System.setProperty("LOGGED_IN_USER_ID", idStr);
-                    System.setProperty("LOGGED_IN_USER_ROLE", "student");
                     return true;
                 }
                 else {
@@ -100,14 +97,6 @@ public class AuthorizationService {
 
     // This method is for signing up a new company
     public boolean isAuthorized(String name, String email, String password, String password2) {
-        if (name == null ||email == null || password == null || password2 == null) {
-            return false;
-        }
-
-        if(!password.equals(password2)){
-            return false;
-        }
-
         String token = JWTUtil.createJWTToken(name);
         String encryptedPassword = null;
         try{
@@ -116,9 +105,6 @@ public class AuthorizationService {
             throw new RuntimeException(e);
         }
 
-        System.setProperty("LOGGED_IN_USER_ID", name);
-        System.setProperty("LOGGED_IN_USER_ROLE", "student");
-
         userService.getUser(name, email, encryptedPassword);
         return true;
 
@@ -126,17 +112,10 @@ public class AuthorizationService {
 
     // This method is for logging in a company
     public boolean isAuthorized (String email, String password) {
-
-        if (password == null) {
-            return false;
-        }
-
         String token = JWTUtil.createJWTToken(email);
         Company company = userService.getUser(email, password);
         try{
             if(company.getPassword() == EncryptionUtil.encryptPassword(password)){
-                System.setProperty("LOGGED_IN_USER_ID", email);
-                System.setProperty("LOGGED_IN_USER_ROLE", "student");
                 return true;
             }
             else {

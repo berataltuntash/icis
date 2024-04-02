@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Cacheable("session")
 public class SessionClientData {
-
     private String userId;
     private String os;
     private String uiVersion;
