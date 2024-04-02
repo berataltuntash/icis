@@ -1,10 +1,13 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Service.AuthorizationService;
+import com.icis.demo.System.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.icis.demo.System.AuthenticationResponse;
 
 import java.net.http.HttpResponse;
 
@@ -25,23 +28,32 @@ public class SessionController {
                                     @RequestParam("password") String password,
                                     HttpServletResponse response) {
 
-        boolean success = authorizationService.isAuthorizedSignUpStudent(name, surname,email, studentNumber, password, response);
+        AuthenticationResponse result = authorizationService.isAuthorizedSignUpStudent(name, surname,email, studentNumber, password, response);
 
-        if (success) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful.");
+        HttpHeaders headers = new HttpHeaders();
+        if (result.isSuccess()) {
+            headers.add("Set-Cookie", "jwt=" + result.getJwtToken() + "; Path=/; HttpOnly; Secure");
+            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
         }
     }
 
     @PostMapping("/loginstudent")
-    public HttpResponse hndLogin(@RequestParam("id") int id,
-                                 @RequestParam("email") String email,
-                                 @RequestParam("password") String password,
-                                 HttpServletResponse response) {
+    public ResponseEntity<?> hndLogin(@RequestParam("id") int id,
+                                      @RequestParam("email") String email,
+                                      @RequestParam("password") String password,
+                                      HttpServletResponse response) {
 
-        boolean success = authorizationService.isAuthorizedLoginStudent(id, email, password,response);
-        return null;
+        AuthenticationResponse result = authorizationService.isAuthorizedLoginStudent(id, email, password,response);
+
+        HttpHeaders headers = new HttpHeaders();
+        if (result.isSuccess()) {
+            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
+            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
+        }
     }
 
     @PostMapping("/signupcompany")

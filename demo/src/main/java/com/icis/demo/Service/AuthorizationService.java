@@ -4,6 +4,7 @@ import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Entity.Student;
+import com.icis.demo.System.AuthenticationResponse;
 import com.icis.demo.Utils.EncryptionUtil;
 import com.icis.demo.Utils.JWTUtil;
 import com.icis.demo.Utils.OBSUtil;
@@ -36,9 +37,10 @@ public class AuthorizationService {
 
     }
 
-    public boolean isAuthorizedSignUpStudent(String name,String surname,String email, int studentNumber,
+    public AuthenticationResponse isAuthorizedSignUpStudent(String name,String surname,String email, int studentNumber,
                                              String password,HttpServletResponse response) {
 
+        AuthenticationResponse authResponse = new AuthenticationResponse();
         if(OBSUtil.isRealStudent(name,surname, email, studentNumber)){
             String jwtToken = JWTUtil.createJWTToken(email);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
@@ -57,15 +59,24 @@ public class AuthorizationService {
             }
 
             userService.createStudentUser(name,surname, email,studentNumber, encryptedPassword,jwtToken);
+            OnlineUser onlineUser = userService.getOnlineUser(email);
+            onlineUser.setJwtToken(jwtToken);
 
-            return true;
+            authResponse.setSuccess(true);
+            authResponse.setMessage("Registration successful.");
+            authResponse.setOnlineUser(onlineUser);
+
+            return authResponse;
         }
-        return false;
+        authResponse.setSuccess(false);
+        authResponse.setMessage("Registration failed.");
+        return authResponse;
     }
 
-    public boolean isAuthorizedLoginStudent (int id,String email, String password,
-                                             HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedLoginStudent (int id, String email, String password,
+                                                            HttpServletResponse response) {
         boolean result = userService.isUserEligible(id);
+        AuthenticationResponse authResponse = new AuthenticationResponse();
 
         if (result) {
             String jwtToken = JWTUtil.createJWTToken(email);
@@ -79,23 +90,29 @@ public class AuthorizationService {
 
             Student student = userService.getStudentUser(id, password);
             OnlineUser onlineUser = userService.getOnlineUser(email);
+            onlineUser.setJwtToken(jwtToken);
 
             try{
                 if(student.getPassword() == EncryptionUtil.encryptPassword(password)){
-                    return true;
+                    authResponse.setSuccess(true);
+                    authResponse.setMessage("Login successful.");
+                    authResponse.setOnlineUser(onlineUser);
+                    return authResponse;
                 }
                 else {
-                    return false;
+                    authResponse.setSuccess(false);
+                    authResponse.setMessage("Login failed.");
+                    return authResponse;
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-
-        return false;
+        authResponse.setSuccess(false);
+        authResponse.setMessage("Login failed.");
+        return authResponse;
     }
 
-    // This method is for signing up a new company
     public boolean isAuthorized(String name, String email, String password, String password2) {
         String token = JWTUtil.createJWTToken(name);
         String encryptedPassword = null;
