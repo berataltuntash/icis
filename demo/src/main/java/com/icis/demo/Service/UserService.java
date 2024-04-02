@@ -109,4 +109,8 @@ public class UserService {
         return onlineUserDAO.findOnlineUserByEmail(email);
     }
 
+    public OnlineUser getOnlineUser(String jwt, String fill){
+        return onlineUserDAO.findOnlineUserByJwtToken(jwt);
+    }
+
 }

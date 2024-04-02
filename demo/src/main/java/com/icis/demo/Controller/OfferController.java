@@ -1,10 +1,12 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.Offer;
+import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Service.OfferService;
 import com.icis.demo.Utils.JWTUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
@@ -14,8 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class OfferController {
-    private JWTUtil JWTUtil;
-    private OfferService offerService;
+    private final JWTUtil JWTUtil;
+    private final OfferService offerService;
 
     public OfferController(JWTUtil JWTUtil, OfferService offerService) {
         this.JWTUtil = JWTUtil;
@@ -23,13 +25,7 @@ public class OfferController {
     }
 
     @PostMapping("/postoffer")
-    public HttpResponse hndPostOffer(@RequestParam String description,
-                                   @RequestParam Date expireDate) {
-        boolean result = JWTUtil.validateJWTToken("a","a");
-        if (result) {
-            offerService.processOfferFromCompany(description, expireDate);
-        }
-
+    public HttpResponse hndPostOffer() {
         return null;
     }
     public HttpResponse hndDeleteOffer(){
@@ -37,26 +33,33 @@ public class OfferController {
     }
 
     @GetMapping("/applyfilters")
-    public HttpResponse hndApplyFilter(){
-        if (true) {
-            boolean result = JWTUtil.validateJWTToken("a","A");
-
-            if (result) {
-                List<Offer> offerList = offerService.getListOfFilteredOffers();
+    public ResponseEntity<?> hndApplyFilter(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String jwtToken = "";
+        String email = "";
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    jwtToken = cookie.getValue();
+                }
+                if ("email".equals(cookie.getName())) {
+                    email = cookie.getValue();
+                }
             }
         }
-        return null;
+
+        if (jwtToken != null && JWTUtil.validateJWTToken(jwtToken, email)) {
+            List<Offer> offerList = offerService.getListOfFilteredOffers();
+            return ResponseEntity.ok(offerList);
+        } else {
+            return ResponseEntity.status(401).body("Invalid or missing JWT token.");
+        }
     }
     public HttpResponse hndShowOfferDetails(){
         return null;
     }
     @PostMapping("/applyofferstudent")
-    public HttpResponse hndApplyOffer(@RequestParam String companyEmail,
-                                      @RequestParam String type) {
-        boolean result = JWTUtil.validateJWTToken("a", "a");
-        if (result) {
-            offerService.processStudentDocuments(companyEmail, type);
-        }
+    public HttpResponse hndApplyOffer() {
         return null;
     }
     public HttpResponse hndApproveOffer(){

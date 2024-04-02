@@ -7,4 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "onlineuser")
 public interface OnlineUserDAO extends JpaRepository<OnlineUser, Integer> {
     OnlineUser findOnlineUserByEmail(String email);
+
+    OnlineUser findOnlineUserByJwtToken(String jwt);
 }

@@ -92,7 +92,7 @@ public class AuthorizationService {
             onlineUser.setJwtToken(jwtToken);
 
             try{
-                if(student.getPassword() == EncryptionUtil.encryptPassword(password)){
+                if(student.getPassword().equals(EncryptionUtil.encryptPassword(password))){
                     authResponse.setSuccess(true);
                     authResponse.setMessage("Login successful.");
                     authResponse.setOnlineUser(onlineUser);
@@ -162,7 +162,7 @@ public class AuthorizationService {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         try{
-            if(company.getPassword() == EncryptionUtil.encryptPassword(password)){
+            if(company.getPassword().equals(EncryptionUtil.encryptPassword(password))){
                 OnlineUser onlineUser = userService.getOnlineUser(email);
                 onlineUser.setJwtToken(jwtToken);
 
