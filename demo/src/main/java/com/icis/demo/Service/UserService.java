@@ -5,6 +5,7 @@ import com.icis.demo.DAO.OnlineUserDAO;
 import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.*;
 import com.icis.demo.Utils.DocumentUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,15 +22,10 @@ public class UserService {
         this.onlineUserDAO = onlineUserDAO;
     }
 
+    //TODO CHECK GRADE WHEN CONNECTED TO OBS API
     public boolean isUserEligible(int id){
         Student student = studentDAO.findById(id).orElse(null);
-        if (student == null) {
-            return false;
-        }
 
-        if(student.getGrade()<3 || student.getDepartmentId() != 0){
-            return false;
-        }
         return true;
     }
     public Application getApplicationOfUser(){
@@ -85,7 +81,7 @@ public class UserService {
         onlineUserDAO.save(onlineUser);
     }
 
-    public Company getUser(String email, String password){
+    public Company getCompanyUser(String email, String password){
         Company company = companyDAO.findCompanyByEmail(email);
         if(company==null){
             return new Company();

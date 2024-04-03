@@ -91,18 +91,20 @@ public class AuthorizationService {
             OnlineUser onlineUser = userService.getOnlineUser(email);
             onlineUser.setJwtToken(jwtToken);
 
+            System.out.println(onlineUser.toString());
+            System.out.println(student.getPassword());
+
             try{
                 if(student.getPassword().equals(EncryptionUtil.encryptPassword(password))){
                     authResponse.setSuccess(true);
                     authResponse.setMessage("Login successful.");
                     authResponse.setOnlineUser(onlineUser);
-                    return authResponse;
                 }
                 else {
                     authResponse.setSuccess(false);
                     authResponse.setMessage("Login failed.");
-                    return authResponse;
                 }
+                return authResponse;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -157,7 +159,7 @@ public class AuthorizationService {
         response.addCookie(jwtCookie);
         response.addCookie(emailCookie);
 
-        Company company = userService.getUser(email, password);
+        Company company = userService.getCompanyUser(email, password);
 
         AuthenticationResponse authResponse = new AuthenticationResponse();
 

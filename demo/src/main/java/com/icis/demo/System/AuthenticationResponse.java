@@ -40,4 +40,14 @@ public class AuthenticationResponse {
     public void setOnlineUser(OnlineUser onlineUser) {
         this.onlineUser = onlineUser;
     }
+
+    // toString
+    @Override
+    public String toString() {
+        return "AuthenticationResponse{" +
+                "success=" + success +
+                ", message='" + message + '\'' +
+                ", onlineUser=" + onlineUser +
+                '}';
+    }
 }

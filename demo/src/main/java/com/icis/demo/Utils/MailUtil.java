@@ -3,8 +3,9 @@ package com.icis.demo.Utils;
 import lombok.experimental.UtilityClass;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
+@Component
 public class MailUtil {
     private JavaMailSender mailSender;
 

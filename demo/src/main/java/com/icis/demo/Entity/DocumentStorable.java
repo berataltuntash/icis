@@ -3,7 +3,7 @@ package com.icis.demo.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "document")
+@Table(name = "documentstorable")
 public class DocumentStorable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

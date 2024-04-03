@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icis.demo.Entity.DocumentFillable;
 import com.icis.demo.Entity.DocumentStorable;
 import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
+@Component
 public class DocumentUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

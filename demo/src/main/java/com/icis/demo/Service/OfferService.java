@@ -45,4 +45,8 @@ public class OfferService {
     public boolean processStudentDocuments(String companyEmail, String type){
         return false;
     }
+
+    public Offer getOfferDetailsById(int offerId) {
+        return offerDAO.findById(offerId).orElse(null);
+    }
 }

@@ -21,10 +21,10 @@ public class SessionController {
 
     @PostMapping("/signupstudent")
     public ResponseEntity<?> hndSignUp(@RequestParam("name") String name,
-                                    @RequestParam("surname") String surname,
-                                    @RequestParam("email") String email,
-                                    @RequestParam("studentNumber") int studentNumber,
-                                    @RequestParam("password") String password,
+                                       @RequestParam("surname") String surname,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("studentNumber") int studentNumber,
+                                       @RequestParam("password") String password,
                                     HttpServletResponse response) {
 
         AuthenticationResponse result = authorizationService.isAuthorizedSignUpStudent(name, surname,email, studentNumber, password, response);
@@ -38,7 +38,7 @@ public class SessionController {
         }
     }
 
-    @PostMapping("/loginstudent")
+        @PostMapping("/loginstudent")
     public ResponseEntity<?> hndLogin(@RequestParam("id") int id,
                                       @RequestParam("email") String email,
                                       @RequestParam("password") String password,
@@ -47,11 +47,12 @@ public class SessionController {
         AuthenticationResponse result = authorizationService.isAuthorizedLoginStudent(id, email, password,response);
 
         HttpHeaders headers = new HttpHeaders();
+        System.out.println(result.toString());
         if (result.isSuccess()) {
             headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
+            return new ResponseEntity<>("Login successful.", headers, HttpStatus.CREATED);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
         }
     }
 
@@ -80,9 +81,9 @@ public class SessionController {
         HttpHeaders headers = new HttpHeaders();
         if (result.isSuccess()) {
             headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
+            return new ResponseEntity<>("Login successful.", headers, HttpStatus.CREATED);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
         }
     }
 

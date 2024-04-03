@@ -12,11 +12,10 @@ import java.util.Base64;
 public class EncryptionUtil {
     private static final String ALGORITHM = "AES";
     private static final int KEY_SIZE = 128;
+    private static final String salt = "abcaaaaaaaqadaapaaaaazaaiaaaaaaa";  //32 chars = 32 bytes are needed for aes salt
 
     public static String encryptPassword(String text) throws Exception {
-        String key = generateKey();
-        byte[] decodedKey = Base64.getDecoder().decode(key);
-
+        byte[] decodedKey = Base64.getDecoder().decode(salt);
         SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, ALGORITHM);
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
