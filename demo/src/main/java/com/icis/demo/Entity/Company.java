@@ -20,7 +20,7 @@ public class Company {
     private String status;
     @Column(name = "email")
     private String email;
-    @Column(name = "date")
+    @Column(name = "last_access_time")
     private Date date;
     @Column(name = "password")
     private String password;
