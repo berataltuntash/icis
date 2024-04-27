@@ -8,15 +8,12 @@ import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/profile")
 public class ProfileController {
     private final UserService userService;
     private final JWTUtil JWTUtil;
@@ -44,7 +41,8 @@ public class ProfileController {
     }
 
     @PostMapping("/formsubmission")
-    public ResponseEntity<?> hndFormSubmission(HttpServletRequest request){
+    public ResponseEntity<?> hndFormSubmission(@RequestParam String formType,
+                                                HttpServletRequest request){
             if (handleJWT(request)) {
                 return null;
             } else {
@@ -79,6 +77,8 @@ public class ProfileController {
                 }
             }
         }
+
+        System.out.println(jwtToken + " " + email);
 
         if (jwtToken != null && JWTUtil.validateJWTToken(jwtToken, email)){
             return true;

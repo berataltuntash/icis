@@ -23,14 +23,17 @@ public class Staff {
     private String name;
     @Column(name = "surname")
     private String surname;
+    @Column(name = "email")
+    private String email;
 
-    public Staff(int departmentId, int authorizationLevel, String password, Date lastAccessTime, String name, String surname) {
+    public Staff(int departmentId, int authorizationLevel, String password, Date lastAccessTime, String name, String surname, String email) {
         this.departmentId = departmentId;
         this.authorizationLevel = authorizationLevel;
         this.password = password;
         this.lastAccessTime = lastAccessTime;
         this.name = name;
         this.surname = surname;
+        this.email = email;
     }
 
     public Staff() {
@@ -90,5 +93,13 @@ public class Staff {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

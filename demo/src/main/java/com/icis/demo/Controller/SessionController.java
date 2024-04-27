@@ -38,7 +38,7 @@ public class SessionController {
         }
     }
 
-        @PostMapping("/loginstudent")
+    @PostMapping("/loginstudent")
     public ResponseEntity<?> hndLogin(@RequestParam("id") int id,
                                       @RequestParam("email") String email,
                                       @RequestParam("password") String password,
@@ -85,6 +85,49 @@ public class SessionController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
         }
+    }
+
+    @PostMapping("/signupstaff")
+    public ResponseEntity<?> hndSignUp(@RequestParam String name,
+                                       @RequestParam String email,
+                                       @RequestParam String password,
+                                       @RequestParam String staffType,
+                                       HttpServletResponse response){
+
+        AuthenticationResponse result = authorizationService.isAuthorizedSignUpCompany(name,email,password, response);
+        HttpHeaders headers = new HttpHeaders();
+        if (result.isSuccess()) {
+            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
+            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
+        }
+    }
+
+    @PostMapping("/loginstaff")
+    public ResponseEntity<?> hndLogin(@RequestParam String email,
+                                      @RequestParam String password,
+                                      @RequestParam String staffType,
+                                      HttpServletResponse response) {
+
+        AuthenticationResponse result = authorizationService.isAuthorizedLoginCompany(email, password, response);
+        HttpHeaders headers = new HttpHeaders();
+        if (result.isSuccess()) {
+            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
+            return new ResponseEntity<>("Login successful.", headers, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
+        }
+    }
+
+    @PostMapping("/resetpassword")
+    public void hndResetPassword(@RequestParam String newPassword,
+                                 @RequestParam String email,
+                                 @RequestParam String userType,
+                                 HttpServletResponse response){
+
+
+
     }
 
 

@@ -2,6 +2,7 @@ package com.icis.demo.Service;
 
 import com.icis.demo.DAO.CompanyDAO;
 import com.icis.demo.DAO.OnlineUserDAO;
+import com.icis.demo.DAO.StaffDAO;
 import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.*;
 import com.icis.demo.Utils.DocumentUtil;
@@ -14,12 +15,15 @@ public class UserService {
     private CompanyDAO companyDAO;
     private DocumentUtil documentUtil;
     private OnlineUserDAO onlineUserDAO;
+    private StaffDAO staffDAO;
 
-    public UserService(StudentDAO studentDAO, DocumentUtil documentUtil, CompanyDAO companyDAO, OnlineUserDAO onlineUserDAO) {
+    public UserService(StudentDAO studentDAO, DocumentUtil documentUtil, CompanyDAO companyDAO, OnlineUserDAO onlineUserDAO,
+                       StaffDAO staffDAO) {
         this.studentDAO = studentDAO;
         this.documentUtil = documentUtil;
         this.companyDAO = companyDAO;
         this.onlineUserDAO = onlineUserDAO;
+        this.staffDAO = staffDAO;
     }
 
     //TODO CHECK GRADE WHEN CONNECTED TO OBS API
@@ -87,6 +91,41 @@ public class UserService {
             return new Company();
         }
         return company;
+    }
+
+    public void createStaffUser(String name, String email, String encryptedPassword, String jwtToken, String stafftype) {
+        int staffDepId;
+
+        if(stafftype.equals("SummerPracticeCoordinator")){
+            staffDepId = 1;
+        }
+        else if(stafftype.equals("chiefEngineer")){
+            staffDepId = 2;
+        }
+        else{
+            staffDepId = 3;
+        }
+
+        Staff staff = new Staff();
+        staff.setName(name);
+        staff.setEmail(email);
+        staff.setDepartmentId(staffDepId);
+        staff.setPassword(encryptedPassword);
+        staffDAO.save(staff);
+
+        OnlineUser onlineUser = new OnlineUser();
+        onlineUser.setEmail(email);
+        onlineUser.setJwtToken(jwtToken);
+        onlineUser.setUsername(name);
+        onlineUserDAO.save(onlineUser);
+    }
+
+    public Staff getStaffUser(String email, String password){
+        Staff staff = staffDAO.findStaffByEmail(email);
+        if(staff==null){
+            return new Staff();
+        }
+        return staff;
     }
 
     public void processCompanyRequest(boolean isApproved, String companyEmail){

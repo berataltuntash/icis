@@ -2,6 +2,7 @@ package com.icis.demo.Service;
 
 import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.OnlineUser;
+import com.icis.demo.Entity.Staff;
 import com.icis.demo.Entity.Student;
 import com.icis.demo.System.AuthenticationResponse;
 import com.icis.demo.Utils.EncryptionUtil;
@@ -181,5 +182,73 @@ public class AuthorizationService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public AuthenticationResponse isAuthorizedLoginStaff (String email, String password, String staffType,
+                                                            HttpServletResponse response) {
+        String jwtToken = JWTUtil.createJWTToken(email);
+        Cookie jwtCookie = new Cookie("jwt", jwtToken);
+        Cookie emailCookie = new Cookie("email", email);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+        response.addCookie(emailCookie);
+
+        Staff staff = userService.getStaffUser(email, password);
+
+        AuthenticationResponse authResponse = new AuthenticationResponse();
+
+        try{
+            if(staff.getPassword().equals(EncryptionUtil.encryptPassword(password))){
+                OnlineUser onlineUser = userService.getOnlineUser(email);
+                onlineUser.setJwtToken(jwtToken);
+
+                authResponse.setSuccess(true);
+                authResponse.setMessage("Login successful.");
+                authResponse.setOnlineUser(onlineUser);
+                return authResponse;
+            }
+            else {
+                authResponse.setSuccess(false);
+                authResponse.setMessage("Login failed.");
+                return authResponse;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public AuthenticationResponse isAuthorizedSignUpStaff(String name, String email, String password,String staffType,
+                                                            HttpServletResponse response) {
+
+        AuthenticationResponse authResponse = new AuthenticationResponse();
+
+        String jwtToken = JWTUtil.createJWTToken(name);
+        Cookie jwtCookie = new Cookie("jwt", jwtToken);
+        Cookie emailCookie = new Cookie("email", email);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+        response.addCookie(emailCookie);
+
+        String encryptedPassword = null;
+        try{
+            encryptedPassword = EncryptionUtil.encryptPassword(password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        userService.createCompanyUser(name, email, encryptedPassword, jwtToken);
+
+        OnlineUser onlineUser = userService.getOnlineUser(email);
+        onlineUser.setJwtToken(jwtToken);
+
+        authResponse.setSuccess(true);
+        authResponse.setMessage("Registration successful.");
+        authResponse.setOnlineUser(onlineUser);
+
+        return authResponse;
     }
 }
