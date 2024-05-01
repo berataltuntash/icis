@@ -148,4 +148,22 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return studentDAO.existsByEmail(email) || staffDAO.existsByEmail(email) || companyDAO.existsByEmail(email);
     }
+
+    public void changePassword(String email, String encryptedPassword) {
+        if(studentDAO.existsByEmail(email)){
+            Student student = studentDAO.findByEmail(email);
+            student.setPassword(encryptedPassword);
+            studentDAO.save(student);
+        }
+        else if(staffDAO.existsByEmail(email)){
+            Staff staff = staffDAO.findStaffByEmail(email);
+            staff.setPassword(encryptedPassword);
+            staffDAO.save(staff);
+        }
+        else if(companyDAO.existsByEmail(email)){
+            Company company = companyDAO.findCompanyByEmail(email);
+            company.setPassword(encryptedPassword);
+            companyDAO.save(company);
+        }
+    }
 }

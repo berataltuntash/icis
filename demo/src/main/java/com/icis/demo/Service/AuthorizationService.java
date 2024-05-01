@@ -1,5 +1,8 @@
 package com.icis.demo.Service;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Random;
 import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Entity.Staff;
@@ -12,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.icis.demo.Utils.MailUtil;
 
 @Service
 public class AuthorizationService {
@@ -20,20 +24,23 @@ public class AuthorizationService {
     private final OBSUtil obsUtil;
     private final EncryptionUtil encryptionUtil;
     private final JWTUtil JWTUtil;
+    private final MailUtil mailUtil;
+    private Dictionary<String, Integer> emailCodeDictionary = new Hashtable<>();
 
     @Autowired
-    public AuthorizationService(UserService userService, OBSUtil obsUtil, EncryptionUtil encryptionUtil, JWTUtil JWTUtil) {
+    public AuthorizationService(UserService userService, OBSUtil obsUtil, EncryptionUtil encryptionUtil, JWTUtil JWTUtil, MailUtil mailUtil) {
         this.userService = userService;
         this.obsUtil = obsUtil;
         this.encryptionUtil = encryptionUtil;
         this.JWTUtil = JWTUtil;
+        this.mailUtil = mailUtil;
     }
 
     public boolean isSessionValid() {
         return true;
     }
 
-    public void removeSession(){
+    public void removeSession(String email){
 
     }
 
@@ -136,7 +143,6 @@ public class AuthorizationService {
                 return authResponse;
             }
 
-            // Create JWT token and set cookies if the password matches
             String jwtToken = JWTUtil.createJWTToken(email);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
             Cookie emailCookie = new Cookie("email", email);
@@ -244,5 +250,38 @@ public class AuthorizationService {
         }
 
         return authResponse;
+    }
+
+    public boolean sendResetPasswordEmail(String email) {
+        int randomCode = createRandomEmailCode();
+        if(userService.existsByEmail(email)){
+            mailUtil.sendMail(email, "Reset Password ICIS", "Your reset password code is: " + randomCode);
+            emailCodeDictionary.put(email, randomCode);
+            return true;
+        }
+        return false;
+    }
+
+    private int createRandomEmailCode(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(900000) + 100000;
+        return randomNumber;
+    }
+
+    public boolean isEmailCodeValid(String email, int code){
+        if(emailCodeDictionary.get(email) == code){
+            return true;
+        }
+        return false;
+    }
+
+    public void changePassword(String email, String password) {
+        String encryptedPassword;
+        try {
+            encryptedPassword = encryptionUtil.encryptPassword(password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        userService.changePassword(email, encryptedPassword);
     }
 }
