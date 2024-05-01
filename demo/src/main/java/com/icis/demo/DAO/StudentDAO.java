@@ -6,5 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(path = "student")
 public interface StudentDAO extends JpaRepository<Student, Integer>{
-
+    Student findByEmail(String email);
+    boolean existsByEmail(String email);
 }

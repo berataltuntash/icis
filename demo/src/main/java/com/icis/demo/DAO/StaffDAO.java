@@ -8,4 +8,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "staff")
 public interface StaffDAO extends JpaRepository<Staff, Integer> {
     Staff findStaffByEmail(String staffEmail);
+    boolean existsByEmail(String email);
 }

@@ -19,34 +19,21 @@ public class SessionController {
         this.authorizationService = authorizationService;
     }
 
-    @PostMapping("/signupstudent")
-    public ResponseEntity<?> hndSignUp(@RequestParam("name") String name,
-                                       @RequestParam("surname") String surname,
-                                       @RequestParam("email") String email,
-                                       @RequestParam("studentNumber") int studentNumber,
-                                       @RequestParam("password") String password,
-                                    HttpServletResponse response) {
-
-        AuthenticationResponse result = authorizationService.isAuthorizedSignUpStudent(name, surname,email, studentNumber, password, response);
-
-        HttpHeaders headers = new HttpHeaders();
-        if (result.isSuccess()) {
-            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
-        }
-    }
-
-    @PostMapping("/loginstudent")
-    public ResponseEntity<?> hndLogin(@RequestParam("id") int id,
-                                      @RequestParam("email") String email,
+    @PostMapping("/login")
+    public ResponseEntity<?> hndLogin(@RequestParam("email") String email,
                                       @RequestParam("password") String password,
                                       HttpServletResponse response) {
-
-        AuthenticationResponse result = authorizationService.isAuthorizedLoginStudent(id, email, password,response);
-
+        AuthenticationResponse result;
         HttpHeaders headers = new HttpHeaders();
+
+        if (email.endsWith("@std.iyte.edu.tr")) {
+            result = authorizationService.isAuthorizedLoginStudent(email, password, response);
+        } else if (email.endsWith("@iyte.edu.tr")) {
+            result = authorizationService.isAuthorizedLoginStaff(email, password, response);
+        } else {
+            result = authorizationService.isAuthorizedLoginCompany(email, password, response);
+        }
+
         System.out.println(result.toString());
         if (result.isSuccess()) {
             headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
@@ -56,81 +43,39 @@ public class SessionController {
         }
     }
 
-    @PostMapping("/signupcompany")
-    public ResponseEntity<?> hndSignUp(@RequestParam String name,
-                                       @RequestParam String email,
-                                       @RequestParam String password,
-                                       HttpServletResponse response){
+    @PostMapping("/signup")
+    public ResponseEntity<?> handleSignUp(
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam(value = "surname", required = false) String surname,
+            @RequestParam(value = "studentNumber", required = false) Integer studentNumber,
+            @RequestParam(value = "staffType", required = false) String staffType,
+            HttpServletResponse response) {
 
-        AuthenticationResponse result = authorizationService.isAuthorizedSignUpCompany(name,email,password, response);
+        AuthenticationResponse result;
         HttpHeaders headers = new HttpHeaders();
+
+        if (email.endsWith("@std.iyte.edu.tr") && surname != null && studentNumber != null) {
+            result = authorizationService.isAuthorizedSignUpStudent(name, surname, email, studentNumber, password, response);
+        } else if (email.endsWith("@iyte.edu.tr") && staffType != null) {
+            result = authorizationService.isAuthorizedSignUpStaff(name, email, password, staffType, response);
+        } else {
+            result = authorizationService.isAuthorizedSignUpCompany(name, email, password, response);
+        }
+
         if (result.isSuccess()) {
             headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
             return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
-        }
-    }
-
-    @PostMapping("/logincompany")
-    public ResponseEntity<?> hndLogin(@RequestParam String email,
-                                      @RequestParam String password,
-                                      HttpServletResponse response) {
-
-        AuthenticationResponse result = authorizationService.isAuthorizedLoginCompany(email, password, response);
-        HttpHeaders headers = new HttpHeaders();
-        if (result.isSuccess()) {
-            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Login successful.", headers, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
-        }
-    }
-
-    @PostMapping("/signupstaff")
-    public ResponseEntity<?> hndSignUp(@RequestParam String name,
-                                       @RequestParam String email,
-                                       @RequestParam String password,
-                                       @RequestParam String staffType,
-                                       HttpServletResponse response){
-
-        AuthenticationResponse result = authorizationService.isAuthorizedSignUpCompany(name,email,password, response);
-        HttpHeaders headers = new HttpHeaders();
-        if (result.isSuccess()) {
-            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Registration successful.", headers, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Registration failed.");
-        }
-    }
-
-    @PostMapping("/loginstaff")
-    public ResponseEntity<?> hndLogin(@RequestParam String email,
-                                      @RequestParam String password,
-                                      @RequestParam String staffType,
-                                      HttpServletResponse response) {
-
-        AuthenticationResponse result = authorizationService.isAuthorizedLoginCompany(email, password, response);
-        HttpHeaders headers = new HttpHeaders();
-        if (result.isSuccess()) {
-            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
-            return new ResponseEntity<>("Login successful.", headers, HttpStatus.CREATED);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
         }
     }
 
     @PostMapping("/resetpassword")
-    public void hndResetPassword(@RequestParam String newPassword,
-                                 @RequestParam String email,
-                                 @RequestParam String userType,
-                                 HttpServletResponse response){
-
-
+    public void hndResetPassword(){
 
     }
-
-
     @PostMapping("/logout")
     public HttpResponse hndLogout() {
         authorizationService.removeSession();

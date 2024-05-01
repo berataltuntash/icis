@@ -18,14 +18,14 @@ public class AuthorizationService {
 
     private final UserService userService;
     private final OBSUtil obsUtil;
-    private final EncryptionUtil EncryptionUtil;
+    private final EncryptionUtil encryptionUtil;
     private final JWTUtil JWTUtil;
 
     @Autowired
-    public AuthorizationService(UserService userService, OBSUtil obsUtil, EncryptionUtil EncryptionUtil, JWTUtil JWTUtil) {
+    public AuthorizationService(UserService userService, OBSUtil obsUtil, EncryptionUtil encryptionUtil, JWTUtil JWTUtil) {
         this.userService = userService;
         this.obsUtil = obsUtil;
-        this.EncryptionUtil = EncryptionUtil;
+        this.encryptionUtil = encryptionUtil;
         this.JWTUtil = JWTUtil;
     }
 
@@ -37,217 +37,211 @@ public class AuthorizationService {
 
     }
 
-    public AuthenticationResponse isAuthorizedSignUpStudent(String name,String surname,String email, int studentNumber,
-                                             String password,HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedSignUpStudent(String name, String surname, String email, int studentNumber,
+                                                            String password, HttpServletResponse response) {
 
         AuthenticationResponse authResponse = new AuthenticationResponse();
-        if(obsUtil.isRealStudent(name,surname, email, studentNumber)){
-            String jwtToken = JWTUtil.createJWTToken(email);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            Cookie emailCookie = new Cookie("email", email);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            response.addCookie(jwtCookie);
-            response.addCookie(emailCookie);
 
-            String encryptedPassword = null;
-            try{
-                encryptedPassword = EncryptionUtil.encryptPassword(password);
+        if (userService.existsByEmail(email)) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("Registration failed: Email already in use.");
+            return authResponse;
+        }
+
+        if (obsUtil.isRealStudent(name, surname, email, studentNumber)) {
+            String encryptedPassword;
+            try {
+                encryptedPassword = encryptionUtil.encryptPassword(password);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            userService.createStudentUser(name,surname, email,studentNumber, encryptedPassword,jwtToken);
-            OnlineUser onlineUser = userService.getOnlineUser(email);
-            onlineUser.setJwtToken(jwtToken);
-
+            userService.createStudentUser(name, surname, email, studentNumber, encryptedPassword);
             authResponse.setSuccess(true);
-            authResponse.setMessage("Registration successful.");
-            authResponse.setOnlineUser(onlineUser);
-
+            authResponse.setMessage("Student Registration successful.");
             return authResponse;
         }
         authResponse.setSuccess(false);
-        authResponse.setMessage("Registration failed.");
-        return authResponse;
-    }
-
-    public AuthenticationResponse isAuthorizedLoginStudent (int id, String email, String password,
-                                                            HttpServletResponse response) {
-        boolean result = userService.isUserEligible(id);
-        AuthenticationResponse authResponse = new AuthenticationResponse();
-
-        if (result) {
-            String jwtToken = JWTUtil.createJWTToken(email);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            Cookie emailCookie = new Cookie("email", email);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            response.addCookie(jwtCookie);
-            response.addCookie(emailCookie);
-
-            Student student = userService.getStudentUser(id, password);
-            OnlineUser onlineUser = userService.getOnlineUser(email);
-            onlineUser.setJwtToken(jwtToken);
-
-            System.out.println(onlineUser.toString());
-            System.out.println(student.getPassword());
-
-            try{
-                if(student.getPassword().equals(EncryptionUtil.encryptPassword(password))){
-                    authResponse.setSuccess(true);
-                    authResponse.setMessage("Login successful.");
-                    authResponse.setOnlineUser(onlineUser);
-                }
-                else {
-                    authResponse.setSuccess(false);
-                    authResponse.setMessage("Login failed.");
-                }
-                return authResponse;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        authResponse.setSuccess(false);
-        authResponse.setMessage("Login failed.");
+        authResponse.setMessage("Student Registration failed.");
         return authResponse;
     }
 
     public AuthenticationResponse isAuthorizedSignUpCompany(String name, String email, String password,
-                                             HttpServletResponse response) {
-
+                                                             HttpServletResponse response) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
+        String encryptedPassword;
 
-        String jwtToken = JWTUtil.createJWTToken(name);
-        Cookie jwtCookie = new Cookie("jwt", jwtToken);
-        Cookie emailCookie = new Cookie("email", email);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        response.addCookie(jwtCookie);
-        response.addCookie(emailCookie);
+        if (userService.existsByEmail(email)) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("Registration failed: Email already in use.");
+            return authResponse;
+        }
 
-        String encryptedPassword = null;
-        try{
-            encryptedPassword = EncryptionUtil.encryptPassword(password);
+        try {
+            encryptedPassword = encryptionUtil.encryptPassword(password);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        userService.createCompanyUser(name, email, encryptedPassword, jwtToken);
-
-        OnlineUser onlineUser = userService.getOnlineUser(email);
-        onlineUser.setJwtToken(jwtToken);
-
+        userService.createCompanyUser(name, email, encryptedPassword);
         authResponse.setSuccess(true);
-        authResponse.setMessage("Registration successful.");
-        authResponse.setOnlineUser(onlineUser);
+        authResponse.setMessage("Company Registration successful.");
+        return authResponse;
+    }
+
+    public AuthenticationResponse isAuthorizedSignUpStaff(String name, String email, String password, String staffType,
+                                                          HttpServletResponse response) {
+        AuthenticationResponse authResponse = new AuthenticationResponse();
+        String encryptedPassword;
+
+        if (userService.existsByEmail(email)) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("Registration failed: Email already in use.");
+            return authResponse;
+        }
+
+        try {
+            encryptedPassword = encryptionUtil.encryptPassword(password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        userService.createStaffUser(name, email, encryptedPassword, staffType);
+        authResponse.setSuccess(true);
+        authResponse.setMessage("Staff Registration successful.");
+        return authResponse;
+    }
+
+    public AuthenticationResponse isAuthorizedLoginStudent(String email, String password, HttpServletResponse response) {
+        AuthenticationResponse authResponse = new AuthenticationResponse();
+
+        boolean isUserEligible = userService.isUserEligible(email);
+        if (!isUserEligible) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("Email not found or user not eligible for login.");
+            return authResponse;
+        }
+
+        try {
+            Student student = userService.getStudentUser(email);
+            if (student == null) {
+                authResponse.setSuccess(false);
+                authResponse.setMessage("No user found with the given email.");
+                return authResponse;
+            }
+
+            if (!student.getPassword().equals(encryptionUtil.encryptPassword(password))) {
+                authResponse.setSuccess(false);
+                authResponse.setMessage("Incorrect password.");
+                return authResponse;
+            }
+
+            // Create JWT token and set cookies if the password matches
+            String jwtToken = JWTUtil.createJWTToken(email);
+            Cookie jwtCookie = new Cookie("jwt", jwtToken);
+            Cookie emailCookie = new Cookie("email", email);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
+            response.addCookie(emailCookie);
+
+            OnlineUser onlineUser = userService.getOnlineUser(email);
+            onlineUser.setJwtToken(jwtToken);
+
+            authResponse.setSuccess(true);
+            authResponse.setMessage("Student Login successful.");
+            authResponse.setOnlineUser(onlineUser);
+        } catch (Exception e) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("An error occurred during login.");
+        }
 
         return authResponse;
     }
 
-    // This method is for logging in a company
-    public AuthenticationResponse isAuthorizedLoginCompany (String email, String password,
-                                             HttpServletResponse response) {
-        String jwtToken = JWTUtil.createJWTToken(email);
-        Cookie jwtCookie = new Cookie("jwt", jwtToken);
-        Cookie emailCookie = new Cookie("email", email);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        response.addCookie(jwtCookie);
-        response.addCookie(emailCookie);
-
-        Company company = userService.getCompanyUser(email, password);
-
+    public AuthenticationResponse isAuthorizedLoginCompany(String email, String password, HttpServletResponse response) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
-        try{
-            if(company.getPassword().equals(EncryptionUtil.encryptPassword(password))){
-                OnlineUser onlineUser = userService.getOnlineUser(email);
-                onlineUser.setJwtToken(jwtToken);
-
-                authResponse.setSuccess(true);
-                authResponse.setMessage("Login successful.");
-                authResponse.setOnlineUser(onlineUser);
-                return authResponse;
-            }
-            else {
-                authResponse.setSuccess(false);
-                authResponse.setMessage("Login failed.");
-                return authResponse;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Company company = userService.getCompanyUser(email);
+        if (company == null) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("No company found with the given email.");
+            return authResponse;
         }
+
+        if (!"approved".equalsIgnoreCase(company.getStatus())) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("Company account is not approved.");
+            return authResponse;
+        }
+
+        try {
+            if (!company.getPassword().equals(encryptionUtil.encryptPassword(password))) {
+                authResponse.setSuccess(false);
+                authResponse.setMessage("Incorrect password.");
+                return authResponse;
+            }
+
+            String jwtToken = JWTUtil.createJWTToken(email);
+            Cookie jwtCookie = new Cookie("jwt", jwtToken);
+            Cookie emailCookie = new Cookie("email", email);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
+            response.addCookie(emailCookie);
+
+            OnlineUser onlineUser = userService.getOnlineUser(email);
+            onlineUser.setJwtToken(jwtToken);
+
+            authResponse.setSuccess(true);
+            authResponse.setMessage("Company Login successful.");
+            authResponse.setOnlineUser(onlineUser);
+        } catch (Exception e) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("An error occurred during the login process.");
+        }
+
+        return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedLoginStaff (String email, String password, String staffType,
-                                                            HttpServletResponse response) {
-        String jwtToken = JWTUtil.createJWTToken(email);
-        Cookie jwtCookie = new Cookie("jwt", jwtToken);
-        Cookie emailCookie = new Cookie("email", email);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        response.addCookie(jwtCookie);
-        response.addCookie(emailCookie);
-
-        Staff staff = userService.getStaffUser(email, password);
-
+    public AuthenticationResponse isAuthorizedLoginStaff(String email, String password, HttpServletResponse response) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
-        try{
-            if(staff.getPassword().equals(EncryptionUtil.encryptPassword(password))){
-                OnlineUser onlineUser = userService.getOnlineUser(email);
-                onlineUser.setJwtToken(jwtToken);
+        Staff staff = userService.getStaffUser(email);
+        if (staff == null) {
+            authResponse.setSuccess(false);
+            authResponse.setMessage("No staff member found with the given email.");
+            return authResponse;
+        }
 
-                authResponse.setSuccess(true);
-                authResponse.setMessage("Login successful.");
-                authResponse.setOnlineUser(onlineUser);
-                return authResponse;
-            }
-            else {
+        try {
+            if (!staff.getPassword().equals(encryptionUtil.encryptPassword(password))) {
                 authResponse.setSuccess(false);
-                authResponse.setMessage("Login failed.");
+                authResponse.setMessage("Incorrect password.");
                 return authResponse;
             }
+
+            String jwtToken = JWTUtil.createJWTToken(email);
+            Cookie jwtCookie = new Cookie("jwt", jwtToken);
+            Cookie emailCookie = new Cookie("email", email);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
+            response.addCookie(emailCookie);
+
+            OnlineUser onlineUser = userService.getOnlineUser(email);
+            onlineUser.setJwtToken(jwtToken);
+
+            authResponse.setSuccess(true);
+            authResponse.setMessage("Staff Login successful.");
+            authResponse.setOnlineUser(onlineUser);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            authResponse.setSuccess(false);
+            authResponse.setMessage("An error occurred during the login process.");
         }
-    }
-
-    public AuthenticationResponse isAuthorizedSignUpStaff(String name, String email, String password,String staffType,
-                                                            HttpServletResponse response) {
-
-        AuthenticationResponse authResponse = new AuthenticationResponse();
-
-        String jwtToken = JWTUtil.createJWTToken(name);
-        Cookie jwtCookie = new Cookie("jwt", jwtToken);
-        Cookie emailCookie = new Cookie("email", email);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        response.addCookie(jwtCookie);
-        response.addCookie(emailCookie);
-
-        String encryptedPassword = null;
-        try{
-            encryptedPassword = EncryptionUtil.encryptPassword(password);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        userService.createCompanyUser(name, email, encryptedPassword, jwtToken);
-
-        OnlineUser onlineUser = userService.getOnlineUser(email);
-        onlineUser.setJwtToken(jwtToken);
-
-        authResponse.setSuccess(true);
-        authResponse.setMessage("Registration successful.");
-        authResponse.setOnlineUser(onlineUser);
 
         return authResponse;
     }

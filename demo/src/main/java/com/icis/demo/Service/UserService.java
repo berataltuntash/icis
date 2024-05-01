@@ -27,8 +27,8 @@ public class UserService {
     }
 
     //TODO CHECK GRADE WHEN CONNECTED TO OBS API
-    public boolean isUserEligible(int id){
-        Student student = studentDAO.findById(id).orElse(null);
+    public boolean isUserEligible(String email){
+        Student student = studentDAO.findByEmail(email);
 
         return true;
     }
@@ -46,7 +46,7 @@ public class UserService {
         return documentFillable;
     }
 
-    public void createStudentUser(String name,String surname,String email, int studentNumber, String password, String jwtToken){
+    public void createStudentUser(String name,String surname,String email, int studentNumber, String password){
         Student student = new Student();
         student.setName(name);
         student.setSurname(surname);
@@ -57,20 +57,19 @@ public class UserService {
 
         OnlineUser onlineUser = new OnlineUser();
         onlineUser.setEmail(email);
-        onlineUser.setJwtToken(jwtToken);
         onlineUser.setUsername(name);
         onlineUserDAO.save(onlineUser);
     }
 
-    public Student getStudentUser(int id, String password){
-        Student student = studentDAO.findById(id).orElse(null);
+    public Student getStudentUser(String email){
+        Student student = studentDAO.findByEmail(email);
         if(student==null){
             return new Student();
         }
         return student;
     }
 
-    public void createCompanyUser(String name, String email, String encryptedPassword, String jwtToken) {
+    public void createCompanyUser(String name, String email, String encryptedPassword) {
         Company company = new Company();
         company.setCompanyName(name);
         company.setEmail(email);
@@ -80,12 +79,11 @@ public class UserService {
 
         OnlineUser onlineUser = new OnlineUser();
         onlineUser.setEmail(email);
-        onlineUser.setJwtToken(jwtToken);
         onlineUser.setUsername(name);
         onlineUserDAO.save(onlineUser);
     }
 
-    public Company getCompanyUser(String email, String password){
+    public Company getCompanyUser(String email){
         Company company = companyDAO.findCompanyByEmail(email);
         if(company==null){
             return new Company();
@@ -93,7 +91,7 @@ public class UserService {
         return company;
     }
 
-    public void createStaffUser(String name, String email, String encryptedPassword, String jwtToken, String stafftype) {
+    public void createStaffUser(String name, String email, String encryptedPassword,String stafftype) {
         int staffDepId;
 
         if(stafftype.equals("SummerPracticeCoordinator")){
@@ -115,12 +113,11 @@ public class UserService {
 
         OnlineUser onlineUser = new OnlineUser();
         onlineUser.setEmail(email);
-        onlineUser.setJwtToken(jwtToken);
         onlineUser.setUsername(name);
         onlineUserDAO.save(onlineUser);
     }
 
-    public Staff getStaffUser(String email, String password){
+    public Staff getStaffUser(String email){
         Staff staff = staffDAO.findStaffByEmail(email);
         if(staff==null){
             return new Staff();
@@ -148,4 +145,7 @@ public class UserService {
         return onlineUserDAO.findOnlineUserByJwtToken(jwt);
     }
 
+    public boolean existsByEmail(String email) {
+        return studentDAO.existsByEmail(email) || staffDAO.existsByEmail(email) || companyDAO.existsByEmail(email);
+    }
 }
