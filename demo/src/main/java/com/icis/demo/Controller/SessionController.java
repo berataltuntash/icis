@@ -39,7 +39,6 @@ public class SessionController {
         }
 
         if (result.isSuccess()) {
-            headers.add("Set-Cookie", "jwt=" + result.getOnlineUser().getJwtToken() + "; Path=/; HttpOnly; Secure");
             return new ResponseEntity<>("Login successful.", headers, HttpStatus.ACCEPTED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
@@ -112,6 +111,6 @@ public class SessionController {
             }
         }
         authorizationService.removeSession(email);
-        return null;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out.");
     }
 }

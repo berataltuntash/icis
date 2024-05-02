@@ -17,11 +17,6 @@ public class SystemFilter {
 
 
     public void deleteInvalidOffers(List<Offer> offers){
-        List<Offer> listOfOffers = offerService.getListOfFilteredOffers();
-        for (Offer offer : listOfOffers) {
-            if (!offerService.isOfferValid(offer)) {
-                offerService.deleteofferById(offer.getId());
-            }
-        }
+
     }
 }

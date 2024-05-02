@@ -41,7 +41,7 @@ public class AuthorizationService {
     }
 
     public void removeSession(String email){
-
+        userService.removeOnlineUser(email);
     }
 
     public AuthenticationResponse isAuthorizedSignUpStudent(String name, String surname, String email, int studentNumber,

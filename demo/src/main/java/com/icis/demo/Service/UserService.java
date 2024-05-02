@@ -26,9 +26,8 @@ public class UserService {
         this.staffDAO = staffDAO;
     }
 
-    //TODO CHECK GRADE WHEN CONNECTED TO OBS API
     public boolean isUserEligible(String email){
-        Student student = studentDAO.findByEmail(email);
+        Student student = studentDAO.findStudentByEmail(email);
 
         return true;
     }
@@ -62,7 +61,7 @@ public class UserService {
     }
 
     public Student getStudentUser(String email){
-        Student student = studentDAO.findByEmail(email);
+        Student student = studentDAO.findStudentByEmail(email);
         if(student==null){
             return new Student();
         }
@@ -151,7 +150,7 @@ public class UserService {
 
     public void changePassword(String email, String encryptedPassword) {
         if(studentDAO.existsByEmail(email)){
-            Student student = studentDAO.findByEmail(email);
+            Student student = studentDAO.findStudentByEmail(email);
             student.setPassword(encryptedPassword);
             studentDAO.save(student);
         }
@@ -165,5 +164,9 @@ public class UserService {
             company.setPassword(encryptedPassword);
             companyDAO.save(company);
         }
+    }
+
+    public void removeOnlineUser(String email) {
+        onlineUserDAO.deleteOnlineUserByEmail(email);
     }
 }

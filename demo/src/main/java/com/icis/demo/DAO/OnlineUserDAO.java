@@ -8,4 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface OnlineUserDAO extends JpaRepository<OnlineUser, Integer> {
     OnlineUser findOnlineUserByEmail(String email);
     OnlineUser findOnlineUserByJwtToken(String jwt);
+
+    void deleteOnlineUserByEmail(String email);
 }

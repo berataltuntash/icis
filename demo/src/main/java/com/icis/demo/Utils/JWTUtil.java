@@ -22,7 +22,7 @@ public class JWTUtil {
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(currentTime + 1000*60*60*24)) // Token expires in 24 hours
+                .setExpiration(new Date(currentTime + 1000*60*60*24*3))
                 .signWith(secretKey)
                 .compact();
 
@@ -34,7 +34,6 @@ public class JWTUtil {
         if(!tokenUsername.equals(username)){
             return false;
         }
-        // Check token expiration
         if(new Date().after(Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getExpiration())){
             return false;
         }

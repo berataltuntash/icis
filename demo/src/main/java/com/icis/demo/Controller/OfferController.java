@@ -2,9 +2,13 @@ package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.Offer;
 import com.icis.demo.Service.OfferService;
+import com.icis.demo.Service.UserService;
 import com.icis.demo.Utils.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,39 +20,40 @@ import java.util.List;
 public class OfferController {
     private final JWTUtil JWTUtil;
     private final OfferService offerService;
-
-    public OfferController(JWTUtil JWTUtil, OfferService offerService) {
+    private final UserService userService;
+    @Autowired
+    public OfferController(JWTUtil JWTUtil, OfferService offerService, UserService userService) {
         this.JWTUtil = JWTUtil;
         this.offerService = offerService;
+        this.userService = userService;
     }
 
     @PostMapping("/postoffer")
     public ResponseEntity<?> hndPostOffer() {
         return null;
     }
+    @PostMapping("/deleteoffer")
     public ResponseEntity<?> hndDeleteOffer(){
         return null;
     }
-
     @PostMapping("/showoffers")
-    public ResponseEntity<?> hndApplyFilter(HttpServletRequest request) {
+    public ResponseEntity<?> hndApplyFilter(@RequestParam(required = false) String sort,
+                                            HttpServletRequest request) {
+        HttpHeaders headers = new HttpHeaders();
         if (handleJWT(request)) {
-            List<Offer> offerList = offerService.getListOfFilteredOffers();
-            return ResponseEntity.ok(offerList);
+            List<Offer> offers = offerService.getListOfFilteredOffers(sort);
+            return new ResponseEntity<>(offers, headers, HttpStatus.ACCEPTED);
         } else {
-            return ResponseEntity.status(401).body("Invalid or missing JWT token.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
         }
     }
     @PostMapping("/showoffers/{offerId}")
     public ResponseEntity<?> hndShowOfferDetails(HttpServletRequest request,
                                                  @PathVariable("offerId") int offerId) {
+        HttpHeaders headers = new HttpHeaders();
         if (handleJWT(request)) {
-            Offer offerDetails = offerService.getOfferDetailsById(offerId);
-            if (offerDetails != null) {
-                return ResponseEntity.ok(offerDetails);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            Offer offer = offerService.getOfferDetailsById(offerId);
+            return new ResponseEntity<>(offer, headers, HttpStatus.ACCEPTED);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
         }
@@ -56,33 +61,17 @@ public class OfferController {
     @PostMapping("/applyofferstudent")
     public ResponseEntity<?> hndHandleOffer(HttpServletRequest request,
                                             @RequestParam boolean isApproved) {
-        if (handleJWT(request)) {
-            return null;
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
     @PostMapping("/handledocument")
     public ResponseEntity<?> hndHandleDocument(HttpServletRequest request,
                                                @RequestParam boolean isApproved) {
-
-        if (handleJWT(request)) {
-            return null;
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
     @PostMapping("/applyinternship")
     public ResponseEntity<?> hndHandleInternship(HttpServletRequest request,
                                                  @RequestParam boolean isApproved) {
-        if (handleJWT(request)) {
-            return null;
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
 
     private boolean handleJWT(HttpServletRequest request) {
@@ -100,10 +89,15 @@ public class OfferController {
             }
         }
 
-        if (jwtToken != null && JWTUtil.validateJWTToken(jwtToken, email)){
-            return true;
-        } else {
+        if (jwtToken.isEmpty() || email.isEmpty()) {
             return false;
         }
+        if (!JWTUtil.validateJWTToken(jwtToken, email)) {
+            return false;
+        }
+        if(!userService.getOnlineUser(email).getJwtToken().equals(jwtToken)){
+            return false;
+        }
+        return true;
     }
 }

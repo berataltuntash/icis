@@ -1,13 +1,10 @@
 package com.icis.demo.Service;
 
 import com.icis.demo.DAO.OfferDAO;
-import com.icis.demo.Entity.DocumentFillable;
 import com.icis.demo.Entity.Offer;
-import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Utils.MailUtil;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -23,17 +20,26 @@ public class OfferService {
         this.userService = userService;
         this.mailUtil = mailUtil;
     }
-    public List<Offer> getListOfFilteredOffers(){
-        return null;
+    public List<Offer> getListOfFilteredOffers(String sort){
+        Sort sorting;
+        switch (sort != null ? sort : "") {
+            case "name":
+                sorting = Sort.by("name").ascending();
+                break;
+            case "date":
+                sorting = Sort.by("date").descending();
+                break;
+            default:
+                sorting = Sort.unsorted();
+                break;
+        }
+        return offerDAO.findAll(sorting);
     }
     public boolean isOfferValid(Offer offer){
         if (offer.getExpirationDate().before(new Date())) {
             return false;
         }
         return true;
-    }
-    public void deleteofferById(int id){
-        offerDAO.deleteById(id);
     }
     public boolean processOfferFromCompany(String description, Date expireDate){
         Offer offer = new Offer();
