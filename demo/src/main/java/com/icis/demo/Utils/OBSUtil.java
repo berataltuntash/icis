@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OBSUtil {
     @Autowired
-    private static ObsDAO obsDAO;
+    private ObsDAO obsDAO;
 
     @Autowired
     public OBSUtil(ObsDAO obsDAO) {

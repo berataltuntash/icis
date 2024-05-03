@@ -167,12 +167,18 @@ public class AuthorizationService {
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
 
-            OnlineUser onlineUser = userService.getOnlineUser(email);
+            OnlineUser onlineUser = new OnlineUser();
+            onlineUser.setEmail(email);
+            onlineUser.setUsername(student.getName());
             onlineUser.setJwtToken(jwtToken);
+            userService.saveOnlineUser(onlineUser);
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Student Login successful.");
             authResponse.setOnlineUser(onlineUser);
+
+            return authResponse;
+
         } catch (Exception e) {
             authResponse.setSuccess(false);
             authResponse.setMessage("An error occurred during login.");
@@ -211,12 +217,17 @@ public class AuthorizationService {
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
 
-            OnlineUser onlineUser = userService.getOnlineUser(email);
+            OnlineUser onlineUser = new OnlineUser();
+            onlineUser.setEmail(email);
+            onlineUser.setUsername(company.getCompanyName());
             onlineUser.setJwtToken(jwtToken);
+            userService.saveOnlineUser(onlineUser);
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Company Login successful.");
             authResponse.setOnlineUser(onlineUser);
+
+            return authResponse;
         } catch (Exception e) {
             authResponse.setSuccess(false);
             authResponse.setMessage("An error occurred during the login process.");
@@ -249,12 +260,17 @@ public class AuthorizationService {
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
 
-            OnlineUser onlineUser = userService.getOnlineUser(email);
+            OnlineUser onlineUser = new OnlineUser();
+            onlineUser.setEmail(email);
+            onlineUser.setUsername(staff.getName());
             onlineUser.setJwtToken(jwtToken);
+            userService.saveOnlineUser(onlineUser);
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Staff Login successful.");
             authResponse.setOnlineUser(onlineUser);
+
+            return authResponse;
         } catch (Exception e) {
             authResponse.setSuccess(false);
             authResponse.setMessage("An error occurred during the login process.");

@@ -28,7 +28,6 @@ public class UserService {
 
     public boolean isUserEligible(String email){
         Student student = studentDAO.findStudentByEmail(email);
-
         return true;
     }
     public Application getApplicationOfUser(){
@@ -53,11 +52,6 @@ public class UserService {
         student.setId(studentNumber);
         student.setPassword(password);
         studentDAO.save(student);
-
-        OnlineUser onlineUser = new OnlineUser();
-        onlineUser.setEmail(email);
-        onlineUser.setUsername(name);
-        onlineUserDAO.save(onlineUser);
     }
 
     public Student getStudentUser(String email){
@@ -75,11 +69,6 @@ public class UserService {
         company.setStatus("pending");
         company.setPassword(encryptedPassword);
         companyDAO.save(company);
-
-        OnlineUser onlineUser = new OnlineUser();
-        onlineUser.setEmail(email);
-        onlineUser.setUsername(name);
-        onlineUserDAO.save(onlineUser);
     }
 
     public Company getCompanyUser(String email){
@@ -110,11 +99,6 @@ public class UserService {
         staff.setPassword(encryptedPassword);
         staff.setSurname(surname);
         staffDAO.save(staff);
-
-        OnlineUser onlineUser = new OnlineUser();
-        onlineUser.setEmail(email);
-        onlineUser.setUsername(name);
-        onlineUserDAO.save(onlineUser);
     }
 
     public Staff getStaffUser(String email){
@@ -138,6 +122,10 @@ public class UserService {
     }
     public OnlineUser getOnlineUser(String jwt){
         return onlineUserDAO.findOnlineUserByJwtToken(jwt);
+    }
+
+    public void saveOnlineUser(OnlineUser onlineUser){
+        onlineUserDAO.save(onlineUser);
     }
 
     public boolean existsByEmail(String email) {

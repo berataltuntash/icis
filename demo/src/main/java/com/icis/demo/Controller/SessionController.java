@@ -45,9 +45,9 @@ public class SessionController {
         }
 
         if (result.isSuccess()) {
-            return new ResponseEntity<>("Login successful.", headers, HttpStatus.ACCEPTED);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result.getMessage());
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login failed.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getMessage());
         }
     }
 
@@ -105,7 +105,6 @@ public class SessionController {
     @PostMapping("/resetpassword")
     public ResponseEntity<?> hndResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest,
                                               HttpServletResponse response){
-
         String email = resetPasswordRequest.getEmail();
         int codeFromEmail = resetPasswordRequest.getEmailCode();
         String password = resetPasswordRequest.getPassword();
