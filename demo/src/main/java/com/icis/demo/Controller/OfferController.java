@@ -1,6 +1,7 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.Offer;
+import com.icis.demo.Entity.OnlineUser;
 import com.icis.demo.Service.OfferService;
 import com.icis.demo.Service.UserService;
 import com.icis.demo.Utils.JWTUtil;
@@ -21,6 +22,10 @@ public class OfferController {
     private final JWTUtil JWTUtil;
     private final OfferService offerService;
     private final UserService userService;
+    private final int StuRole = 1;
+    private final int StfRole = 2;
+    private final int ComRole = 3;
+
 
     @Autowired
     public OfferController(JWTUtil JWTUtil, OfferService offerService, UserService userService) {
@@ -38,9 +43,9 @@ public class OfferController {
         return null;
     }
 
-    @PostMapping("/showalloffers")
+    @GetMapping("/showalloffers")
     public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
-        if (handleJWT(request)) {
+        if (handleJWT(request, StuRole)) {
             List<Offer> offers = offerService.getListOfOffers();
             return new ResponseEntity<>(offers, new HttpHeaders(), HttpStatus.ACCEPTED);
         } else {
@@ -48,27 +53,24 @@ public class OfferController {
         }
     }
 
+    @PostMapping("/showallapplications")
+    public ResponseEntity<?> hndShowAllApplications(HttpServletRequest request) {
+        if(handleJWT(request, StuRole)) {
+            return null;
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access.");
+        }
+    }
+
     @PostMapping("/showoffers")
     public ResponseEntity<?> hndApplyFilter(@RequestParam(required = false) String sort,
                                             HttpServletRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        if (handleJWT(request)) {
-            List<Offer> offers = offerService.getListOfFilteredOffers(sort);
-            return new ResponseEntity<>(offers, headers, HttpStatus.ACCEPTED);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
     @PostMapping("/showoffers/{offerId}")
     public ResponseEntity<?> hndShowOfferDetails(HttpServletRequest request,
                                                  @PathVariable("offerId") int offerId) {
-        HttpHeaders headers = new HttpHeaders();
-        if (handleJWT(request)) {
-            Offer offer = offerService.getOfferDetailsById(offerId);
-            return new ResponseEntity<>(offer, headers, HttpStatus.ACCEPTED);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
     @PostMapping("/applyofferstudent")
     public ResponseEntity<?> hndHandleOffer(HttpServletRequest request,
@@ -86,27 +88,40 @@ public class OfferController {
         return null;
     }
 
-    private boolean handleJWT(HttpServletRequest request) {
+    private boolean handleJWT(HttpServletRequest request, int role) {
+        String jwtToken = extractJWTFromCookies(request);
+        if (jwtToken == null || jwtToken.isEmpty()) {
+            return false;
+        }
+
+        OnlineUser onlineUser = userService.getOnlineUser(jwtToken);
+        if (onlineUser == null || !jwtToken.equals(onlineUser.getJwtToken())) {
+            return false;
+        }
+
+        String email = onlineUser.getEmail();
+        return isValidRole(role, email);
+    }
+
+    private String extractJWTFromCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        String jwtToken = null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    jwtToken = cookie.getValue();
-                }
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if ("jwt".equals(cookie.getName())) {
+                return cookie.getValue();
             }
         }
-        String compareJWT = userService.getOnlineUser(jwtToken).getJwtToken();
-        String email = userService.getOnlineUser(jwtToken).getEmail();
-        if(compareJWT == null && !compareJWT.equals(jwtToken)){
-            return false;
-        }
-        if (jwtToken.isEmpty()) {
-            return false;
-        }
-        if (!JWTUtil.validateJWTToken(jwtToken, email)) {
-            return false;
-        }
-        return true;
+        return null;
+    }
+
+    private boolean isValidRole(int role, String email) {
+        return switch (role) {
+            case 1 -> email.endsWith("@std.iyte.edu.tr");
+            case 2 -> email.endsWith("@iyte.edu.tr");
+            case 3 -> true;
+            default -> false;
+        };
     }
 }
