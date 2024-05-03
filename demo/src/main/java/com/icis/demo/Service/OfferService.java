@@ -20,25 +20,20 @@ public class OfferService {
         this.userService = userService;
         this.mailUtil = mailUtil;
     }
+
+    public List<Offer> getListOfOffers(){
+        return offerDAO.findAll();
+    }
+
     public List<Offer> getListOfFilteredOffers(String sort){
-        Sort sorting;
-        switch (sort != null ? sort : "") {
-            case "name":
-                sorting = Sort.by("name").ascending();
-                break;
-            case "date":
-                sorting = Sort.by("date").descending();
-                break;
-            default:
-                sorting = Sort.unsorted();
-                break;
-        }
+        Sort sorting = switch (sort != null ? sort : "") {
+            case "name" -> Sort.by("name").ascending();
+            case "date" -> Sort.by("date").descending();
+            default -> Sort.unsorted();
+        };
         return offerDAO.findAll(sorting);
     }
     public boolean isOfferValid(Offer offer){
-        if (offer.getExpirationDate().before(new Date())) {
-            return false;
-        }
         return true;
     }
     public boolean processOfferFromCompany(String description, Date expireDate){

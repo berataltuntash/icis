@@ -21,6 +21,7 @@ public class OfferController {
     private final JWTUtil JWTUtil;
     private final OfferService offerService;
     private final UserService userService;
+
     @Autowired
     public OfferController(JWTUtil JWTUtil, OfferService offerService, UserService userService) {
         this.JWTUtil = JWTUtil;
@@ -36,6 +37,17 @@ public class OfferController {
     public ResponseEntity<?> hndDeleteOffer(){
         return null;
     }
+
+    @PostMapping("/showalloffers")
+    public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
+        if (handleJWT(request)) {
+            List<Offer> offers = offerService.getListOfOffers();
+            return new ResponseEntity<>(offers, new HttpHeaders(), HttpStatus.ACCEPTED);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
+        }
+    }
+
     @PostMapping("/showoffers")
     public ResponseEntity<?> hndApplyFilter(@RequestParam(required = false) String sort,
                                             HttpServletRequest request) {
