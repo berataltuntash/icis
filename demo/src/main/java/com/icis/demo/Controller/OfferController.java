@@ -76,26 +76,23 @@ public class OfferController {
 
     private boolean handleJWT(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        String jwtToken = "";
-        String email = "";
+        String jwtToken = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("jwt".equals(cookie.getName())) {
                     jwtToken = cookie.getValue();
                 }
-                if ("email".equals(cookie.getName())) {
-                    email = cookie.getValue();
-                }
             }
         }
-
-        if (jwtToken.isEmpty() || email.isEmpty()) {
+        String compareJWT = userService.getOnlineUser(jwtToken).getJwtToken();
+        String email = userService.getOnlineUser(jwtToken).getEmail();
+        if(compareJWT == null && !compareJWT.equals(jwtToken)){
+            return false;
+        }
+        if (jwtToken.isEmpty()) {
             return false;
         }
         if (!JWTUtil.validateJWTToken(jwtToken, email)) {
-            return false;
-        }
-        if(!userService.getOnlineUser(email).getJwtToken().equals(jwtToken)){
             return false;
         }
         return true;

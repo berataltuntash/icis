@@ -90,7 +90,7 @@ public class UserService {
         return company;
     }
 
-    public void createStaffUser(String name, String email, String encryptedPassword,String stafftype) {
+    public void createStaffUser(String name, String surname ,String email, String encryptedPassword,String stafftype) {
         int staffDepId;
 
         if(stafftype.equals("SummerPracticeCoordinator")){
@@ -108,6 +108,7 @@ public class UserService {
         staff.setEmail(email);
         staff.setDepartmentId(staffDepId);
         staff.setPassword(encryptedPassword);
+        staff.setSurname(surname);
         staffDAO.save(staff);
 
         OnlineUser onlineUser = new OnlineUser();
@@ -135,12 +136,7 @@ public class UserService {
             companyDAO.delete(company);
         }
     }
-
-    public OnlineUser getOnlineUser(String email){
-        return onlineUserDAO.findOnlineUserByEmail(email);
-    }
-
-    public OnlineUser getOnlineUser(String jwt, String fill){
+    public OnlineUser getOnlineUser(String jwt){
         return onlineUserDAO.findOnlineUserByJwtToken(jwt);
     }
 

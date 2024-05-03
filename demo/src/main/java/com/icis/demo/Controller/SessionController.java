@@ -1,5 +1,9 @@
 package com.icis.demo.Controller;
 
+import com.icis.demo.RequestEntities.AuthenticationRequest;
+import com.icis.demo.RequestEntities.AuthenticationRequestCompany;
+import com.icis.demo.RequestEntities.ForgotPasswordRequest;
+import com.icis.demo.RequestEntities.ResetPasswordRequest;
 import com.icis.demo.Service.AuthorizationService;
 import com.icis.demo.System.AuthenticationResponse;
 import jakarta.servlet.http.Cookie;
@@ -23,12 +27,14 @@ public class SessionController {
         this.authorizationService = authorizationService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> hndLogin(@RequestParam("email") String email,
-                                      @RequestParam("password") String password,
-                                      HttpServletResponse response) {
+    @CrossOrigin(origins = "http://localhost:5173")  // Allow CORS only for this controller
+    @PostMapping(path="/login", consumes = "application/json")
+    public ResponseEntity<?> hndLogin(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
         AuthenticationResponse result;
         HttpHeaders headers = new HttpHeaders();
+
+        String email = request.getEmail();
+        String password = request.getPassword();
 
         if (email.endsWith("@std.iyte.edu.tr")) {
             result = authorizationService.isAuthorizedLoginStudent(email, password, response);
@@ -45,25 +51,26 @@ public class SessionController {
         }
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> handleSignUp(
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            @RequestParam(value = "surname", required = false) String surname,
-            @RequestParam(value = "studentNumber", required = false) Integer studentNumber,
-            @RequestParam(value = "staffType", required = false) String staffType,
-            HttpServletResponse response) {
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/iyteregister")
+    public ResponseEntity<?> handleSignUp(@RequestBody AuthenticationRequest request,
+                                          HttpServletResponse response) {
 
         AuthenticationResponse result;
         HttpHeaders headers = new HttpHeaders();
 
-        if (email.endsWith("@std.iyte.edu.tr") && surname != null && studentNumber != null) {
-            result = authorizationService.isAuthorizedSignUpStudent(name, surname, email, studentNumber, password, response);
-        } else if (email.endsWith("@iyte.edu.tr") && staffType != null) {
-            result = authorizationService.isAuthorizedSignUpStaff(name, email, password, staffType, response);
-        } else {
-            result = authorizationService.isAuthorizedSignUpCompany(name, email, password, response);
+        String email = request.getEmail();
+        String password = request.getPassword();
+
+        if (email.endsWith("@std.iyte.edu.tr")) {
+            result = authorizationService.isAuthorizedSignUpStudent(email, password, response);
+        } else if (email.endsWith("@iyte.edu.tr")) {
+            result = authorizationService.isAuthorizedSignUpStaff(email, password, response);
+        }
+        else {
+            result = new AuthenticationResponse();
+            result.setSuccess(false);
+            result.setMessage("Invalid email.");
         }
 
         if (result.isSuccess()) {
@@ -73,11 +80,36 @@ public class SessionController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/companyregister")
+    public ResponseEntity<?> handleSignUp(@RequestBody AuthenticationRequestCompany request,
+                                          HttpServletResponse response) {
+
+        AuthenticationResponse result;
+        HttpHeaders headers = new HttpHeaders();
+
+        String name = request.getName();
+        String email = request.getEmail();
+        String password = request.getPassword();
+
+        result = authorizationService.isAuthorizedSignUpCompany(name, email, password, response);
+
+        if (result.isSuccess()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(result.getMessage());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getMessage());
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/resetpassword")
-    public ResponseEntity<?> hndResetPassword(@RequestParam String email,
-                                              @RequestParam String password,
-                                              @RequestParam int codeFromEmail,
+    public ResponseEntity<?> hndResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest,
                                               HttpServletResponse response){
+
+        String email = resetPasswordRequest.getEmail();
+        int codeFromEmail = resetPasswordRequest.getEmailCode();
+        String password = resetPasswordRequest.getPassword();
+
         boolean result = authorizationService.isEmailCodeValid(email, codeFromEmail);
         if (result) {
             authorizationService.changePassword(email, password);
@@ -86,9 +118,11 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email code is not correct.");
         }
     }
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/forgotpassword")
-    public ResponseEntity<?> hndForgotPassword(@RequestParam String email,
+    public ResponseEntity<?> hndForgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest,
                                                HttpServletResponse response){
+        String email = forgotPasswordRequest.getEmail();
         boolean result = authorizationService.sendResetPasswordEmail(email);
 
         if (result) {
@@ -97,20 +131,19 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is not registered.");
         }
     }
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/logout")
     public ResponseEntity<?> hndLogout(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
-        String email = null;
+        String jwtToken = null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("jwt")) {
+                jwtToken = cookie.getValue();
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
             }
-            if(cookie.getName()=="email"){
-                email = cookie.getValue();
-            }
         }
-        authorizationService.removeSession(email);
+        authorizationService.removeSession(jwtToken);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out.");
     }
 }

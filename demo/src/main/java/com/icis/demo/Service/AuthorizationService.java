@@ -3,10 +3,8 @@ package com.icis.demo.Service;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Random;
-import com.icis.demo.Entity.Company;
-import com.icis.demo.Entity.OnlineUser;
-import com.icis.demo.Entity.Staff;
-import com.icis.demo.Entity.Student;
+
+import com.icis.demo.Entity.*;
 import com.icis.demo.System.AuthenticationResponse;
 import com.icis.demo.Utils.EncryptionUtil;
 import com.icis.demo.Utils.JWTUtil;
@@ -44,8 +42,8 @@ public class AuthorizationService {
         userService.removeOnlineUser(email);
     }
 
-    public AuthenticationResponse isAuthorizedSignUpStudent(String name, String surname, String email, int studentNumber,
-                                                            String password, HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedSignUpStudent(String email, String password,
+                                                            HttpServletResponse response) {
 
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
@@ -55,8 +53,14 @@ public class AuthorizationService {
             return authResponse;
         }
 
-        if (obsUtil.isRealStudent(name, surname, email, studentNumber)) {
+        ObsPerson obsPerson = obsUtil.isRealStudent(email);
+
+        if (obsPerson != null && obsPerson.getRole() == "student") {
             String encryptedPassword;
+            String name = obsPerson.getName();
+            String surname = obsPerson.getSurname();
+            int studentNumber = obsPerson.getId();
+
             try {
                 encryptedPassword = encryptionUtil.encryptPassword(password);
             } catch (Exception e) {
@@ -96,10 +100,9 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedSignUpStaff(String name, String email, String password, String staffType,
+    public AuthenticationResponse isAuthorizedSignUpStaff(String email, String password,
                                                           HttpServletResponse response) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
-        String encryptedPassword;
 
         if (userService.existsByEmail(email)) {
             authResponse.setSuccess(false);
@@ -107,15 +110,29 @@ public class AuthorizationService {
             return authResponse;
         }
 
-        try {
-            encryptedPassword = encryptionUtil.encryptPassword(password);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        ObsPerson obsPerson = obsUtil.isRealStaff(email);
+
+        if (obsPerson != null && obsPerson.getRole() == "staff") {
+            String encryptedPassword;
+            String name = obsPerson.getName();
+            String surname = obsPerson.getSurname();
+            int studentNumber = obsPerson.getId();
+            String staffType = obsPerson.getRole();
+
+            try {
+                encryptedPassword = encryptionUtil.encryptPassword(password);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            userService.createStaffUser(name, surname, email, encryptedPassword, staffType);
+            authResponse.setSuccess(true);
+            authResponse.setMessage("Staff Registration successful.");
+            return authResponse;
         }
 
-        userService.createStaffUser(name, email, encryptedPassword, staffType);
-        authResponse.setSuccess(true);
-        authResponse.setMessage("Staff Registration successful.");
+        authResponse.setSuccess(false);
+        authResponse.setMessage("Staff Registration failed.");
         return authResponse;
     }
 
@@ -145,12 +162,10 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            Cookie emailCookie = new Cookie("email", email);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setSecure(true);
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
-            response.addCookie(emailCookie);
 
             OnlineUser onlineUser = userService.getOnlineUser(email);
             onlineUser.setJwtToken(jwtToken);
@@ -191,12 +206,10 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            Cookie emailCookie = new Cookie("email", email);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setSecure(true);
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
-            response.addCookie(emailCookie);
 
             OnlineUser onlineUser = userService.getOnlineUser(email);
             onlineUser.setJwtToken(jwtToken);
@@ -231,12 +244,10 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            Cookie emailCookie = new Cookie("email", email);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setSecure(true);
             jwtCookie.setPath("/");
             response.addCookie(jwtCookie);
-            response.addCookie(emailCookie);
 
             OnlineUser onlineUser = userService.getOnlineUser(email);
             onlineUser.setJwtToken(jwtToken);
