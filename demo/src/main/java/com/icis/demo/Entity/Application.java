@@ -9,9 +9,9 @@ public class Application {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "status")
+    @Column(name = "statuss")
     private String status;
-    @JoinColumn(name = "offer")
+    @JoinColumn(name = "offer_id")
     @ManyToOne(targetEntity = Offer.class)
     private int offer;
     @JoinColumn(name = "student_id")

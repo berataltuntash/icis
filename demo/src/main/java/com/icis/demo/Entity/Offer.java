@@ -13,9 +13,9 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "status")
+    @Column(name = "statuss")
     private String status;
-    @JoinColumn(name = "companyid")
+    @JoinColumn(name = "company_id")
     @ManyToOne(targetEntity = Company.class)
     private int companyId;
     @Column(name = "share_date")

@@ -15,11 +15,11 @@ public class Staff {
     private int departmentId;
     @Column(name = "authorization_level")
     private int authorizationLevel;
-    @Column(name = "password")
+    @Column(name = "passwordd")
     private String password;
     @Column(name = "last_access_time")
     private Date lastAccessTime;
-    @Column(name = "name")
+    @Column(name = "namee")
     private String name;
     @Column(name = "surname")
     private String surname;

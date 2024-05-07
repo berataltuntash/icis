@@ -12,11 +12,11 @@ public class Student {
     private int id;
     @Column(name = "department_id")
     private int departmentId;
-    @Column(name = "name")
+    @Column(name = "namee")
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "password")
+    @Column(name = "passwordd")
     private String password;
     @Column(name = "last_access_time")
     private Date lastAccessTime;

@@ -3,21 +3,20 @@ package com.icis.demo.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "obsdatabase")
+@Table(name = "obsperson")
 public class ObsPerson {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "email")
+    private String email;
+    @Column(name = "student_id")
     private int id;
     @Column(name = "department_id")
     private int departmentId;
-    @Column(name = "name")
+    @Column(name = "namee")
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "role")
+    @Column(name = "rolee")
     private String role;
 
     public ObsPerson(int departmentId, String name, String surname, String email, String role) {

@@ -16,13 +16,13 @@ public class Company {
     private String companyName;
     @Column(name = "location")
     private String location;
-    @Column(name = "status")
+    @Column(name = "statuss")
     private String status;
     @Column(name = "email")
     private String email;
     @Column(name = "last_access_time")
     private Date date;
-    @Column(name = "password")
+    @Column(name = "passwordd")
     private String password;
 
     public Company(String companyName, String location, List<Offer> offers, String status, Date date, String email, String password) {

@@ -1,5 +1,6 @@
 package com.icis.demo.Service;
 
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class AuthorizationService {
     private final EncryptionUtil encryptionUtil;
     private final JWTUtil JWTUtil;
     private final MailUtil mailUtil;
-    private Dictionary<String, Integer> emailCodeDictionary = new Hashtable<>();
+    private final Dictionary<String, Integer> emailCodeDictionary = new Hashtable<>();
 
     @Autowired
     public AuthorizationService(UserService userService, OBSUtil obsUtil, EncryptionUtil encryptionUtil, JWTUtil JWTUtil, MailUtil mailUtil) {
@@ -55,7 +56,7 @@ public class AuthorizationService {
 
         ObsPerson obsPerson = obsUtil.isRealStudent(email);
 
-        if (obsPerson != null && obsPerson.getRole() == "student") {
+        if (obsPerson != null && obsPerson.getRole().equals("student")) {
             String encryptedPassword;
             String name = obsPerson.getName();
             String surname = obsPerson.getSurname();
@@ -112,7 +113,7 @@ public class AuthorizationService {
 
         ObsPerson obsPerson = obsUtil.isRealStaff(email);
 
-        if (obsPerson != null && obsPerson.getRole() == "staff") {
+        if (obsPerson != null && obsPerson.getRole().equals("staff")) {
             String encryptedPassword;
             String name = obsPerson.getName();
             String surname = obsPerson.getSurname();
@@ -275,12 +276,11 @@ public class AuthorizationService {
             authResponse.setSuccess(false);
             authResponse.setMessage("An error occurred during the login process.");
         }
-
         return authResponse;
     }
 
     public boolean sendResetPasswordEmail(String email) {
-        int randomCode = createRandomEmailCode();
+        Integer randomCode = createRandomEmailCode();
         if(userService.existsByEmail(email)){
             mailUtil.sendMail(email, "Reset Password ICIS", "Your reset password code is: " + randomCode);
             emailCodeDictionary.put(email, randomCode);
@@ -289,17 +289,15 @@ public class AuthorizationService {
         return false;
     }
 
-    private int createRandomEmailCode(){
+    private Integer createRandomEmailCode(){
         Random random = new Random();
-        int randomNumber = random.nextInt(900000) + 100000;
-        return randomNumber;
+        return random.nextInt(900000) + 100000;
     }
 
     public boolean isEmailCodeValid(String email, int code){
-        if(emailCodeDictionary.get(email) == code){
-            return true;
-        }
-        return false;
+        Integer codeDict = emailCodeDictionary.get(email);
+        System.out.println(codeDict);
+        return codeDict.equals(code);
     }
 
     public void changePassword(String email, String password) {

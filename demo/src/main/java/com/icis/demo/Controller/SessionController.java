@@ -74,7 +74,7 @@ public class SessionController {
         }
 
         if (result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(result.getMessage());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result.getMessage());
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getMessage());
         }
@@ -95,7 +95,7 @@ public class SessionController {
         result = authorizationService.isAuthorizedSignUpCompany(name, email, password, response);
 
         if (result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(result.getMessage());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result.getMessage());
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getMessage());
         }

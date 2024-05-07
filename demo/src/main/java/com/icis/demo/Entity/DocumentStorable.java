@@ -12,9 +12,9 @@ public class DocumentStorable {
     @JoinColumn(name = "application_id")
     @ManyToOne(targetEntity = Application.class)
     private int applicationId;
-    @Column(name = "name")
+    @Column(name = "namee")
     private String name;
-    @Column(name = "data")
+    @Column(name = "dataa")
     private String data;
 
     public DocumentStorable(int applicationId, String name, String data) {
