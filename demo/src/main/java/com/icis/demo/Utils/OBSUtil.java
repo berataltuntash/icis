@@ -15,6 +15,7 @@ public class OBSUtil {
     public OBSUtil(ObsDAO obsDAO) {
         this.obsDAO = obsDAO;
     }
+
     public ObsPerson isRealStudent(String email){
         ObsPerson person = obsDAO.findObsPersonByEmail(email);
         return person;

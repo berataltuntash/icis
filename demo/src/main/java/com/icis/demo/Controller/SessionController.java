@@ -1,9 +1,6 @@
 package com.icis.demo.Controller;
 
-import com.icis.demo.RequestEntities.AuthenticationRequest;
-import com.icis.demo.RequestEntities.AuthenticationRequestCompany;
-import com.icis.demo.RequestEntities.ForgotPasswordRequest;
-import com.icis.demo.RequestEntities.ResetPasswordRequest;
+import com.icis.demo.RequestEntities.*;
 import com.icis.demo.Service.AuthorizationService;
 import com.icis.demo.System.AuthenticationResponse;
 import jakarta.servlet.http.Cookie;
@@ -31,7 +28,6 @@ public class SessionController {
     @PostMapping(path="/login", consumes = "application/json")
     public ResponseEntity<?> hndLogin(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
         AuthenticationResponse result;
-        HttpHeaders headers = new HttpHeaders();
 
         String email = request.getEmail();
         String password = request.getPassword();
@@ -44,20 +40,24 @@ public class SessionController {
             result = authorizationService.isAuthorizedLoginCompany(email, password, response);
         }
 
+        String userJWT = result.getOnlineUser().getJwtToken();
+        String message = result.getMessage();
+
         if (result.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(result.getMessage());
+            LoginResponse loginResponse = new LoginResponse(userJWT, message);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(loginResponse);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result.getMessage());
+            LoginResponse loginResponse = new LoginResponse("", message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginResponse);
         }
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/iyteregister")
+    @PostMapping(path="/iyteregister", consumes = "application/json")
     public ResponseEntity<?> handleSignUp(@RequestBody AuthenticationRequest request,
                                           HttpServletResponse response) {
 
         AuthenticationResponse result;
-        HttpHeaders headers = new HttpHeaders();
 
         String email = request.getEmail();
         String password = request.getPassword();
@@ -81,7 +81,7 @@ public class SessionController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/companyregister")
+    @PostMapping(path="/companyregister",consumes = "application/json")
     public ResponseEntity<?> handleSignUp(@RequestBody AuthenticationRequestCompany request,
                                           HttpServletResponse response) {
 
@@ -102,7 +102,7 @@ public class SessionController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/resetpassword")
+    @PostMapping(path="/resetpassword",consumes = "application/json")
     public ResponseEntity<?> hndResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest,
                                               HttpServletResponse response){
         String email = resetPasswordRequest.getEmail();
@@ -118,7 +118,7 @@ public class SessionController {
         }
     }
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/forgotpassword")
+    @PostMapping(path="/forgotpassword",consumes = "application/json")
     public ResponseEntity<?> hndForgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest,
                                                HttpServletResponse response){
         String email = forgotPasswordRequest.getEmail();
@@ -131,18 +131,19 @@ public class SessionController {
         }
     }
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/logout")
-    public ResponseEntity<?> hndLogout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        String jwtToken = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("jwt")) {
-                jwtToken = cookie.getValue();
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-            }
+    @PostMapping(path="/logout",consumes = "application/json")
+    public ResponseEntity<?> hndLogout(@RequestBody LogOutRequest logOutRequest,
+                                       HttpServletRequest request) {
+
+        String jwtToken = logOutRequest.getJwt();
+
+        if (jwtToken == null || jwtToken.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No JWT token provided.");
         }
+
         authorizationService.removeSession(jwtToken);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out.");
     }
+
+
 }

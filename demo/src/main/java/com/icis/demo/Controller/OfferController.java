@@ -2,6 +2,7 @@ package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.Offer;
 import com.icis.demo.Entity.OnlineUser;
+import com.icis.demo.RequestEntities.ShowHomePageRequest;
 import com.icis.demo.Service.OfferService;
 import com.icis.demo.Service.UserService;
 import com.icis.demo.Utils.JWTUtil;
@@ -38,6 +39,7 @@ public class OfferController {
     public ResponseEntity<?> hndPostOffer() {
         return null;
     }
+
     @PostMapping("/deleteoffer")
     public ResponseEntity<?> hndDeleteOffer(){
         return null;
@@ -45,21 +47,12 @@ public class OfferController {
 
     @GetMapping("/showalloffers")
     public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
-        if (handleJWT(request, StuRole)) {
-            List<Offer> offers = offerService.getListOfOffers();
-            return new ResponseEntity<>(offers, new HttpHeaders(), HttpStatus.ACCEPTED);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
-        }
+        return null;
     }
 
     @PostMapping("/showallapplications")
     public ResponseEntity<?> hndShowAllApplications(HttpServletRequest request) {
-        if(handleJWT(request, StuRole)) {
-            return null;
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access.");
-        }
+        return null;
     }
 
     @PostMapping("/showoffers")
@@ -88,8 +81,46 @@ public class OfferController {
         return null;
     }
 
-    private boolean handleJWT(HttpServletRequest request, int role) {
-        String jwtToken = extractJWTFromCookies(request);
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/showstudenthomepage", consumes = "application/json")
+    public ResponseEntity<?> hndShowStudentHomePage(@RequestBody ShowHomePageRequest showHomePageRequest,
+                                                    HttpServletRequest request) {
+        String stuJWT = showHomePageRequest.getJwt();
+        if (handleJWT(stuJWT, StuRole)) {
+            OnlineUser studentInfo = userService.getOnlineUser(stuJWT);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(studentInfo.getUsername());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Access.");
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(path="/showcompanyhomepage", consumes = "application/json")
+    public ResponseEntity<?> hndShowCompanyHomePage(@RequestBody ShowHomePageRequest showHomePageRequest,
+                                                    HttpServletRequest request) {
+        String comJWT = showHomePageRequest.getJwt();
+        if (handleJWT(comJWT, ComRole)) {
+            OnlineUser companyInfo = userService.getOnlineUser(comJWT);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(companyInfo.getUsername());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Access.");
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(path="/showstaffhomepage", consumes = "application/json")
+    public ResponseEntity<?> hndShowStaffHomePage(@RequestBody ShowHomePageRequest showHomePageRequest,
+                                                  HttpServletRequest request) {
+        String staJWT = showHomePageRequest.getJwt();
+        if (handleJWT(staJWT, StfRole)) {
+            OnlineUser staffInfo = userService.getOnlineUser(staJWT);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(staffInfo.getUsername());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Access.");
+        }
+    }
+
+    private boolean handleJWT(String jwtToken, int role) {
         if (jwtToken == null || jwtToken.isEmpty()) {
             return false;
         }
@@ -101,19 +132,6 @@ public class OfferController {
 
         String email = onlineUser.getEmail();
         return isValidRole(role, email);
-    }
-
-    private String extractJWTFromCookies(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
-        }
-        for (Cookie cookie : cookies) {
-            if ("jwt".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 
     private boolean isValidRole(int role, String email) {

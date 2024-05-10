@@ -113,11 +113,10 @@ public class AuthorizationService {
 
         ObsPerson obsPerson = obsUtil.isRealStaff(email);
 
-        if (obsPerson != null && obsPerson.getRole().equals("staff")) {
+        if (obsPerson != null && !obsPerson.getRole().equals("student")) {
             String encryptedPassword;
             String name = obsPerson.getName();
             String surname = obsPerson.getSurname();
-            int studentNumber = obsPerson.getId();
             String staffType = obsPerson.getRole();
 
             try {
@@ -162,11 +161,6 @@ public class AuthorizationService {
             }
 
             String jwtToken = JWTUtil.createJWTToken(email);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            response.addCookie(jwtCookie);
 
             OnlineUser onlineUser = new OnlineUser();
             onlineUser.setEmail(email);
@@ -212,11 +206,6 @@ public class AuthorizationService {
             }
 
             String jwtToken = JWTUtil.createJWTToken(email);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            response.addCookie(jwtCookie);
 
             OnlineUser onlineUser = new OnlineUser();
             onlineUser.setEmail(email);
@@ -255,11 +244,6 @@ public class AuthorizationService {
             }
 
             String jwtToken = JWTUtil.createJWTToken(email);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            response.addCookie(jwtCookie);
 
             OnlineUser onlineUser = new OnlineUser();
             onlineUser.setEmail(email);
