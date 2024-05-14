@@ -17,7 +17,7 @@ public class Offer {
     private String status;
     @JoinColumn(name = "company_id")
     @ManyToOne(targetEntity = Company.class)
-    private int companyId;
+    private Company companyId;
     @Column(name = "share_date")
     private Date shareDate;
     @Column(name = "expiration_date")
@@ -25,7 +25,7 @@ public class Offer {
     @Column(name = "description")
     private String description;
 
-    public Offer(String status, int companyId,  Date shareDate, Date expirationDate, String description) {
+    public Offer(String status, Company companyId,  Date shareDate, Date expirationDate, String description) {
         this.status = status;
         this.companyId = companyId;
         this.shareDate = shareDate;
@@ -52,11 +52,11 @@ public class Offer {
         this.status = status;
     }
 
-    public int getCompanyId() {
+    public Company getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(Company companyId) {
         this.companyId = companyId;
     }
 

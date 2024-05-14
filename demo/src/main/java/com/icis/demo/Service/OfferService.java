@@ -22,7 +22,8 @@ public class OfferService {
     }
 
     public List<Offer> getListOfOffers(){
-        return offerDAO.findAll();
+        List<Offer> offers = offerDAO.findAll();
+        return offers;
     }
 
     public List<Offer> getListOfFilteredOffers(String sort){

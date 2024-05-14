@@ -4,6 +4,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -11,7 +13,15 @@ import java.util.Date;
 
 @Component
 public class JWTUtil {
-    private static SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static SecretKey secretKey;
+
+    @Value("${jwt.secret}")
+    private String secretString; // This is the base64 encoded secret key string from your config
+
+    @PostConstruct
+    public void init() {
+        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretString));
+    }
 
     public JWTUtil() {
 

@@ -120,23 +120,10 @@ public class UserService {
             companyDAO.delete(company);
         }
     }
-    public OnlineUser getOnlineUser(String jwt){
-        return onlineUserDAO.findOnlineUserByJwtToken(jwt);
-    }
-
-    public void saveOnlineUser(OnlineUser onlineUser){
-        onlineUserDAO.save(onlineUser);
-    }
-
-    public boolean existByEmailOnlineUser(String email) {
-        return onlineUserDAO.existsOnlineUserByEmail(email);
-    }
 
     public boolean existsByEmail(String email) {
         return studentDAO.existsByEmail(email) || staffDAO.existsByEmail(email) || companyDAO.existsByEmail(email);
     }
-
-
 
     public void changePassword(String email, String encryptedPassword) {
         if(studentDAO.existsByEmail(email)){
@@ -163,5 +150,16 @@ public class UserService {
     public void updateOnlineUser(OnlineUser onlineUser) {
         onlineUserDAO.delete(onlineUserDAO.findOnlineUserByEmail(onlineUser.getEmail()));
         onlineUserDAO.save(onlineUser);
+    }
+    public OnlineUser getOnlineUser(String jwt){
+        return onlineUserDAO.findOnlineUserByJwtToken(jwt);
+    }
+
+    public void saveOnlineUser(OnlineUser onlineUser){
+        onlineUserDAO.save(onlineUser);
+    }
+
+    public boolean existByEmailOnlineUser(String email) {
+        return onlineUserDAO.existsOnlineUserByEmail(email);
     }
 }
