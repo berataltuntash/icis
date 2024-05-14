@@ -66,7 +66,7 @@ public class UserService {
         Company company = new Company();
         company.setCompanyName(name);
         company.setEmail(email);
-        company.setStatus("pending");
+        company.setStatus("approved");
         company.setPassword(encryptedPassword);
         companyDAO.save(company);
     }
@@ -128,9 +128,15 @@ public class UserService {
         onlineUserDAO.save(onlineUser);
     }
 
+    public boolean existByEmailOnlineUser(String email) {
+        return onlineUserDAO.existsOnlineUserByEmail(email);
+    }
+
     public boolean existsByEmail(String email) {
         return studentDAO.existsByEmail(email) || staffDAO.existsByEmail(email) || companyDAO.existsByEmail(email);
     }
+
+
 
     public void changePassword(String email, String encryptedPassword) {
         if(studentDAO.existsByEmail(email)){
@@ -152,5 +158,10 @@ public class UserService {
 
     public void removeOnlineUser(String email) {
         onlineUserDAO.deleteOnlineUserByEmail(email);
+    }
+
+    public void updateOnlineUser(OnlineUser onlineUser) {
+        onlineUserDAO.delete(onlineUserDAO.findOnlineUserByEmail(onlineUser.getEmail()));
+        onlineUserDAO.save(onlineUser);
     }
 }

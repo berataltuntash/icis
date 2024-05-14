@@ -35,16 +35,21 @@ public class AuthorizationService {
         this.mailUtil = mailUtil;
     }
 
-    public boolean isSessionValid() {
-        return true;
+    public OnlineUser isSessionValid(String jwt) {
+        OnlineUser onlineUser = userService.getOnlineUser(jwt.trim());
+        String email = onlineUser.getEmail();
+        boolean result = JWTUtil.validateJWTToken(jwt, email);
+        if (result) {
+            return onlineUser;
+        }
+        return null;
     }
 
     public void removeSession(String email){
         userService.removeOnlineUser(email);
     }
 
-    public AuthenticationResponse isAuthorizedSignUpStudent(String email, String password,
-                                                            HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedSignUpStudent(String email, String password) {
 
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
@@ -78,8 +83,7 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedSignUpCompany(String name, String email, String password,
-                                                             HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedSignUpCompany(String name, String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
         String encryptedPassword;
 
@@ -101,8 +105,7 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedSignUpStaff(String email, String password,
-                                                          HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedSignUpStaff(String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         if (userService.existsByEmail(email)) {
@@ -136,7 +139,7 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedLoginStudent(String email, String password, HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedLoginStudent(String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         boolean isUserEligible = userService.isUserEligible(email);
@@ -162,11 +165,14 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
 
-            OnlineUser onlineUser = new OnlineUser();
-            onlineUser.setEmail(email);
-            onlineUser.setUsername(student.getName());
-            onlineUser.setJwtToken(jwtToken);
-            userService.saveOnlineUser(onlineUser);
+            OnlineUser onlineUser = new OnlineUser(jwtToken, student.getName(), email);
+            boolean isOnlineUserExist = userService.existByEmailOnlineUser(email);
+
+            if (!isOnlineUserExist) {
+                userService.saveOnlineUser(onlineUser);
+            }else{
+                userService.updateOnlineUser(onlineUser);
+            }
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Student Login successful.");
@@ -177,12 +183,11 @@ public class AuthorizationService {
         } catch (Exception e) {
             authResponse.setSuccess(false);
             authResponse.setMessage("An error occurred during login.");
+            return authResponse;
         }
-
-        return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedLoginCompany(String email, String password, HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedLoginCompany(String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         Company company = userService.getCompanyUser(email);
@@ -207,11 +212,14 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
 
-            OnlineUser onlineUser = new OnlineUser();
-            onlineUser.setEmail(email);
-            onlineUser.setUsername(company.getCompanyName());
-            onlineUser.setJwtToken(jwtToken);
-            userService.saveOnlineUser(onlineUser);
+            OnlineUser onlineUser = new OnlineUser(jwtToken, company.getCompanyName(), email);
+            boolean isOnlineUserExist = userService.existByEmailOnlineUser(email);
+
+            if (!isOnlineUserExist) {
+                userService.saveOnlineUser(onlineUser);
+            }else{
+                userService.updateOnlineUser(onlineUser);
+            }
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Company Login successful.");
@@ -226,7 +234,7 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedLoginStaff(String email, String password, HttpServletResponse response) {
+    public AuthenticationResponse isAuthorizedLoginStaff(String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         Staff staff = userService.getStaffUser(email);
@@ -245,11 +253,14 @@ public class AuthorizationService {
 
             String jwtToken = JWTUtil.createJWTToken(email);
 
-            OnlineUser onlineUser = new OnlineUser();
-            onlineUser.setEmail(email);
-            onlineUser.setUsername(staff.getName());
-            onlineUser.setJwtToken(jwtToken);
-            userService.saveOnlineUser(onlineUser);
+            OnlineUser onlineUser = new OnlineUser(jwtToken, staff.getName(), email);
+            boolean isOnlineUserExist = userService.existByEmailOnlineUser(email);
+
+            if (!isOnlineUserExist) {
+                userService.saveOnlineUser(onlineUser);
+            }else{
+                userService.updateOnlineUser(onlineUser);
+            }
 
             authResponse.setSuccess(true);
             authResponse.setMessage("Staff Login successful.");

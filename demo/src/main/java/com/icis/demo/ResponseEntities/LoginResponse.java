@@ -1,4 +1,4 @@
-package com.icis.demo.RequestEntities;
+package com.icis.demo.ResponseEntities;
 
 public class LoginResponse {
     private String jwtToken;
