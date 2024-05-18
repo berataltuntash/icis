@@ -13,12 +13,12 @@ public class Application {
     private String status;
     @JoinColumn(name = "offer_id")
     @ManyToOne(targetEntity = Offer.class)
-    private int offer;
+    private Offer offer;
     @JoinColumn(name = "student_id")
     @ManyToOne(targetEntity = Student.class)
-    private int studentId;
+    private Student studentId;
 
-    public Application(String status, int offer, int studentId) {
+    public Application(String status, Offer offer, Student studentId) {
         this.status = status;
         this.offer = offer;
         this.studentId = studentId;
@@ -43,19 +43,19 @@ public class Application {
         this.status = status;
     }
 
-    public int getOffer() {
+    public Offer getOffer() {
         return offer;
     }
 
-    public void setOffer(int offer) {
+    public void setOffer(Offer offer) {
         this.offer = offer;
     }
 
-    public int getStudentId() {
+    public Student getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Student studentId) {
         this.studentId = studentId;
     }
 }

@@ -1,7 +1,9 @@
 package com.icis.demo.Controller;
 
+import com.icis.demo.Entity.Application;
 import com.icis.demo.Entity.Offer;
 import com.icis.demo.Entity.OnlineUser;
+import com.icis.demo.Entity.Student;
 import com.icis.demo.ResponseEntities.ActiveOffersResponse;
 import com.icis.demo.ResponseEntities.OfferDetailsResponse;
 import com.icis.demo.Service.OfferService;
@@ -92,9 +94,18 @@ public class OfferController {
             return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED);
         }
 
-        String email = onlineUser.getEmail();
-        String companyEmail = offerService.getOfferDetailsById(offerId).getCompanyId().getEmail();
-        mailUtil.sendMail(companyEmail, "internship application", "application body");
+        Offer offer = offerService.getOfferDetailsById(offerId);
+        Student student = userService.getStudentUser(onlineUser.getEmail());
+
+        if (offer == null || student == null) {
+            return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+        }
+
+
+        Application stuApplication = offerService.createStudentApplication(offer, student);
+
+        String companyEmail = offer.getCompanyId().getEmail();
+        mailUtil.sendMail(companyEmail, "Internship Application", "Beni nolur staja alin");
 
         return new ResponseEntity<>("", HttpStatus.ACCEPTED);
     }
@@ -114,6 +125,5 @@ public class OfferController {
                                                @RequestParam boolean isApproved) {
         return null;
     }
-
 
 }

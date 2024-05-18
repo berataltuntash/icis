@@ -1,8 +1,12 @@
 package com.icis.demo.Service;
 
+import com.icis.demo.DAO.ApplicationDAO;
 import com.icis.demo.DAO.OfferDAO;
+import com.icis.demo.Entity.Application;
 import com.icis.demo.Entity.Offer;
+import com.icis.demo.Entity.Student;
 import com.icis.demo.Utils.MailUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -14,11 +18,14 @@ public class OfferService {
     OfferDAO offerDAO;
     UserService userService;
     MailUtil mailUtil;
+    ApplicationDAO applicationDAO;
 
-    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil) {
+    @Autowired
+    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil, ApplicationDAO applicationDAO) {
         this.offerDAO = offerDAO;
         this.userService = userService;
         this.mailUtil = mailUtil;
+        this.applicationDAO = applicationDAO;
     }
 
     public List<Offer> getListOfOffers(){
@@ -34,9 +41,18 @@ public class OfferService {
         };
         return offerDAO.findAll(sorting);
     }
-    public boolean isOfferValid(Offer offer){
-        return true;
+
+    public Application createStudentApplication(Offer offer, Student student){
+        Application studentApplication = new Application();
+        studentApplication.setStatus("Pending");
+        studentApplication.setOffer(offer);
+        studentApplication.setStudentId(student);
+
+        applicationDAO.save(studentApplication);
+
+        return studentApplication;
     }
+
     public boolean processOfferFromCompany(String description, Date expireDate){
         Offer offer = new Offer();
         offer.setDescription(description);
