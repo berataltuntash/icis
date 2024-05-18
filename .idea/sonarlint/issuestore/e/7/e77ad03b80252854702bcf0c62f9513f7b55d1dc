@@ -1,24 +1,30 @@
 
-œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8†§ìåø1J$908e0054-3a10-4033-aa9b-410f2e0f94d5
+–
+java:S11921"NDefine a constant instead of duplicating this literal "Authorization" 3 times.(°‚é”ıÿÿÿÿ8²¢òæø1J$b375d101-76b7-41a5-b166-acb109d592fe
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8†§ìåø1J$db2ab073-0dff-437c-97a1-4cc33ea07db2
 €
-java:S2589h"8Remove this expression which always evaluates to "false"(ëàÿüÿÿÿÿ8˜§ìåø1J$60967738-02ff-4ff6-8344-cee82701ad7f
+java:S2589p"8Remove this expression which always evaluates to "false"(ëàÿüÿÿÿÿ8˜§ìåø1J$2a5d7c0c-54c9-47fb-88f8-2157e0503d1d
 n
-java:S1452'"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8§ìåø1J$92edd47d-2c61-4270-b9e0-bdf3be8a685d
+java:S1452/"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8§ìåø1J$954e30d0-8c0c-46cc-b9fc-4a31c976c7ac
 i
-java:S14523"&Remove usage of generic wildcard type.(ÿÙ 8§ìåø1J$e1cab875-61a4-4a76-94cd-7c1f190015cf
+java:S1452;"&Remove usage of generic wildcard type.(ÿÙ 8§ìåø1J$8d0384aa-fde2-4aa7-8478-7a63432852b8
 i
-java:S1452:"&Remove usage of generic wildcard type.(ÎóŒ÷8Ÿ§ìåø1J$e748dfad-2e12-4b99-b476-d4c48089a343
+java:S1452B"&Remove usage of generic wildcard type.(ÎóŒ÷8Ÿ§ìåø1J$cdac49a5-cf4a-4ec0-a420-3380abb794d6
 n
-java:S1452K"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8 §ìåø1J$ac19a048-5d62-4e8f-baf8-4f3daeb677de
+java:S1452S"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8 §ìåø1J$cd190d15-975c-4f4d-bd74-5a01e8548ee8
 i
-java:S1452["&Remove usage of generic wildcard type.(˜¡•·8¢§ìåø1J$8a5661dc-de75-484b-9407-ff8aa17aac93
-n
-java:S1452y"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8¢§ìåø1J$d43d7512-7ef0-43b2-9997-e3b16aa228c1
-i
-java:S1452‰"&Remove usage of generic wildcard type.(ĞÌ½8£§ìåø1J$910dcee4-a26d-4712-a84d-7d4ca1e93855
+java:S1452c"&Remove usage of generic wildcard type.(˜¡•·8¢§ìåø1J$e9147604-2bb9-4116-940f-96c2cf8a2302
 o
-java:S1452 "&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ8¤§ìåø1J$bf920598-6660-4164-834e-7bcf60fbd437
+java:S1452"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8¢§ìåø1J$3febbd4b-327a-4b8b-9223-6147469e27e3
+i
+java:S1452‘"&Remove usage of generic wildcard type.(ÄÔ­*8£§ìåø1J$1285faa7-8188-425d-bb3c-f5f79742f0cb
+o
+java:S1452ª"&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ8¤§ìåø1J$9a2fd2d1-74ab-4ba9-bdca-8bd73c240598
 j
-java:S1452°"&Remove usage of generic wildcard type.(ËÙ¬™8¥§ìåø1J$b91e8369-58ba-4fbb-8752-de05cfc6bef4
+java:S1452º"&Remove usage of generic wildcard type.(ËÙ¬™8¥§ìåø1J$6b98e693-7562-4421-a72b-c598ef5c9356
 o
-java:S1452À"&Remove usage of generic wildcard type.(ÜïÄ®şÿÿÿÿ8¦§ìåø1J$12795b58-26eb-470a-9933-90c88b0b48eb
+java:S1452Ê"&Remove usage of generic wildcard type.(ÜïÄ®şÿÿÿÿ8¦§ìåø1J$97572d1f-12be-4900-9a74-dae396d8c48c
+o
+java:S1452ä"&Remove usage of generic wildcard type.(üšêúÿÿÿÿ8£öæø1J$73485f36-3a69-443e-9513-f5dd47103b3f
+
+java:S2674€"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8âüæø1J$6662591c-0f7a-412c-ac28-dc98a751b491

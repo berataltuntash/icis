@@ -1,24 +1,30 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.*;
-import com.icis.demo.RequestEntities.ApproveDisapproveOfferRequest;
+import com.icis.demo.RequestEntities.ApproveDisapproveRequest;
 import com.icis.demo.ResponseEntities.ActiveOffersResponse;
 import com.icis.demo.ResponseEntities.NotApprovedCompaniesResponse;
 import com.icis.demo.ResponseEntities.NotApprovedOffersResponse;
 import com.icis.demo.ResponseEntities.OfferDetailsResponse;
 import com.icis.demo.RequestEntities.PostOfferRequest;
+import com.icis.demo.Service.DocumentGeneratorService;
 import com.icis.demo.Service.OfferService;
 import com.icis.demo.Service.UserService;
-import com.icis.demo.Utils.JWTUtil;
 import com.icis.demo.Utils.MailUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -26,12 +32,14 @@ public class OfferController {
     private final OfferService offerService;
     private final UserService userService;
     private final MailUtil mailUtil;
+    private final DocumentGeneratorService documentGenerationService;
 
     @Autowired
-    public OfferController(OfferService offerService, UserService userService, MailUtil mailUtil) {
+    public OfferController(OfferService offerService, UserService userService, MailUtil mailUtil, DocumentGeneratorService documentGenerationService) {
         this.offerService = offerService;
         this.userService = userService;
         this.mailUtil = mailUtil;
+        this.documentGenerationService = documentGenerationService;
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
@@ -134,10 +142,12 @@ public class OfferController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/managecompanyapplication/{companyId}")
-    public ResponseEntity<?> hndApproveCompany(HttpServletRequest request, @PathVariable("companyId") int companyId) {
-        String isApproved = request.getHeader("companyApproved");
+    public ResponseEntity<?> hndApproveCompany(HttpServletRequest request,
+                                               @RequestBody ApproveDisapproveRequest approveDisapproveRequest,
+                                               @PathVariable("companyId") int companyId) {
+        boolean isApproved = approveDisapproveRequest.isApprove();
         boolean result = false;
-        if(isApproved.equals("true")){
+        if(isApproved){
             result = userService.approveCompanyApplication(companyId);
             if (result) {
                 return new ResponseEntity<>("Company Approved", HttpStatus.ACCEPTED);
@@ -190,9 +200,9 @@ public class OfferController {
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/approverejectoffer/{offerId}", consumes = "application/json")
     public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request,
-                                                       @RequestBody ApproveDisapproveOfferRequest approveDisapproveRequest,
+                                                       @RequestBody ApproveDisapproveRequest approveDisapproveRequest,
                                                        @PathVariable("offerId") int offerId) {
-        boolean isApproved = approveDisapproveRequest.isOfferApprove();
+        boolean isApproved = approveDisapproveRequest.isApprove();
 
         boolean result = false;
         if(isApproved){
@@ -210,6 +220,50 @@ public class OfferController {
             } else {
                 return new ResponseEntity<>("Error occured while rejecting the offer", HttpStatus.BAD_REQUEST);
             }
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/downloadapplicationletter")
+    public ResponseEntity<?> downloadApplicationLetter(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String email = userService.getOnlineUser(token).getEmail();
+
+        if (email == null || !email.endsWith("@std.iyte.edu.tr")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Student student = userService.getStudentUser(email);
+
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            Map<String, String> studentData = new HashMap<>();
+            studentData.put("ADI - SOYADI", student.getName() + " " + student.getSurname());
+            studentData.put("SINIFI", String.valueOf(student.getGrade()));
+            studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
+            studentData.put("E-POSTA", student.getEmail());
+
+            String templatePath = "classpath:1_TR_SummerPracticeApplicationLetter2023.docx";
+            String outputPath = "classpath:application_letter_" + student.getId() + ".docx";
+            documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
+
+            File file = new File(outputPath);
+            byte[] contents = new byte[(int) file.length()];
+            try (FileInputStream fis = new FileInputStream(file)) {
+                fis.read(contents);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", file.getName());
+
+            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
