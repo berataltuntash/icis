@@ -1,0 +1,24 @@
+<changelist name="Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]" date="1716048476216" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 18/05/2024 19:07 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/icis/demo/Controller/OfferController.class" />
+    <option name="AFTER_PATH" value="target/classes/com/icis/demo/Controller/OfferController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]/OfferController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/icis/demo/Controller/SessionController.class" />
+    <option name="AFTER_PATH" value="target/classes/com/icis/demo/Controller/SessionController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]/SessionController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/icis/demo/Service/AuthorizationService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/icis/demo/Service/AuthorizationService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]/AuthorizationService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/icis/demo/Service/OfferService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/icis/demo/Service/OfferService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_05_2024_19_07_[Changes]/OfferService.class" />
+  </binary>
+</changelist>
