@@ -1,0 +1,39 @@
+
+f	java:S117#"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ØŸÅ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê
+f	java:S116"RRename this field "JWTUtil" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(þÔÞX
+g	java:S116"RRename this field "StuRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼äÒÀ
+l	java:S116"RRename this field "StfRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©ú¥‹ûÿÿÿÿ
+g	java:S116"RRename this field "ComRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÝéŽÒ
+7
+java:S1170"!Make this final field static too.(¼äÒÀ
+<
+java:S1170"!Make this final field static too.(©ú¥‹ûÿÿÿÿ
+7
+java:S1170"!Make this final field static too.(ÝéŽÒ
+A
+java:S1452,"&Remove usage of generic wildcard type.(Þ€ ûÿÿÿÿ
+<
+java:S14528"&Remove usage of generic wildcard type.(ÿÙ 
+<
+java:S1452?"&Remove usage of generic wildcard type.(ÎóŒ÷
+A
+java:S1452O"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ
+<
+java:S1452_"&Remove usage of generic wildcard type.(˜¡•·
+A
+java:S1452}"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ
+<
+java:S1452"&Remove usage of generic wildcard type.(ÐÌ½
+B
+java:S1452¤"&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ
+=
+java:S1452³"&Remove usage of generic wildcard type.(ËÙ¬™
+=
+java:S1452Ã"&Remove usage of generic wildcard type.(…¥íâ
+A
+java:S1068"+Remove this unused "StuRole" private field.(¼äÒÀ
+F
+java:S1068"+Remove this unused "StfRole" private field.(©ú¥‹ûÿÿÿÿ
+A
+java:S1068"+Remove this unused "ComRole" private field.(ÝéŽÒ

@@ -7,7 +7,6 @@ import com.icis.demo.ResponseEntities.LoginResponse;
 import com.icis.demo.Service.AuthorizationService;
 import com.icis.demo.System.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class SessionController {
         this.authorizationService = authorizationService;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")  // Allow CORS only for this controller
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/login", consumes = "application/json")
     public ResponseEntity<?> hndLogin(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse result;

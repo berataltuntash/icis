@@ -3,13 +3,14 @@ package com.icis.demo.Service;
 import com.icis.demo.DAO.ApplicationDAO;
 import com.icis.demo.DAO.OfferDAO;
 import com.icis.demo.Entity.Application;
+import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.Offer;
 import com.icis.demo.Entity.Student;
 import com.icis.demo.Utils.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.Date;
+
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -33,13 +34,20 @@ public class OfferService {
         return offers;
     }
 
-    public List<Offer> getListOfFilteredOffers(String sort){
-        Sort sorting = switch (sort != null ? sort : "") {
-            case "name" -> Sort.by("name").ascending();
-            case "date" -> Sort.by("date").descending();
-            default -> Sort.unsorted();
-        };
-        return offerDAO.findAll(sorting);
+    public void createOffer(Company company, String offerName, String offerDescription){
+        Offer offer = new Offer();
+        offer.setCompanyId(company);
+        offer.setDescription(offerName);
+        offer.setDescription(offerDescription);
+        offer.setStatus("Pending");
+
+        Calendar calendar = Calendar.getInstance();
+        offer.setShareDate(calendar.getTime());
+
+        calendar.add(Calendar.MONTH, 1);
+        offer.setExpirationDate(calendar.getTime());
+
+        offerDAO.save(offer);
     }
 
     public Application createStudentApplication(Offer offer, Student student){
@@ -53,18 +61,27 @@ public class OfferService {
         return studentApplication;
     }
 
-    public boolean processOfferFromCompany(String description, Date expireDate){
-        Offer offer = new Offer();
-        offer.setDescription(description);
-        offer.setExpirationDate(expireDate);
-        offerDAO.save(offer);
-        return true;
-    }
-    public boolean processStudentDocuments(String companyEmail, String type){
-        return false;
-    }
-
     public Offer getOfferDetailsById(int offerId) {
         return offerDAO.findById(offerId).orElse(null);
+    }
+
+    public boolean approveOffer(int offerId) {
+        Offer offer = offerDAO.findById(offerId).orElse(null);
+        if(offer == null) return false;
+
+        offerDAO.delete(offer);
+        offer.setStatus("Active");
+        offerDAO.save(offer);
+
+        return true;
+    }
+
+    public boolean rejectOffer(int offerId) {
+        Offer offer = offerDAO.findById(offerId).orElse(null);
+        if(offer == null) return false;
+
+        offerDAO.delete(offer);
+
+        return true;
     }
 }

@@ -45,10 +45,6 @@ public class AuthorizationService {
         return null;
     }
 
-    public void removeSession(String email){
-        userService.removeOnlineUser(email);
-    }
-
     public AuthenticationResponse isAuthorizedSignUpStudent(String email, String password) {
 
         AuthenticationResponse authResponse = new AuthenticationResponse();

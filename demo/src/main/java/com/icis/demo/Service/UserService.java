@@ -7,20 +7,22 @@ import com.icis.demo.DAO.StudentDAO;
 import com.icis.demo.Entity.*;
 import com.icis.demo.Utils.DocumentUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
-    private StudentDAO studentDAO;
-    private CompanyDAO companyDAO;
-    private DocumentUtil documentUtil;
-    private OnlineUserDAO onlineUserDAO;
-    private StaffDAO staffDAO;
+    private final StudentDAO studentDAO;
+    private final CompanyDAO companyDAO;
+    private final OnlineUserDAO onlineUserDAO;
+    private final StaffDAO staffDAO;
 
-    public UserService(StudentDAO studentDAO, DocumentUtil documentUtil, CompanyDAO companyDAO, OnlineUserDAO onlineUserDAO,
+    @Autowired
+    public UserService(StudentDAO studentDAO, CompanyDAO companyDAO, OnlineUserDAO onlineUserDAO,
                        StaffDAO staffDAO) {
         this.studentDAO = studentDAO;
-        this.documentUtil = documentUtil;
         this.companyDAO = companyDAO;
         this.onlineUserDAO = onlineUserDAO;
         this.staffDAO = staffDAO;
@@ -30,18 +32,31 @@ public class UserService {
         Student student = studentDAO.findStudentByEmail(email);
         return true;
     }
-    public Application getApplicationOfUser(){
-        return null;
+
+    public List<Company> getCompanyApplications(){
+        List<Company> companies = companyDAO.findAll();
+        companies.removeIf(company -> !company.getStatus().equals("pending"));
+        return companies;
     }
-    public boolean uploadDocument(){
-        return false;
+
+    public boolean approveCompanyApplication(int companyId){
+        Company company = companyDAO.findCompanyById(companyId);
+        if(company==null || !company.getStatus().equals("pending")){
+            return false;
+        }
+        companyDAO.delete(company);
+        company.setStatus("approved");
+        companyDAO.save(company);
+        return true;
     }
-    public String downloadDocument(){
-        return null;
-    }
-    public DocumentFillable prepareDocument(String type){
-        DocumentFillable documentFillable = documentUtil.createDocumentFillable(type);
-        return documentFillable;
+
+    public boolean rejectCompanyApplication(int companyId){
+        Company company = companyDAO.findCompanyById(companyId);
+        if(company==null || !company.getStatus().equals("pending")){
+            return false;
+        }
+        companyDAO.delete(company);
+        return true;
     }
 
     public void createStudentUser(String name,String surname,String email, int studentNumber, String password){
@@ -53,7 +68,6 @@ public class UserService {
         student.setPassword(password);
         studentDAO.save(student);
     }
-
     public Student getStudentUser(String email){
         Student student = studentDAO.findStudentByEmail(email);
         if(student==null){
@@ -61,16 +75,14 @@ public class UserService {
         }
         return student;
     }
-
     public void createCompanyUser(String name, String email, String encryptedPassword) {
         Company company = new Company();
         company.setCompanyName(name);
         company.setEmail(email);
-        company.setStatus("approved");
+        company.setStatus("pending");
         company.setPassword(encryptedPassword);
         companyDAO.save(company);
     }
-
     public Company getCompanyUser(String email){
         Company company = companyDAO.findCompanyByEmail(email);
         if(company==null){
@@ -78,7 +90,6 @@ public class UserService {
         }
         return company;
     }
-
     public void createStaffUser(String name, String surname ,String email, String encryptedPassword,String stafftype) {
         int staffDepId;
 
@@ -100,7 +111,6 @@ public class UserService {
         staff.setSurname(surname);
         staffDAO.save(staff);
     }
-
     public Staff getStaffUser(String email){
         Staff staff = staffDAO.findStaffByEmail(email);
         if(staff==null){
@@ -108,23 +118,9 @@ public class UserService {
         }
         return staff;
     }
-
-    public void processCompanyRequest(boolean isApproved, String companyEmail){
-        Company company = companyDAO.findCompanyByEmail(companyEmail);
-        if(isApproved){
-            company.setStatus("approved");
-            companyDAO.save(company);
-        }
-        else{
-            company.setStatus("rejected");
-            companyDAO.delete(company);
-        }
-    }
-
     public boolean existsByEmail(String email) {
         return studentDAO.existsByEmail(email) || staffDAO.existsByEmail(email) || companyDAO.existsByEmail(email);
     }
-
     public void changePassword(String email, String encryptedPassword) {
         if(studentDAO.existsByEmail(email)){
             Student student = studentDAO.findStudentByEmail(email);
@@ -142,11 +138,9 @@ public class UserService {
             companyDAO.save(company);
         }
     }
-
     public void removeOnlineUser(String email) {
         onlineUserDAO.deleteOnlineUserByEmail(email);
     }
-
     public void updateOnlineUser(OnlineUser onlineUser) {
         onlineUserDAO.delete(onlineUserDAO.findOnlineUserByEmail(onlineUser.getEmail()));
         onlineUserDAO.save(onlineUser);
@@ -154,11 +148,9 @@ public class UserService {
     public OnlineUser getOnlineUser(String jwt){
         return onlineUserDAO.findOnlineUserByJwtToken(jwt);
     }
-
     public void saveOnlineUser(OnlineUser onlineUser){
         onlineUserDAO.save(onlineUser);
     }
-
     public boolean existByEmailOnlineUser(String email) {
         return onlineUserDAO.existsOnlineUserByEmail(email);
     }
