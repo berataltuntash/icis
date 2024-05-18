@@ -1,6 +1,7 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.*;
+import com.icis.demo.RequestEntities.ApproveDisapproveOfferRequest;
 import com.icis.demo.ResponseEntities.ActiveOffersResponse;
 import com.icis.demo.ResponseEntities.NotApprovedCompaniesResponse;
 import com.icis.demo.ResponseEntities.NotApprovedOffersResponse;
@@ -22,18 +23,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class OfferController {
-    private final JWTUtil JWTUtil;
     private final OfferService offerService;
     private final UserService userService;
     private final MailUtil mailUtil;
-    private final int StuRole = 1;
-    private final int StfRole = 2;
-    private final int ComRole = 3;
-
 
     @Autowired
-    public OfferController(JWTUtil JWTUtil, OfferService offerService, UserService userService, MailUtil mailUtil) {
-        this.JWTUtil = JWTUtil;
+    public OfferController(OfferService offerService, UserService userService, MailUtil mailUtil) {
         this.offerService = offerService;
         this.userService = userService;
         this.mailUtil = mailUtil;
@@ -59,7 +54,7 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(path="/showoffers", consumes = "application/json")
+    @GetMapping(path="/showoffers")
     public ResponseEntity<?> hndShowAllOffers() {
         List<Offer> offers = offerService.getListOfOffers();
         List<ActiveOffersResponse> activeOffers = new ArrayList<>();
@@ -74,8 +69,9 @@ public class OfferController {
         }
         return ResponseEntity.ok(activeOffers);
     }
+
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(path="/showoffers/{offerId}", consumes = "application/json")
+    @GetMapping(path="/showoffers/{offerId}")
     public ResponseEntity<?> hndShowOfferDetails(@PathVariable("offerId") int offerId) {
         Offer offer = offerService.getOfferDetailsById(offerId);
         OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
@@ -91,7 +87,7 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/applyinternship/{offerId}", consumes = "application/json")
+    @PostMapping(path="/applyinternship/{offerId}")
     public ResponseEntity<?> hndApplyForInternship(HttpServletRequest request,
                                                    @PathVariable("offerId") int offerId) {
         String token = request.getHeader("Authorization");
@@ -121,7 +117,7 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(path="/manageCompanyApplication", consumes = "application/json")
+    @GetMapping(path="/managecompanyapplication")
     public ResponseEntity<?> hndShowCompanyApplications(HttpServletRequest request){
         List<Company> companies = userService.getCompanyApplications();
         List<NotApprovedCompaniesResponse> companiesNotApproved = new ArrayList<>();
@@ -137,7 +133,7 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/manageCompanyApplication/{companyId}", consumes = "application/json")
+    @PostMapping(path="/managecompanyapplication/{companyId}")
     public ResponseEntity<?> hndApproveCompany(HttpServletRequest request, @PathVariable("companyId") int companyId) {
         String isApproved = request.getHeader("companyApproved");
         boolean result = false;
@@ -160,7 +156,7 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/manageOffers", consumes = "application/json")
+    @GetMapping(path="/manageoffers")
     public ResponseEntity<?> hndShowNotApprovedCompanyOffers(HttpServletRequest request) {
         List<Offer> offers = offerService.getListOfOffers();
         List<NotApprovedOffersResponse> offersNotApproved = new ArrayList<>();
@@ -174,8 +170,9 @@ public class OfferController {
         }
         return new ResponseEntity<>(offersNotApproved, HttpStatus.ACCEPTED);
     }
+
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/manageOffers/{offerId}", consumes = "application/json")
+    @GetMapping(path="/manageoffers/{offerId}")
     public ResponseEntity<?> hndViewOfferDetailsForApproveDisapprove(HttpServletRequest request, @PathVariable("offerId") int offerId) {
         Offer offer = offerService.getOfferDetailsById(offerId);
         OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
@@ -191,11 +188,14 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/approveDisapproveOffer/{offerId}", consumes = "application/json")
-    public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request, @PathVariable("offerId") int offerId) {
-        String isApproved = request.getHeader("offerApproved");
+    @PostMapping(path="/approverejectoffer/{offerId}", consumes = "application/json")
+    public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request,
+                                                       @RequestBody ApproveDisapproveOfferRequest approveDisapproveRequest,
+                                                       @PathVariable("offerId") int offerId) {
+        boolean isApproved = approveDisapproveRequest.isOfferApprove();
+
         boolean result = false;
-        if(isApproved.equals("true")){
+        if(isApproved){
             result = offerService.approveOffer(offerId);
             if (result) {
                 return new ResponseEntity<>("Offer Approved", HttpStatus.ACCEPTED);

@@ -19,3 +19,5 @@ r
 Bdemo/src/main/java/com/icis/demo/Controller/ProfileController.java,4\1\41c41da7d2a7573594641b70b8ce0bb658c41e7e
 d
 4demo/src/main/java/com/icis/demo/DAO/CompanyDAO.java,6\d\6df005f51d0f9f6a9171834c86072da419f73a9b
+ƒ
+Sdemo/src/main/java/com/icis/demo/RequestEntities/ApproveDisapproveOfferRequest.java,3\1\3123b32cb3835368c2b01199dd97f784fd9c0e03

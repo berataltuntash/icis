@@ -1,39 +1,24 @@
 
-f	java:S117#"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ØŸÅ
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê
-f	java:S116"RRename this field "JWTUtil" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(þÔÞX
-g	java:S116"RRename this field "StuRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼äÒÀ
-l	java:S116"RRename this field "StfRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©ú¥‹ûÿÿÿÿ
-g	java:S116"RRename this field "ComRole" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÝéŽÒ
-7
-java:S1170"!Make this final field static too.(¼äÒÀ
-<
-java:S1170"!Make this final field static too.(©ú¥‹ûÿÿÿÿ
-7
-java:S1170"!Make this final field static too.(ÝéŽÒ
-A
-java:S1452,"&Remove usage of generic wildcard type.(Þ€ ûÿÿÿÿ
-<
-java:S14528"&Remove usage of generic wildcard type.(ÿÙ 
-<
-java:S1452?"&Remove usage of generic wildcard type.(ÎóŒ÷
-A
-java:S1452O"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ
-<
-java:S1452_"&Remove usage of generic wildcard type.(˜¡•·
-A
-java:S1452}"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ
-<
-java:S1452"&Remove usage of generic wildcard type.(ÐÌ½
-B
-java:S1452¤"&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ
-=
-java:S1452³"&Remove usage of generic wildcard type.(ËÙ¬™
-=
-java:S1452Ã"&Remove usage of generic wildcard type.(…¥íâ
-A
-java:S1068"+Remove this unused "StuRole" private field.(¼äÒÀ
-F
-java:S1068"+Remove this unused "StfRole" private field.(©ú¥‹ûÿÿÿÿ
-A
-java:S1068"+Remove this unused "ComRole" private field.(ÝéŽÒ
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8†§ìåø1J$908e0054-3a10-4033-aa9b-410f2e0f94d5
+€
+java:S2589h"8Remove this expression which always evaluates to "false"(ëàÿüÿÿÿÿ8˜§ìåø1J$60967738-02ff-4ff6-8344-cee82701ad7f
+n
+java:S1452'"&Remove usage of generic wildcard type.(Þ€ ûÿÿÿÿ8§ìåø1J$92edd47d-2c61-4270-b9e0-bdf3be8a685d
+i
+java:S14523"&Remove usage of generic wildcard type.(ÿÙ 8ž§ìåø1J$e1cab875-61a4-4a76-94cd-7c1f190015cf
+i
+java:S1452:"&Remove usage of generic wildcard type.(ÎóŒ÷8Ÿ§ìåø1J$e748dfad-2e12-4b99-b476-d4c48089a343
+n
+java:S1452K"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8 §ìåø1J$ac19a048-5d62-4e8f-baf8-4f3daeb677de
+i
+java:S1452["&Remove usage of generic wildcard type.(˜¡•·8¢§ìåø1J$8a5661dc-de75-484b-9407-ff8aa17aac93
+n
+java:S1452y"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8¢§ìåø1J$d43d7512-7ef0-43b2-9997-e3b16aa228c1
+i
+java:S1452‰"&Remove usage of generic wildcard type.(ÐÌ½8£§ìåø1J$910dcee4-a26d-4712-a84d-7d4ca1e93855
+o
+java:S1452 "&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ8¤§ìåø1J$bf920598-6660-4164-834e-7bcf60fbd437
+j
+java:S1452°"&Remove usage of generic wildcard type.(ËÙ¬™8¥§ìåø1J$b91e8369-58ba-4fbb-8752-de05cfc6bef4
+o
+java:S1452À"&Remove usage of generic wildcard type.(ÜïÄ®þÿÿÿÿ8¦§ìåø1J$12795b58-26eb-470a-9933-90c88b0b48eb
