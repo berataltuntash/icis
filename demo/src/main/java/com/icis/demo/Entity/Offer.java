@@ -15,6 +15,10 @@ public class Offer {
     private int id;
     @Column(name = "statuss")
     private String status;
+
+    @Column(name = "namee")
+    private String name;
+
     @JoinColumn(name = "company_id")
     @ManyToOne(targetEntity = Company.class)
     private Company companyId;
@@ -25,12 +29,13 @@ public class Offer {
     @Column(name = "description")
     private String description;
 
-    public Offer(String status, Company companyId,  Date shareDate, Date expirationDate, String description) {
+    public Offer(String status, Company companyId,  Date shareDate, Date expirationDate, String description, String name) {
         this.status = status;
         this.companyId = companyId;
         this.shareDate = shareDate;
         this.expirationDate = expirationDate;
         this.description = description;
+        this.name = name;
     }
 
     public Offer() {
@@ -82,5 +87,13 @@ public class Offer {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -2,7 +2,6 @@ package com.icis.demo.System;
 
 import com.icis.demo.Entity.Offer;
 import com.icis.demo.Service.OfferService;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

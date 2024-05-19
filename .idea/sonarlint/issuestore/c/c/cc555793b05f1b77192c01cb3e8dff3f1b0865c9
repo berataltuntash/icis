@@ -1,8 +1,8 @@
 
-
-java:S1192!"QDefine a constant instead of duplicating this literal "@std.iyte.edu.tr" 3 times.(ˆ–İõJ$e41f3312-656f-4c6c-9dbb-804a46f63d6c
 
 java:S1192#"MDefine a constant instead of duplicating this literal "@iyte.edu.tr" 3 times.(¬şªáüÿÿÿÿJ$e89812b2-9dcc-4022-b912-95516c62a1a8
+
+java:S1192!"QDefine a constant instead of duplicating this literal "@std.iyte.edu.tr" 3 times.(ˆ–İõJ$e41f3312-656f-4c6c-9dbb-804a46f63d6c
 •	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©êJ$63f64552-8e52-474d-8ee2-2027b6e96120
 b
 java:S1452"&Remove usage of generic wildcard type.(²£äJ$e76a8e11-9e4c-4596-861b-5f9e3404a78a

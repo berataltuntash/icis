@@ -2,7 +2,7 @@ package com.icis.demo.ResponseEntities;
 
 public class NotApprovedCompaniesResponse {
     private String companyName;
-    private int companyId;
+        private int companyId;
 
     public NotApprovedCompaniesResponse(String companyName, int companyId) {
         this.companyName = companyName;
