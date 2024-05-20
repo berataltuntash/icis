@@ -1,4 +1,6 @@
 
+‹
+java:S1192+"HDefine a constant instead of duplicating this literal "Pending" 3 times.(‰ò™8¯œ›¸ù1J$0c72ca06-b41f-4e49-8149-1e07181086d2
 ¦
-java:S1488""^Immediately return this expression instead of assigning it to the temporary variable "offers".(İÕìêùÿÿÿÿ8Ä¾‹‰ù1J$2edc26b6-0a16-428f-97c2-4c417f6dfef7
-œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8Æ¾‹‰ù1J$9258afd2-e524-4257-8e7f-8a33663927c9
+java:S1488""^Immediately return this expression instead of assigning it to the temporary variable "offers".(İÕìêùÿÿÿÿ8ƒ‰¸ù1J$0c038294-0865-4a9f-82f6-4c3e7cc67f1d
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8…‰¸ù1J$94588a89-9265-4862-a612-06783f1f4672

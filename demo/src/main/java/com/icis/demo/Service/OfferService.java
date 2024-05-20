@@ -102,4 +102,26 @@ public class OfferService {
 
         return applicationsToCompany;
     }
+
+    public boolean approveApplicationCompany(int applicationId) {
+        Application application = applicationDAO.findById(applicationId).orElse(null);
+        if (application == null) return false;
+        applicationDAO.delete(application);
+        application.setStatus("Pending");
+        applicationDAO.save(application);
+        return true;
+    }
+
+    public List<Application> getApplicationsToStudent(int id) {
+        List<Application> applications = applicationDAO.findAll();
+        List<Application> applicationsToStudent = new ArrayList<>();
+
+        for(Application application : applications) {
+            if(application.getStudentId().getId() == id) {
+                applicationsToStudent.add(application);
+            }
+        }
+
+        return applicationsToStudent;
+    }
 }

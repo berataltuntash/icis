@@ -274,8 +274,62 @@ public class OfferController {
             }
 
             List<Application> applications = offerService.getApplicationsToCompany(company.getId());
+            List<ApplicationsToCompanyResponse> applicationsToCompany = new ArrayList<>();
 
-            return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+            for (Application application : applications) {
+                ApplicationsToCompanyResponse applicationToCompany = new ApplicationsToCompanyResponse();
+                applicationToCompany.setStudentName(application.getStudentId().getName());
+                applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
+                applicationToCompany.setOfferName(application.getOffer().getName());
+                applicationsToCompany.add(applicationToCompany);
+            }
+
+
+            return new ResponseEntity<>(applicationsToCompany, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/approveapplication/{applicationId}")
+    public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
+                                                   @PathVariable("applicationId") int applicationId) {
+        try{
+            boolean result = offerService.approveApplicationCompany(applicationId);
+            if (result) {
+                return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/studentapprovedapplications")
+    public ResponseEntity<?> hndShowStudentApprovedApplications(HttpServletRequest request) {
+        try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+            Student student = userService.getStudentUser(onlineUser.getEmail());
+
+            if (student == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.UNAUTHORIZED);
+            }
+
+            List<Application> applications = offerService.getApplicationsToStudent(student.getId());
+            List<ApprovedApplicationResponse> approvedApplications = new ArrayList<>();
+
+            for (Application application : applications) {
+                if (application.getStatus().equals("Approved")) {
+                    ApprovedApplicationResponse approvedApplication = new ApprovedApplicationResponse();
+                    approvedApplications.add(approvedApplication);
+                }
+            }
+
+            return new ResponseEntity<>(approvedApplications, HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
         }
