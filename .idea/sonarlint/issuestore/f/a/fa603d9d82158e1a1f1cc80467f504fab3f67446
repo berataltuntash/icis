@@ -1,11 +1,0 @@
-
-†	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ë¼³‡ıÿÿÿÿJ$fc516a23-b13e-4697-a62b-7ea66825b021
-	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ìßÒúJ$950db8ea-5cd9-439c-bcc1-99c2f2649d5a
-”	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¡ğqJ$b7f3d639-c47e-4261-9a93-08ee115198c6
-š	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(è¿óÀøÿÿÿÿJ$87602fce-e5ba-4015-ace7-ee4a0fd73050
-{
-java:S1118":Add a private constructor to hide the implicit public one.(½«äğÿÿÿÿÿJ$9bc38422-f2b3-4328-9d18-802665a3ce25
-X
-java:S5542"Use a secure padding scheme.(É©üJ$61effea3-f165-4efd-9542-169e5daf13a1
-l
-java:S1144"0Remove this unused private "generateKey" method.(ìßÒúJ$7a0ebcba-4a5e-4bb7-b721-b32e10cb64ae

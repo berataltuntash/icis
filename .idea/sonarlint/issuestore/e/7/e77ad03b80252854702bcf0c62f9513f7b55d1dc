@@ -1,46 +1,50 @@
 
-q
-java:S1192v"TDefine a constant instead of duplicating this literal "Unauthorized Access" 3 times.(õİ³ê8·«ë¸ù1
-p
-java:S1192/"NDefine a constant instead of duplicating this literal "Authorization" 6 times.(°‚é”ıÿÿÿÿ8¸«ë¸ù1
+—
+java:S1192v"TDefine a constant instead of duplicating this literal "Unauthorized Access" 3 times.(õİ³ê8‚€Ï¹ù1J$c4e09b8f-a7cb-4dd1-a32c-59cc7b74e56e
+²
+java:S1192®"nDefine a constant instead of duplicating this literal "Error occured while approving the application" 4 times.(È… 8ƒ€Ï¹ù1J$f955d87b-ce5e-486a-abd4-3c915cdb9ede
+–
+java:S1192/"NDefine a constant instead of duplicating this literal "Authorization" 6 times.(°‚é”ıÿÿÿÿ8ƒ€Ï¹ù1J$61e98467-663c-4576-b8ca-5d67a2c66063
+´
+java:S1192i"qDefine a constant instead of duplicating this literal "Error occured while retrieving the offer details" 3 times.(Ä™íƒ8ƒ€Ï¹ù1J$341908e1-37e8-4cf7-a7a1-a62c16d7dda0
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8…€Ï¹ù1J$fa2523d4-7aca-4f67-b829-a58218f3f067
+€
+java:S2589}"8Remove this expression which always evaluates to "false"(ëàÿüÿÿÿÿ8¯€Ï¹ù1J$9bd81945-22bd-4a89-ad60-71b53aabd7c7
+n
+java:S1452,"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8³€Ï¹ù1J$a1737976-1202-43bb-ba74-1ca3135a9445
+i
+java:S1452="&Remove usage of generic wildcard type.(ÿÙ 8µ€Ï¹ù1J$2560939d-a5fe-4ecc-b15b-fbc8bf954148
+i
+java:S1452D"&Remove usage of generic wildcard type.(ÎóŒ÷8µ€Ï¹ù1J$59ad4374-ab7a-4999-831f-d75a2c657d58
+n
+java:S1452Z"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8·€Ï¹ù1J$a2e09666-4abc-40f0-b511-61be9670f9e3
+i
+java:S1452o"&Remove usage of generic wildcard type.(˜¡•·8¸€Ï¹ù1J$56d18010-3829-49ab-a274-d24e92e46754
+o
+java:S1452‘"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8¹€Ï¹ù1J$bcc2b0b5-ac56-4378-aa19-120228d3e9ec
+i
+java:S1452¦"&Remove usage of generic wildcard type.(ÄÔ­*8º€Ï¹ù1J$80b4f3ff-efe6-45fd-9ad5-0ef73e53feef
+o
+java:S1452Ä"&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ8»€Ï¹ù1J$0e24c24d-10ad-425c-b6b5-1ec7b17221a9
+j
+java:S1452Ø"&Remove usage of generic wildcard type.(ËÙ¬™8¼€Ï¹ù1J$e64e084f-9827-4e59-9ed3-9bd826da416c
+o
+java:S1452ì"&Remove usage of generic wildcard type.(ÜïÄ®şÿÿÿÿ8½€Ï¹ù1J$f218a27f-2090-4a40-b74d-93b9d8b44d77
+o
+java:S1452‰"&Remove usage of generic wildcard type.(‡º©şùÿÿÿÿ8¾€Ï¹ù1J$a0f61bbf-27e6-49c4-86cc-9c4f23b37c66
+i
+java:S1452¦"&Remove usage of generic wildcard type.(ˆb8¿€Ï¹ù1J$852f444b-5e50-40de-9c18-1a420361ebc2
+i
+java:S1452·"&Remove usage of generic wildcard type.(è°¥28À€Ï¹ù1J$d6f97aa9-7d27-4f08-a8d8-d5909ec51711
+j
+java:S1452Ö"&Remove usage of generic wildcard type.(š ¡ß8Á€Ï¹ù1J$a5b21500-e17d-4613-9535-714ec1e17cb3
+o
+java:S1452è"&Remove usage of generic wildcard type.(üšêúÿÿÿÿ8Â€Ï¹ù1J$8a2d0cf6-92c8-4a57-917b-39fc71a772b5
 
-java:S1192i"qDefine a constant instead of duplicating this literal "Error occured while retrieving the offer details" 3 times.(Ä™íƒ8¸«ë¸ù1
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8º«ë¸ù1
-Z
-java:S2589}"8Remove this expression which always evaluates to "false"(ëàÿüÿÿÿÿ8Ù«ë¸ù1
-H
-java:S1452,"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8Ş«ë¸ù1
-C
-java:S1452="&Remove usage of generic wildcard type.(ÿÙ 8à«ë¸ù1
-C
-java:S1452D"&Remove usage of generic wildcard type.(ÎóŒ÷8á«ë¸ù1
-H
-java:S1452Z"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8â«ë¸ù1
-C
-java:S1452o"&Remove usage of generic wildcard type.(˜¡•·8ã«ë¸ù1
-I
-java:S1452‘"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8å«ë¸ù1
-C
-java:S1452¦"&Remove usage of generic wildcard type.(ÄÔ­*8æ«ë¸ù1
-I
-java:S1452Ä"&Remove usage of generic wildcard type.(ßœÚ´ûÿÿÿÿ8ç«ë¸ù1
-D
-java:S1452Ø"&Remove usage of generic wildcard type.(ËÙ¬™8è«ë¸ù1
-I
-java:S1452ì"&Remove usage of generic wildcard type.(ÜïÄ®şÿÿÿÿ8è«ë¸ù1
-I
-java:S1452Š"&Remove usage of generic wildcard type.(‡º©şùÿÿÿÿ8é«ë¸ù1
-C
-java:S1452¨"&Remove usage of generic wildcard type.(ˆb8ë«ë¸ù1
-C
-java:S1452¸"&Remove usage of generic wildcard type.(è°¥28ë«ë¸ù1
-I
-java:S1452Õ"&Remove usage of generic wildcard type.(üšêúÿÿÿÿ8í«ë¸ù1
-h
-java:S2674ñ"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8ğ«ë¸ù1
-I
-java:S1452€"&Remove usage of generic wildcard type.(ô²¨Äüÿÿÿÿ8ò«ë¸ù1
-h
-java:S2674œ"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8ô«ë¸ù1
-I
-java:S1452­"&Remove usage of generic wildcard type.(Óæ€øÿÿÿÿ8õ«ë¸ù1
+java:S2674„"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8Å€Ï¹ù1J$0043d4bf-6179-4ad9-a7d9-b201a42bd954
+o
+java:S1452“"&Remove usage of generic wildcard type.(ô²¨Äüÿÿÿÿ8È€Ï¹ù1J$007da3fc-6eb1-4900-965b-7e787e2d5f4f
+
+java:S2674¯"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8É€Ï¹ù1J$d9a3d728-fb3d-413d-a21d-88f390ed9d8c
+o
+java:S1452À"&Remove usage of generic wildcard type.(Óæ€øÿÿÿÿ8Ê€Ï¹ù1J$a2832501-b939-4923-9052-8c678b77a5ca

@@ -238,7 +238,6 @@ public class OfferController {
                                                        @PathVariable("offerId") int offerId) {
         try{
             boolean isApproved = approveDisapproveRequest.isApprove();
-
             boolean result = false;
             if(isApproved){
                 result = offerService.approveOffer(offerId);
@@ -284,7 +283,6 @@ public class OfferController {
                 applicationsToCompany.add(applicationToCompany);
             }
 
-
             return new ResponseEntity<>(applicationsToCompany, HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
@@ -294,9 +292,10 @@ public class OfferController {
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/approveapplication/{applicationId}")
     public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
-                                                   @PathVariable("applicationId") int applicationId) {
+                                                   @PathVariable("applicationId") int applicationId,
+                                                   @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
         try{
-            boolean result = offerService.approveApplicationCompany(applicationId);
+            boolean result = offerService.approveApplicationCompany(applicationId, approveDisapproveRequest.isApprove());
             if (result) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
             } else {
@@ -325,6 +324,9 @@ public class OfferController {
             for (Application application : applications) {
                 if (application.getStatus().equals("Approved")) {
                     ApprovedApplicationResponse approvedApplication = new ApprovedApplicationResponse();
+                    approvedApplication.setOfferName(application.getOffer().getName());
+                    approvedApplication.setCompanyName(application.getOffer().getCompanyId().getCompanyName());
+                    approvedApplication.setId(application.getId());
                     approvedApplications.add(approvedApplication);
                 }
             }
@@ -332,6 +334,23 @@ public class OfferController {
             return new ResponseEntity<>(approvedApplications, HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/studentapproveapplication/{applicationId}")
+    public ResponseEntity<?> hndApproveApplicationStudent(HttpServletRequest request,
+                                                          @PathVariable("applicationId") int applicationId,
+                                                          @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
+        try{
+            boolean result = offerService.approveApplicationStudent(applicationId, approveDisapproveRequest.isApprove());
+            if (result) {
+                return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
         }
     }
 

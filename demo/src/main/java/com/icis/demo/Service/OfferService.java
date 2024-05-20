@@ -103,13 +103,20 @@ public class OfferService {
         return applicationsToCompany;
     }
 
-    public boolean approveApplicationCompany(int applicationId) {
+    public boolean approveApplicationCompany(int applicationId, boolean isApproved) {
         Application application = applicationDAO.findById(applicationId).orElse(null);
         if (application == null) return false;
         applicationDAO.delete(application);
-        application.setStatus("Pending");
-        applicationDAO.save(application);
-        return true;
+        if(isApproved) {
+            application.setStatus("Approved");
+            applicationDAO.save(application);
+            return true;
+        }
+        else {
+            application.setStatus("Rejected");
+            applicationDAO.save(application);
+            return false;
+        }
     }
 
     public List<Application> getApplicationsToStudent(int id) {
@@ -121,7 +128,22 @@ public class OfferService {
                 applicationsToStudent.add(application);
             }
         }
-
         return applicationsToStudent;
+    }
+
+    public boolean approveApplicationStudent(int applicationId, boolean isApproved) {
+        Application application = applicationDAO.findById(applicationId).orElse(null);
+        if (application == null) return false;
+        applicationDAO.delete(application);
+        if(isApproved) {
+            application.setStatus("Approved");
+            applicationDAO.save(application);
+            return true;
+        }
+        else {
+            application.setStatus("Rejected");
+            applicationDAO.save(application);
+            return false;
+        }
     }
 }
