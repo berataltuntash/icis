@@ -1,0 +1,41 @@
+
+g	java:S112E"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8ü£«½ù1
+g	java:S112_"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¤«½ù1
+g	java:S112|"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¤«½ù1
+h	java:S112«"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8‚¤«½ù1
+ˆ
+java:S11926"kDefine a constant instead of duplicating this literal "Registration failed: Email already in use." 3 times.(„ë™8‘¤«½ù1
+w
+java:S1192—"TDefine a constant instead of duplicating this literal "Incorrect password." 3 times.(Â©óøÿÿÿÿ8“¤«½ù1
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(™±·Çûÿÿÿÿ8›¤«½ù1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8¢¤«½ù1
+m	java:S116"RRename this field "JWTUtil" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(şÔŞX8İ¤«½ù1
+x
+java:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(µĞ½¹şÿÿÿÿ8á¤«½ù1
+R
+java:S2209C"5Change this instance-reference to a static reference.(ÔÕÍ•8ë¤«½ù1
+R
+java:S2209]"5Change this instance-reference to a static reference.(ÔÕÍ•8î¤«½ù1
+R
+java:S2209z"5Change this instance-reference to a static reference.(ÔÕÍ•8ò¤«½ù1
+R
+java:S2209•"5Change this instance-reference to a static reference.(´ßÊ8õ¤«½ù1
+X
+java:S2209¢"5Change this instance-reference to a static reference.(‰Îåûúÿÿÿÿ8ö¤«½ù1
+X
+java:S2209Ë"5Change this instance-reference to a static reference.(•Ò²×ıÿÿÿÿ8ú¤«½ù1
+X
+java:S2209Ñ"5Change this instance-reference to a static reference.(‰Îåûúÿÿÿÿ8û¤«½ù1
+S
+java:S2209ô"5Change this instance-reference to a static reference.(³¥Ó¡8ÿ¤«½ù1
+X
+java:S2209ú"5Change this instance-reference to a static reference.(‰Îåûúÿÿÿÿ8ÿ¤«½ù1
+;
+java:S2119œ"Save and re-use this "Random".(¼İÅf8‡¥«½ù1
+M	java:S106¢"+Replace this use of System.out by a logger.(¥ÈùÓıÿÿÿÿ8‰¥«½ù1
+S
+java:S2209©"5Change this instance-reference to a static reference.(ÔÕÍ•8‹¥«½ù1
+Z
+java:S1128"8Remove this unused import 'jakarta.servlet.http.Cookie'.(Ê‘¡¹úÿÿÿÿ8Œ¥«½ù1
+g
+java:S1128"ERemove this unused import 'jakarta.servlet.http.HttpServletResponse'.(ÂÓÕÇÿÿÿÿÿ8¥«½ù1

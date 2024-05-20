@@ -294,16 +294,7 @@ public class OfferController {
     public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
                                                    @PathVariable("applicationId") int applicationId,
                                                    @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
-        try{
-            boolean result = offerService.approveApplicationCompany(applicationId, approveDisapproveRequest.isApprove());
-            if (result) {
-                return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
-            } else {
-                return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
-        }
+       return null;
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
