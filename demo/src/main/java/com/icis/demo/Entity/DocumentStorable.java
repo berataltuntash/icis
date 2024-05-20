@@ -11,13 +11,13 @@ public class DocumentStorable {
     private int id;
     @JoinColumn(name = "application_id")
     @ManyToOne(targetEntity = Application.class)
-    private int applicationId;
+    private Application applicationId;
     @Column(name = "namee")
     private String name;
     @Column(name = "dataa")
     private String data;
 
-    public DocumentStorable(int applicationId, String name, String data) {
+    public DocumentStorable(Application applicationId, String name, String data) {
         this.applicationId = applicationId;
         this.name = name;
         this.data = data;
@@ -34,11 +34,11 @@ public class DocumentStorable {
         this.id = id;
     }
 
-    public int getApplicationId() {
+    public Application getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(int applicationId) {
+    public void setApplicationId(Application applicationId) {
         this.applicationId = applicationId;
     }
 

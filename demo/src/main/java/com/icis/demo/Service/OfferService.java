@@ -1,15 +1,14 @@
 package com.icis.demo.Service;
 
+import com.icis.demo.DAO.AnnouncementDAO;
 import com.icis.demo.DAO.ApplicationDAO;
 import com.icis.demo.DAO.OfferDAO;
-import com.icis.demo.Entity.Application;
-import com.icis.demo.Entity.Company;
-import com.icis.demo.Entity.Offer;
-import com.icis.demo.Entity.Student;
+import com.icis.demo.Entity.*;
 import com.icis.demo.Utils.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -20,13 +19,15 @@ public class OfferService {
     UserService userService;
     MailUtil mailUtil;
     ApplicationDAO applicationDAO;
+    AnnouncementDAO announcementDAO;
 
     @Autowired
-    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil, ApplicationDAO applicationDAO) {
+    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil, ApplicationDAO applicationDAO, AnnouncementDAO announcementDAO) {
         this.offerDAO = offerDAO;
         this.userService = userService;
         this.mailUtil = mailUtil;
         this.applicationDAO = applicationDAO;
+        this.announcementDAO = announcementDAO;
     }
 
     public List<Offer> getListOfOffers(){
@@ -83,5 +84,22 @@ public class OfferService {
         offerDAO.delete(offer);
 
         return true;
+    }
+
+    public List<Announcement> getListOfAnnouncements() {
+        return announcementDAO.findAll();
+    }
+
+    public List<Application> getApplicationsToCompany(int id) {
+        List<Application> applications = applicationDAO.findAll();
+        List<Application> applicationsToCompany = new ArrayList<>();
+
+        for(Application application : applications) {
+            if(application.getOffer().getCompanyId().getId() == id) {
+                applicationsToCompany.add(application);
+            }
+        }
+
+        return applicationsToCompany;
     }
 }

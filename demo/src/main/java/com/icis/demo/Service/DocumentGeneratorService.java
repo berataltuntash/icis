@@ -1,8 +1,8 @@
 package com.icis.demo.Service;
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import com.icis.demo.Entity.Application;
+import com.icis.demo.Entity.DocumentStorable;
+import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,44 @@ public class DocumentGeneratorService {
         Resource templateResource = new ClassPathResource(templatePath);
         try (InputStream is = templateResource.getInputStream()) {
             XWPFDocument document = new XWPFDocument(is);
+
             for (XWPFParagraph paragraph : document.getParagraphs()) {
-                for (XWPFRun run : paragraph.getRuns()) {
-                    String text = run.getText(0);
-                    if (text != null) {
-                        for (Map.Entry<String, String> entry : data.entrySet()) {
-                            text = text.replace("{{" + entry.getKey() + "}}", entry.getValue());
+                replacePlaceholders(paragraph, data);
+            }
+
+            for (XWPFTable table : document.getTables()) {
+                for (XWPFTableRow row : table.getRows()) {
+                    for (XWPFTableCell cell : row.getTableCells()) {
+                        for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                            replacePlaceholders(paragraph, data);
                         }
-                        run.setText(text, 0);
                     }
                 }
             }
+
             try (FileOutputStream out = new FileOutputStream(outputPath)) {
                 document.write(out);
             }
         }
+    }
 
+    public DocumentStorable createStorableDocument(Application application, String name, String data) {
+        DocumentStorable documentStorable = new DocumentStorable();
+        documentStorable.setData(data);
+        documentStorable.setName(name);
+        documentStorable.setApplicationId(application);
+        return documentStorable;
+    }
 
+    private void replacePlaceholders(XWPFParagraph paragraph, Map<String, String> data) {
+        for (XWPFRun run : paragraph.getRuns()) {
+            String text = run.getText(0);
+            if (text != null) {
+                for (Map.Entry<String, String> entry : data.entrySet()) {
+                    text = text.replace("{{" + entry.getKey() + "}}", entry.getValue());
+                }
+                run.setText(text, 0);
+            }
+        }
     }
 }

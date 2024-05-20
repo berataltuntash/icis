@@ -1,0 +1,41 @@
+
+†	java:S112E"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$4b0bfd60-a1d9-4d9a-99e2-8ec80e08e4d6
+†	java:S112_"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$5124333e-ad59-42a2-bfb5-d35e29b3c9cd
+†	java:S112|"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$1b982c79-7da3-4e43-bffe-69d7d4bc412f
+‡	java:S112«"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$06cd48c6-f05d-48d4-9cd6-2eb0b9b89941
+§
+java:S11926"kDefine a constant instead of duplicating this literal "Registration failed: Email already in use." 3 times.(„ë™J$686adf4d-396e-4d68-adbf-691ce443e631
+–
+java:S1192—"TDefine a constant instead of duplicating this literal "Incorrect password." 3 times.(Â©óøÿÿÿÿJ$30648326-e0fb-4728-ae6f-3b7c586531e9
+‘	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(™±·ÇûÿÿÿÿJ$b09b9980-b277-4387-a237-700c36a15f44
+•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”J$d89fce43-f387-4a23-bb6c-5a5a32672eb7
+Œ	java:S116"RRename this field "JWTUtil" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(şÔŞXJ$232e0c4f-1b37-4550-a2d3-451f9dd4aea5
+—
+java:S1149"VReplace the synchronized class "Hashtable" by an unsynchronized one such as "HashMap".(µĞ½¹şÿÿÿÿJ$f2b706a0-8a98-4049-a0e8-48a9e2ff44ad
+q
+java:S2209C"5Change this instance-reference to a static reference.(ÔÕÍ•J$ad394ca5-4953-4bb9-8ba0-2f057c762b42
+q
+java:S2209]"5Change this instance-reference to a static reference.(ÔÕÍ•J$d2d0591f-476c-409b-bd7d-8d613d9b135c
+q
+java:S2209z"5Change this instance-reference to a static reference.(ÔÕÍ•J$91a96225-c2a6-4035-9fee-2f596c749f97
+q
+java:S2209•"5Change this instance-reference to a static reference.(´ßÊJ$38b838bb-01e7-46c7-bc28-e94f37d64714
+w
+java:S2209¢"5Change this instance-reference to a static reference.(‰ÎåûúÿÿÿÿJ$4a0058eb-bf45-4635-958a-0408802aab4a
+w
+java:S2209Ë"5Change this instance-reference to a static reference.(•Ò²×ıÿÿÿÿJ$b9128ea6-f81e-4605-850b-8820a48e3998
+w
+java:S2209Ñ"5Change this instance-reference to a static reference.(‰ÎåûúÿÿÿÿJ$c48b677f-3f88-48b0-affd-568cc6152159
+r
+java:S2209ô"5Change this instance-reference to a static reference.(³¥Ó¡J$e45ba3f1-2880-4ac5-8de5-f633f3d355eb
+w
+java:S2209ú"5Change this instance-reference to a static reference.(‰ÎåûúÿÿÿÿJ$f037c256-ba3b-4eef-871a-f34b13351515
+Z
+java:S2119œ"Save and re-use this "Random".(¼İÅfJ$81c29a01-8081-4c12-ae38-be9652244acf
+l	java:S106¢"+Replace this use of System.out by a logger.(¥ÈùÓıÿÿÿÿJ$b1b99f7d-04ba-464f-bd9d-ebbfd649c5f7
+r
+java:S2209©"5Change this instance-reference to a static reference.(ÔÕÍ•J$95160e11-fe6a-46dd-bf3e-8eb5dc129ecd
+y
+java:S1128"8Remove this unused import 'jakarta.servlet.http.Cookie'.(Ê‘¡¹úÿÿÿÿJ$d84ded25-1218-479a-a8a0-7f25600ba0bc
+†
+java:S1128"ERemove this unused import 'jakarta.servlet.http.HttpServletResponse'.(ÂÓÕÇÿÿÿÿÿJ$74cfe2a9-ffff-4dee-896e-f4708f62b669

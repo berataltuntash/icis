@@ -1,18 +1,18 @@
 
-
-java:S1192#"MDefine a constant instead of duplicating this literal "@iyte.edu.tr" 3 times.(¬şªáüÿÿÿÿJ$e89812b2-9dcc-4022-b912-95516c62a1a8
-
-java:S1192!"QDefine a constant instead of duplicating this literal "@std.iyte.edu.tr" 3 times.(ˆ–İõJ$e41f3312-656f-4c6c-9dbb-804a46f63d6c
-•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©êJ$63f64552-8e52-474d-8ee2-2027b6e96120
-b
-java:S1452"&Remove usage of generic wildcard type.(²£äJ$e76a8e11-9e4c-4596-861b-5f9e3404a78a
-g
-java:S14528"&Remove usage of generic wildcard type.(‰Ü…ÆøÿÿÿÿJ$efff5d97-6495-4c06-8537-036fd9e8ccf5
-b
-java:S1452S"&Remove usage of generic wildcard type.(™ÿÎJ$758f57df-7ecf-4d54-aa59-6aa00c67cb7f
-b
-java:S1452f"&Remove usage of generic wildcard type.(ÆşÃJ$283fc00e-fa25-44d6-908c-80397cb763a0
-b
-java:S1452u"&Remove usage of generic wildcard type.(ÌÇŞJ$6c2e9073-3e8b-4f8f-af22-1dcd1198a7ba
-c
-java:S1452‚"&Remove usage of generic wildcard type.(‘ØâÛJ$a6b33d78-a4a8-42fa-9d7b-ff5b09f40a0b
+”
+java:S1192!"QDefine a constant instead of duplicating this literal "@std.iyte.edu.tr" 3 times.(ˆ–İõ8Û‹ˆù1J$73b35c02-c25c-4f8c-ae9f-bfe923deb669
+•
+java:S1192#"MDefine a constant instead of duplicating this literal "@iyte.edu.tr" 3 times.(¬şªáüÿÿÿÿ8Û‹ˆù1J$cfa7c460-8f33-4046-a106-73a9997d985e
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8Û‹ˆù1J$b46b1d94-b33f-49aa-b9f8-675c6fc17e6a
+i
+java:S1452"&Remove usage of generic wildcard type.(²£ä8¡Û‹ˆù1J$3c25a8e0-1ea7-457d-905e-d78292d0d96a
+n
+java:S14528"&Remove usage of generic wildcard type.(‰Ü…Æøÿÿÿÿ8£Û‹ˆù1J$a6ec9289-54cd-4548-8c2c-3a79e4ca7b8f
+i
+java:S1452S"&Remove usage of generic wildcard type.(™ÿÎ8¥Û‹ˆù1J$cc768142-9a52-4cdc-949c-0b7fa4820a0d
+i
+java:S1452f"&Remove usage of generic wildcard type.(ÆşÃ8¦Û‹ˆù1J$478513e0-37a9-418f-af8c-84c33b5859c7
+i
+java:S1452u"&Remove usage of generic wildcard type.(ÌÇŞ8¦Û‹ˆù1J$d900ecf4-b85b-44db-b506-f722cd9e1dd3
+j
+java:S1452‚"&Remove usage of generic wildcard type.(‘ØâÛ8§Û‹ˆù1J$8ba8f778-7943-44da-ad95-ccf5b0ba8b9e

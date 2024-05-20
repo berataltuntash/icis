@@ -138,13 +138,6 @@ public class AuthorizationService {
     public AuthenticationResponse isAuthorizedLoginStudent(String email, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
-        boolean isUserEligible = userService.isUserEligible(email);
-        if (!isUserEligible) {
-            authResponse.setSuccess(false);
-            authResponse.setMessage("Email not found or user not eligible for login.");
-            return authResponse;
-        }
-
         try {
             Student student = userService.getStudentUser(email);
             if (student == null) {
@@ -156,6 +149,13 @@ public class AuthorizationService {
             if (!student.getPassword().equals(encryptionUtil.encryptPassword(password))) {
                 authResponse.setSuccess(false);
                 authResponse.setMessage("Incorrect password.");
+                return authResponse;
+            }
+
+            boolean isUserEligible = userService.isUserEligible(email);
+            if (!isUserEligible) {
+                authResponse.setSuccess(false);
+                authResponse.setMessage("User not eligible for login.");
                 return authResponse;
             }
 

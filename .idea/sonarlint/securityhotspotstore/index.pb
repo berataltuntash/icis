@@ -39,3 +39,23 @@ i
 9demo/src/main/java/com/icis/demo/System/SystemFilter.java,a\e\ae2046b5c4cf6840fa39fde617c36f72577b6939
 h
 8demo/src/main/java/com/icis/demo/Utils/DocumentUtil.java,9\2\924524083507b86b0ebccf799eb1fcd4960eb384
+9
+	classpath,5\1\51d6f8e0d4d608f163138b7b280d810e201757ac
+A
+demo/compose.yaml,4\2\42f99e00b8ddb135e824b203211d961d2d9bdccf
+|
+Ldemo/src/main/java/com/icis/demo/ResponseEntities/AnnouncementsResponse.java,6\b\6b13f206d377ee979b86281a0410e46c67bbb615
+{
+Kdemo/src/main/java/com/icis/demo/ResponseEntities/OfferDetailsResponse.java,5\3\530f8d1a44bd4c61f31b26c8f780a7054076b7eb
+m
+=demo/src/main/java/com/icis/demo/Entity/DocumentFillable.java,2\d\2d441752e8e42035101dfecabbf7824781add654
+m
+=demo/src/main/java/com/icis/demo/Entity/DocumentStorable.java,0\4\0454664ddc64e1e26e504cdc97ec7787ae88266b
+r
+Bdemo/src/main/java/com/icis/demo/Service/AuthorizationService.java,7\0\7003da83b900f2cc0f2581d84dd8d5acbfa49836
+i
+9demo/src/main/java/com/icis/demo/Service/UserService.java,8\7\873e6764617bf2297c1d8d32fba1abe3d78fe7ca
+„
+Tdemo/src/main/java/com/icis/demo/ResponseEntities/ApplicationsToCompanyResponse.java,b\a\badd3e89bf36f3cc1c5259971057660d92d6357c
+f
+6demo/src/main/java/com/icis/demo/Config/WebConfig.java,2\e\2ed1077995da9158db4e4d3218234b0573bda192

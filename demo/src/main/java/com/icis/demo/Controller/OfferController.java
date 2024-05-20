@@ -2,10 +2,7 @@ package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.*;
 import com.icis.demo.RequestEntities.ApproveDisapproveRequest;
-import com.icis.demo.ResponseEntities.ActiveOffersResponse;
-import com.icis.demo.ResponseEntities.NotApprovedCompaniesResponse;
-import com.icis.demo.ResponseEntities.NotApprovedOffersResponse;
-import com.icis.demo.ResponseEntities.OfferDetailsResponse;
+import com.icis.demo.ResponseEntities.*;
 import com.icis.demo.RequestEntities.PostOfferRequest;
 import com.icis.demo.Service.DocumentGeneratorService;
 import com.icis.demo.Service.OfferService;
@@ -265,6 +262,27 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(path="/applicationstocompany")
+    public ResponseEntity<?> hndShowApplicationsToCompany(HttpServletRequest request) {
+        try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+            Company company = userService.getCompanyUser(onlineUser.getEmail());
+
+            if (company == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.UNAUTHORIZED);
+            }
+
+            List<Application> applications = offerService.getApplicationsToCompany(company.getId());
+
+            return new ResponseEntity<>("", HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/downloadapplicationletter")
     public ResponseEntity<?> downloadApplicationLetter(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -287,8 +305,8 @@ public class OfferController {
             studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
             studentData.put("E-POSTA", student.getEmail());
 
-            String templatePath = "classpath:1_TR_SummerPracticeApplicationLetter2023.docx";
-            String outputPath = "classpath:application_letter_" + student.getId() + ".docx";
+            String templatePath = "1_TR_SummerPracticeApplicationLetter2023.docx";
+            String outputPath = "application_letter_" + student.getId() + ".docx";
             documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
 
             File file = new File(outputPath);
@@ -299,12 +317,76 @@ public class OfferController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", file.getName());
+            String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
+            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(path="/downloadpracticeapplicationform")
+    public ResponseEntity<?> downloadPracticeApplicationForm(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String email = userService.getOnlineUser(token).getEmail();
+
+        if (email == null || !email.endsWith("@std.iyte.edu.tr")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Student student = userService.getStudentUser(email);
+
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            Map<String, String> studentData = new HashMap<>();
+            studentData.put("ADI - SOYADI", student.getName() + " " + student.getSurname());
+            studentData.put("SINIFI", String.valueOf(student.getGrade()));
+            studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
+            studentData.put("E-POSTA", student.getEmail());
+
+            String templatePath = "2_TR_SummerPracticeApplicationForm2023.docx";
+            String outputPath = "practice_application_form_" + student.getId() + ".docx";
+            documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
+
+            File file = new File(outputPath);
+            byte[] contents = new byte[(int) file.length()];
+            try (FileInputStream fis = new FileInputStream(file)) {
+                fis.read(contents);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
+            String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
 
             return new ResponseEntity<>(contents, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(path="/announcements")
+    public ResponseEntity<?> hndShowAnnouncements() {
+        try{
+            List<Announcement> announcements = offerService.getListOfAnnouncements();
+            List<AnnouncementsResponse> announcementsList = new ArrayList<>();
+
+            for (Announcement announcement : announcements) {
+                AnnouncementsResponse announcementsResponse = new AnnouncementsResponse();
+                announcementsResponse.setTitle(announcement.getTitle());
+                announcementsResponse.setDescription(announcement.getDescription());
+                announcementsList.add(announcementsResponse);
+            }
+
+            return new ResponseEntity<>(announcementsList, HttpStatus.ACCEPTED);
+        } catch(Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the announcements", HttpStatus.BAD_REQUEST);
         }
     }
 }
