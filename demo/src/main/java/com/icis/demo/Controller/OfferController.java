@@ -280,6 +280,7 @@ public class OfferController {
                 applicationToCompany.setStudentName(application.getStudentId().getName());
                 applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
                 applicationToCompany.setOfferName(application.getOffer().getName());
+                applicationToCompany.setGrade(String.valueOf(application.getStudentId().getGrade()));
                 applicationsToCompany.add(applicationToCompany);
             }
 
@@ -294,7 +295,17 @@ public class OfferController {
     public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
                                                    @PathVariable("applicationId") int applicationId,
                                                    @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
-       return null;
+        try{
+            boolean isApproved = approveDisapproveRequest.isApprove();
+            boolean result = offerService.approveApplicationCompany(applicationId, isApproved);
+            if (result) {
+                return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
@@ -334,7 +345,8 @@ public class OfferController {
                                                           @PathVariable("applicationId") int applicationId,
                                                           @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
         try{
-            boolean result = offerService.approveApplicationStudent(applicationId, approveDisapproveRequest.isApprove());
+            boolean isApproved = approveDisapproveRequest.isApprove();
+            boolean result = offerService.approveApplicationStudent(applicationId, isApproved);
             if (result) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
             } else {
