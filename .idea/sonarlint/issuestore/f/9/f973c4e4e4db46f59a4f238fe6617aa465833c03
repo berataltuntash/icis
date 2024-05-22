@@ -1,0 +1,12 @@
+
+t
+java:S1488"^Immediately return this expression instead of assigning it to the temporary variable "person".(úÖŸ
+t
+java:S1488"^Immediately return this expression instead of assigning it to the temporary variable "person".(úÖŸ
+n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¡ğq
+X
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ
+s
+java:S4144"]Update this method so that its implementation is not identical to "isRealStudent" on line 19.(ˆ€Ï
+O
+java:S1128"9Remove this unused import 'com.icis.demo.Entity.Student'.(üºæÊ

@@ -1,7 +1,25 @@
 
+~
+Ndemo/src/main/java/com/icis/demo/RequestEntities/ApproveDisapproveRequest.java,6\6\6632ee64be5bb256382c13d850e0703e0d54867b
 p
 @demo/src/main/java/com/icis/demo/Controller/OfferController.java,e\7\e77ad03b80252854702bcf0c62f9513f7b55d1dc
+i
+9demo/src/main/java/com/icis/demo/Service/UserService.java,8\7\873e6764617bf2297c1d8d32fba1abe3d78fe7ca
 j
 :demo/src/main/java/com/icis/demo/Service/OfferService.java,e\c\eced745e3c000042d8b79c437fc4f8e4cb7f5633
-‚
-Rdemo/src/main/java/com/icis/demo/ResponseEntities/ApprovedApplicationResponse.java,e\8\e82ad44f981fa7dedf8ca762f77bdf933734cce1
+v
+Fdemo/src/main/java/com/icis/demo/Service/DocumentGeneratorService.java,d\3\d3a23d04940405c98d41982390af5912f9d23b22
+j
+:demo/src/main/java/com/icis/demo/Utils/EncryptionUtil.java,f\a\fa603d9d82158e1a1f1cc80467f504fab3f67446
+h
+8demo/src/main/java/com/icis/demo/Utils/DocumentUtil.java,9\2\924524083507b86b0ebccf799eb1fcd4960eb384
+r
+Bdemo/src/main/java/com/icis/demo/Service/AuthorizationService.java,7\0\7003da83b900f2cc0f2581d84dd8d5acbfa49836
+d
+4demo/src/main/java/com/icis/demo/Utils/MailUtil.java,e\4\e48cb946bc71ab792df547e839c2160f399b57a8
+d
+4demo/src/main/java/com/icis/demo/Entity/Student.java,c\2\c274cf161c32df76e7bb0d29b25e184c2e9c60a5
+d
+4demo/src/main/java/com/icis/demo/Entity/Company.java,1\8\18636e89e28a7ae0d50dab7f0ca7417be77192aa
+c
+3demo/src/main/java/com/icis/demo/Utils/OBSUtil.java,f\9\f973c4e4e4db46f59a4f238fe6617aa465833c03

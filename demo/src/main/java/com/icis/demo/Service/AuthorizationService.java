@@ -59,9 +59,6 @@ public class AuthorizationService {
 
         if (obsPerson != null && obsPerson.getRole().equals("student")) {
             String encryptedPassword;
-            String name = obsPerson.getName();
-            String surname = obsPerson.getSurname();
-            int studentNumber = obsPerson.getId();
 
             try {
                 encryptedPassword = encryptionUtil.encryptPassword(password);
@@ -69,7 +66,7 @@ public class AuthorizationService {
                 throw new RuntimeException(e);
             }
 
-            userService.createStudentUser(name, surname, email, studentNumber, encryptedPassword);
+            userService.createStudentUser(obsPerson, encryptedPassword);
             authResponse.setSuccess(true);
             authResponse.setMessage("Student Registration successful.");
             return authResponse;
@@ -79,7 +76,7 @@ public class AuthorizationService {
         return authResponse;
     }
 
-    public AuthenticationResponse isAuthorizedSignUpCompany(String name, String email, String password) {
+    public AuthenticationResponse isAuthorizedSignUpCompany(String name, String email,boolean isForeign, String password) {
         AuthenticationResponse authResponse = new AuthenticationResponse();
         String encryptedPassword;
 
@@ -95,7 +92,7 @@ public class AuthorizationService {
             throw new RuntimeException(e);
         }
 
-        userService.createCompanyUser(name, email, encryptedPassword);
+        userService.createCompanyUser(name, email,isForeign, encryptedPassword);
         authResponse.setSuccess(true);
         authResponse.setMessage("Company Registration successful.");
         return authResponse;
@@ -114,9 +111,6 @@ public class AuthorizationService {
 
         if (obsPerson != null && !obsPerson.getRole().equals("student")) {
             String encryptedPassword;
-            String name = obsPerson.getName();
-            String surname = obsPerson.getSurname();
-            String staffType = obsPerson.getRole();
 
             try {
                 encryptedPassword = encryptionUtil.encryptPassword(password);
@@ -124,7 +118,7 @@ public class AuthorizationService {
                 throw new RuntimeException(e);
             }
 
-            userService.createStaffUser(name, surname, email, encryptedPassword, staffType);
+            userService.createStaffUser(obsPerson, encryptedPassword);
             authResponse.setSuccess(true);
             authResponse.setMessage("Staff Registration successful.");
             return authResponse;
@@ -140,7 +134,7 @@ public class AuthorizationService {
 
         try {
             Student student = userService.getStudentUser(email);
-            if (student == null) {
+            if (student.getName() == null) {
                 authResponse.setSuccess(false);
                 authResponse.setMessage("No user found with the given email.");
                 return authResponse;
@@ -187,7 +181,7 @@ public class AuthorizationService {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         Company company = userService.getCompanyUser(email);
-        if (company == null) {
+        if (company.getCompanyName() == null) {
             authResponse.setSuccess(false);
             authResponse.setMessage("No company found with the given email.");
             return authResponse;
@@ -234,7 +228,7 @@ public class AuthorizationService {
         AuthenticationResponse authResponse = new AuthenticationResponse();
 
         Staff staff = userService.getStaffUser(email);
-        if (staff == null) {
+        if (staff.getName() == null) {
             authResponse.setSuccess(false);
             authResponse.setMessage("No staff member found with the given email.");
             return authResponse;

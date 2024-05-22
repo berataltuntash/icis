@@ -15,10 +15,8 @@ public class Offer {
     private int id;
     @Column(name = "statuss")
     private String status;
-
     @Column(name = "namee")
     private String name;
-
     @JoinColumn(name = "company_id")
     @ManyToOne(targetEntity = Company.class)
     private Company companyId;

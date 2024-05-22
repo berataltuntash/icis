@@ -48,7 +48,7 @@ public class OfferController {
             OnlineUser onlineUser = userService.getOnlineUser(token);
             Company company = userService.getCompanyUser(onlineUser.getEmail());
 
-            offerService.createOffer(company, offerRequest.getOfferName(), offerRequest.getDescription());
+            offerService.createOffer(company, offerRequest.getOffername(), offerRequest.getDescription());
 
             return new ResponseEntity<>("Offer posted", HttpStatus.ACCEPTED);
         }
@@ -57,15 +57,9 @@ public class OfferController {
         }
     }
 
-    @PostMapping("/deleteoffer")
-    public ResponseEntity<?> hndDeleteOffer(){
-
-        return null;
-    }
-
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/showoffers")
-    public ResponseEntity<?> hndShowAllOffers() {
+    public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
 
         try{
             List<Offer> offers = offerService.getListOfOffers();
@@ -122,17 +116,21 @@ public class OfferController {
             Student student = userService.getStudentUser(onlineUser.getEmail());
             Company company = offer.getCompanyId();
 
-            if (offer == null || student == null) {
+            if (offer.getName()==null || student.getName() == null) {
                 return new ResponseEntity<>("Error occured while retrieving the Student data or Offer not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            if(offerService.controlStudentApplication(student)){
+                return new ResponseEntity<>("You have an ongoing internship", HttpStatus.BAD_REQUEST);
             }
 
             Application stuApplication = offerService.createStudentApplication(offer, student);
 
-            if (stuApplication == null) {
+            if (stuApplication.getStatus() == null) {
                 return new ResponseEntity<>("Error occured while creating a student application", HttpStatus.BAD_REQUEST);
             }
 
-            mailUtil.sendInternshipApplicationMail(company.getEmail(),student.getName(),company.getCompanyName(), offer.getDescription());
+            offerService.sendInternshipApplicationMail(student, company);
 
             return new ResponseEntity<>("Mail sent for approval", HttpStatus.ACCEPTED);
         }catch (Exception e){
@@ -166,9 +164,8 @@ public class OfferController {
     public ResponseEntity<?> hndApproveCompany(HttpServletRequest request,
                                                @RequestBody ApproveDisapproveRequest approveDisapproveRequest,
                                                @PathVariable("companyId") int companyId) {
-
         try{
-            boolean isApproved = approveDisapproveRequest.isApprove();
+            boolean isApproved = approveDisapproveRequest.isApproved();
             boolean result = false;
             if(isApproved){
                 result = userService.approveCompanyApplication(companyId);
@@ -193,7 +190,7 @@ public class OfferController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/manageoffers")
-    public ResponseEntity<?> hndShowNotApprovedCompanyOffers(HttpServletRequest request) {
+    public ResponseEntity<?> hndShowDisapprovedCompanyOffers(HttpServletRequest request) {
         try{
             List<Offer> offers = offerService.getListOfOffers();
             List<NotApprovedOffersResponse> offersNotApproved = new ArrayList<>();
@@ -201,7 +198,7 @@ public class OfferController {
                 NotApprovedOffersResponse offerNotApproved = new NotApprovedOffersResponse();
                 if(offer.getStatus().equals("Pending")){
                     offerNotApproved.setOfferid(offer.getId());
-                    offerNotApproved.setOffername(offer.getDescription());
+                    offerNotApproved.setOffername(offer.getName());
                     offersNotApproved.add(offerNotApproved);
                 }
             }
@@ -218,10 +215,10 @@ public class OfferController {
             Offer offer = offerService.getOfferDetailsById(offerId);
             OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
             if(offer == null){
-                return ResponseEntity.badRequest().body(offerDetailsResponse);
+                return new ResponseEntity<>("Error occured while retrieving the offer details", HttpStatus.BAD_REQUEST);
             }
 
-            offerDetailsResponse.setOffername(offer.getDescription());
+            offerDetailsResponse.setOffername(offer.getName());
             offerDetailsResponse.setCompanyname(offer.getCompanyId().getCompanyName());
             offerDetailsResponse.setDescription(offer.getDescription());
 
@@ -232,12 +229,12 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/approverejectoffer/{offerId}", consumes = "application/json")
-    public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request,
-                                                       @RequestBody ApproveDisapproveRequest approveDisapproveRequest,
+    @PostMapping(path="/approverejectoffer/{offerId}")
+    public ResponseEntity<?> hndApproveDisapproveOffer(@RequestBody ApproveDisapproveRequest approveDisapproveRequest,
                                                        @PathVariable("offerId") int offerId) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApprove();
+            boolean isApproved = approveDisapproveRequest.isApproved();
+            System.out.println(isApproved);
             boolean result = false;
             if(isApproved){
                 result = offerService.approveOffer(offerId);
@@ -296,7 +293,7 @@ public class OfferController {
                                                    @PathVariable("applicationId") int applicationId,
                                                    @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApprove();
+            boolean isApproved = approveDisapproveRequest.isApproved();
             boolean result = offerService.approveApplicationCompany(applicationId, isApproved);
             if (result) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
@@ -345,18 +342,20 @@ public class OfferController {
                                                           @PathVariable("applicationId") int applicationId,
                                                           @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApprove();
-            boolean result = offerService.approveApplicationStudent(applicationId, isApproved);
-            if (result) {
+            boolean isApproved = approveDisapproveRequest.isApproved();
+            String result = offerService.approveApplicationStudent(applicationId, isApproved);
+            if (result.equals("Approved")) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
-            } else {
+            } else if(result.equals("Rejected")) {
+                return new ResponseEntity<>("Application Rejected", HttpStatus.ACCEPTED);
+            }
+            else{
                 return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
             }
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/downloadapplicationletter")

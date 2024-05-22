@@ -1,0 +1,12 @@
+
+j
+java:S1192&"HDefine a constant instead of duplicating this literal "pending" 4 times.(µ›×‘øÿÿÿÿ8åï¨†ú1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8çï¨†ú1
+X
+java:S1854 ";Remove this useless assignment to local variable "student".(ÿ¦Á³8ûï¨†ú1
+I
+java:S1481 ",Remove this unused "student" local variable.(ÿ¦Á³8þï¨†ú1
+_
+java:S1128"=Remove this unused import 'com.icis.demo.Utils.DocumentUtil'.(Á«Êüÿÿÿÿÿ8‹ð¨†ú1
+[
+java:S1128	">Remove this unused import 'jakarta.transaction.Transactional'.(ß–Ê³8‹ð¨†ú1

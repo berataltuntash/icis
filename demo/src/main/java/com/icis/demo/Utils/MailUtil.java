@@ -1,5 +1,7 @@
 package com.icis.demo.Utils;
 
+import com.icis.demo.Entity.Company;
+import com.icis.demo.Entity.Student;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Objects;
 
 
 @Component
@@ -35,17 +38,25 @@ public class MailUtil {
         sendMail(to, subject, body);
     }
 
-    public void sendMailWithAttachment(String to, String subject, String body, String attachmentPath) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    public void sendMessageWithAttachment(String to, Student student, Company company, String pathToAttachment) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(body);
+            helper.setTo(to);
+            helper.setSubject("Internship Application:" + student.getName() + " " + student.getSurname());  // Replace [Student Full Name] with the actual name
+            helper.setText( "Dear " + company.getCompanyName() + ",\n\n" +
+                    "A new application has been submitted by " + student.getName() + " " + student.getSurname() + " internship.\n\n" +
+                    "Please log in to the our website to view the application.\n\n" +
+                    "Best regards,\n" +
+                    "IZTECH Ceng Internship System");
 
-        FileSystemResource file = new FileSystemResource(new File(attachmentPath));
-        helper.addAttachment(file.getFilename(), file);
+            FileSystemResource file = new FileSystemResource(new File(pathToAttachment));
+            helper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
 
-        mailSender.send(message);
+            mailSender.send(message);
+        } catch (Exception e) {
+            //:)
+        }
     }
 }

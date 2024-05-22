@@ -1,6 +1,8 @@
 
+”
+java:S1192o"QDefine a constant instead of duplicating this literal "Company_Approved" 3 times.(”ƒ±Ä8à†ª†ú1J$ed50451d-b05e-4d37-986a-a33b462540fe
 ¦
-java:S1488""^Immediately return this expression instead of assigning it to the temporary variable "offers".(İÕìêùÿÿÿÿ8ÌçË½ù1J$bfef851d-e329-42c0-a892-6fd9d501f497
-œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8ÏçË½ù1J$68441340-54b3-40f9-b6ba-02f5a3f9d340
-
-java:S4144†"jUpdate this method so that its implementation is not identical to "approveApplicationCompany" on line 106.(¶ßîüÿÿÿÿ8–áÎ½ù1
+java:S1488&"^Immediately return this expression instead of assigning it to the temporary variable "offers".(İÕìêùÿÿÿÿ8â†ª†ú1J$eeabf3f7-cd80-48dc-8264-4c2173cab97e
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ì©º”8ã†ª†ú1J$ce4ca0a3-6345-4cb2-b513-216d097412e1
+
+java:S2674¶"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8áíê†ú1J$32bbbd41-3598-4415-929c-8bf826e1285b

@@ -24,14 +24,18 @@ public class Company {
     private Date date;
     @Column(name = "passwordd")
     private String password;
+    @Column(name = "is_foreign")
+    private boolean isForeign;
 
-    public Company(String companyName, String location, List<Offer> offers, String status, Date date, String email, String password) {
+    public Company(String companyName, String location, String status, Date date,
+                   String email, String password, boolean isForeign) {
         this.companyName = companyName;
         this.location = location;
         this.status = status;
         this.date = date;
         this.email = email;
         this.password = password;
+        this.isForeign = isForeign;
     }
 
     public Company() {
@@ -91,5 +95,13 @@ public class Company {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean getIsForeign() {
+        return isForeign;
+    }
+
+    public void setIsForeign(boolean isForeign) {
+        this.isForeign = isForeign;
     }
 }

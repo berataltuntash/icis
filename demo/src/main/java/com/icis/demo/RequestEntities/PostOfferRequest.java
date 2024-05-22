@@ -1,33 +1,30 @@
 package com.icis.demo.RequestEntities;
 
 public class PostOfferRequest {
-    String offerName;
-    String companyName;
+    String offername;
+    String companyname;
     String description;
 
-    public PostOfferRequest(String offerName, String companyName, String description) {
-        this.offerName = offerName;
-        this.companyName = companyName;
+    public PostOfferRequest(String offername, String companyname, String description) {
+        this.offername = offername;
+        this.companyname = companyname;
         this.description = description;
     }
 
-    public PostOfferRequest() {
+    public String getOffername() {
+        return offername;
     }
 
-    public String getOfferName() {
-        return offerName;
+    public void setOffername(String offername) {
+        this.offername = offername;
     }
 
-    public void setOfferName(String offerName) {
-        this.offerName = offerName;
+    public String getCompanyname() {
+        return companyname;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 
     public String getDescription() {

@@ -87,8 +87,9 @@ public class SessionController {
         String name = request.getName();
         String email = request.getEmail();
         String password = request.getPassword();
+        boolean isForeign = false;
 
-        result = authorizationService.isAuthorizedSignUpCompany(name, email, password);
+        result = authorizationService.isAuthorizedSignUpCompany(name, email, isForeign, password);
 
         if (result.isSuccess()) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(result.getMessage());

@@ -1,20 +1,20 @@
 package com.icis.demo.RequestEntities;
 
 public class ApproveDisapproveRequest {
-    private boolean offerApprove;
+    private boolean isApproved;
+
+    public ApproveDisapproveRequest(boolean isApproved) {
+        this.isApproved = isApproved;
+    }
 
     public ApproveDisapproveRequest() {
     }
 
-    public ApproveDisapproveRequest(boolean offerApprove) {
-        this.offerApprove = offerApprove;
+    public boolean isApproved() {
+        return isApproved;
     }
 
-    public boolean isApprove() {
-        return offerApprove;
-    }
-
-    public void setApprove(boolean offerApprove) {
-        this.offerApprove = offerApprove;
+    public void setApproved(boolean isApproved) {
+        this.isApproved = isApproved;
     }
 }

@@ -8,9 +8,10 @@ import com.icis.demo.Utils.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class OfferService {
@@ -20,14 +21,17 @@ public class OfferService {
     MailUtil mailUtil;
     ApplicationDAO applicationDAO;
     AnnouncementDAO announcementDAO;
+    DocumentGeneratorService documentGenerationService;
 
     @Autowired
-    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil, ApplicationDAO applicationDAO, AnnouncementDAO announcementDAO) {
+    public OfferService(OfferDAO offerDAO, UserService userService, MailUtil mailUtil, ApplicationDAO applicationDAO,
+                        AnnouncementDAO announcementDAO, DocumentGeneratorService documentGenerationService) {
         this.offerDAO = offerDAO;
         this.userService = userService;
         this.mailUtil = mailUtil;
         this.applicationDAO = applicationDAO;
         this.announcementDAO = announcementDAO;
+        this.documentGenerationService = documentGenerationService;
     }
 
     public List<Offer> getListOfOffers(){
@@ -35,10 +39,10 @@ public class OfferService {
         return offers;
     }
 
-    public void createOffer(Company company, String offerName, String offerDescription){
+    public Offer createOffer(Company company, String offerName, String offerDescription){
         Offer offer = new Offer();
         offer.setCompanyId(company);
-        offer.setDescription(offerName);
+        offer.setName(offerName);
         offer.setDescription(offerDescription);
         offer.setStatus("Pending");
 
@@ -49,6 +53,7 @@ public class OfferService {
         offer.setExpirationDate(calendar.getTime());
 
         offerDAO.save(offer);
+        return offer;
     }
 
     public Application createStudentApplication(Offer offer, Student student){
@@ -63,26 +68,21 @@ public class OfferService {
     }
 
     public Offer getOfferDetailsById(int offerId) {
-        return offerDAO.findById(offerId).orElse(null);
+        return offerDAO.findById(offerId).orElse(new Offer());
     }
 
     public boolean approveOffer(int offerId) {
         Offer offer = offerDAO.findById(offerId).orElse(null);
         if(offer == null) return false;
-
-        offerDAO.delete(offer);
         offer.setStatus("Active");
         offerDAO.save(offer);
-
         return true;
     }
 
     public boolean rejectOffer(int offerId) {
         Offer offer = offerDAO.findById(offerId).orElse(null);
         if(offer == null) return false;
-
         offerDAO.delete(offer);
-
         return true;
     }
 
@@ -90,12 +90,12 @@ public class OfferService {
         return announcementDAO.findAll();
     }
 
-    public List<Application> getApplicationsToCompany(int id) {
+    public List<Application> getApplicationsToCompany(int companyId) {
         List<Application> applications = applicationDAO.findAll();
         List<Application> applicationsToCompany = new ArrayList<>();
 
         for(Application application : applications) {
-            if(application.getOffer().getCompanyId().getId() == id) {
+            if(application.getOffer().getCompanyId().getId() == companyId) {
                 applicationsToCompany.add(application);
             }
         }
@@ -106,44 +106,82 @@ public class OfferService {
     public boolean approveApplicationCompany(int applicationId, boolean isApproved) {
         Application application = applicationDAO.findById(applicationId).orElse(null);
         if (application == null) return false;
-        applicationDAO.delete(application);
+
         if(isApproved) {
-            application.setStatus("Approved");
+            application.setStatus("Company_Approved");
             applicationDAO.save(application);
             return true;
         }
         else {
-            application.setStatus("Rejected");
+            application.setStatus("Company_Rejected");
             applicationDAO.save(application);
             return false;
         }
     }
 
-    public List<Application> getApplicationsToStudent(int id) {
+    public List<Application> getApplicationsToStudent(int studentId) {
         List<Application> applications = applicationDAO.findAll();
         List<Application> applicationsToStudent = new ArrayList<>();
 
         for(Application application : applications) {
-            if(application.getStudentId().getId() == id) {
+            if(application.getStudentId().getId() == studentId) {
                 applicationsToStudent.add(application);
             }
         }
         return applicationsToStudent;
     }
 
-    public boolean approveApplicationStudent(int applicationId, boolean isApproved) {
+    public String approveApplicationStudent(int applicationId, boolean isApproved) {
         Application application = applicationDAO.findById(applicationId).orElse(null);
-        if (application == null) return false;
-        applicationDAO.delete(application);
-        if(isApproved) {
-            application.setStatus("Approved");
+        if (application == null) return "NotFound";
+
+        if(isApproved && application.getStatus().equals("Company_Approved")) {
+            application.setStatus("Student_Approved");
             applicationDAO.save(application);
-            return true;
-        }
-        else {
-            application.setStatus("Rejected");
+            return "Approved";
+        } else if (!isApproved && application.getStatus().equals("Company_Approved")) {
+            application.setStatus("Student_Rejected");
             applicationDAO.save(application);
-            return false;
+            return "Rejected";
         }
+        return "ErrorOccured";
+    }
+
+    public boolean controlStudentApplication(Student student) {
+        List<Application> applications = applicationDAO.findAll();
+        for(Application application : applications) {
+            if(application.getStudentId().getId() == student.getId() && application.getStatus().equals("Student_Approved")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void sendInternshipApplicationMail(Student student, Company company) throws IOException {
+        Map<String, String> studentData = new HashMap<>();
+        studentData.put("ADI - SOYADI", student.getName() + " " + student.getSurname());
+        studentData.put("SINIFI", String.valueOf(student.getGrade()));
+        studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
+        studentData.put("TC", student.getCitizenId());
+        studentData.put("TELEFON", student.getTelephone());
+        studentData.put("E-POSTA", student.getEmail());
+
+        String templatePath;
+        if (company.getIsForeign()) {
+            templatePath = "1_EN_SummerPracticeApplicationLetter2023.docx";
+        } else {
+            templatePath = "1_TR_SummerPracticeApplicationLetter2023.docx";
+        }
+
+        String outputPath = "application_letter_" + student.getId() + ".docx";
+        documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
+
+        File file = new File(outputPath);
+        byte[] contents = new byte[(int) file.length()];
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(contents);
+        }
+
+        mailUtil.sendMessageWithAttachment(company.getEmail(),student, company ,file.getName());
     }
 }

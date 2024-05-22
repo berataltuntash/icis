@@ -59,13 +59,18 @@ public class UserService {
         return true;
     }
 
-    public void createStudentUser(String name,String surname,String email, int studentNumber, String password){
+    public void createStudentUser(ObsPerson obsPerson, String password){
         Student student = new Student();
-        student.setName(name);
-        student.setSurname(surname);
-        student.setEmail(email);
-        student.setId(studentNumber);
+        student.setName(obsPerson.getName());
+        student.setSurname(obsPerson.getSurname());
+        student.setEmail(obsPerson.getEmail());
+        student.setId(obsPerson.getId());
         student.setPassword(password);
+        student.setDepartmentId(obsPerson.getDepartmentId());
+        student.setGrade(0);
+        student.setIsForeign(obsPerson.getIsForeign());
+        student.setCitizenId(obsPerson.getCitizenId());
+        student.setTelephone(obsPerson.getTelephone());
         studentDAO.save(student);
     }
     public Student getStudentUser(String email){
@@ -75,11 +80,12 @@ public class UserService {
         }
         return student;
     }
-    public void createCompanyUser(String name, String email, String encryptedPassword) {
+    public void createCompanyUser(String name, String email, boolean isForeign, String encryptedPassword) {
         Company company = new Company();
         company.setCompanyName(name);
         company.setEmail(email);
         company.setStatus("pending");
+        company.setIsForeign(isForeign);
         company.setPassword(encryptedPassword);
         companyDAO.save(company);
     }
@@ -90,25 +96,30 @@ public class UserService {
         }
         return company;
     }
-    public void createStaffUser(String name, String surname ,String email, String encryptedPassword,String stafftype) {
-        int staffDepId;
+    public void createStaffUser(ObsPerson obsPerson, String encryptedPassword) {
+        int staffAuthLevel;
+        String stafftype = obsPerson.getRole();
 
-        if(stafftype.equals("SummerPracticeCoordinator")){
-            staffDepId = 1;
+        if(stafftype.equals("student_coordinator")){
+            staffAuthLevel = 1;
         }
-        else if(stafftype.equals("chiefEngineer")){
-            staffDepId = 2;
+        else if(stafftype.equals("department_secretary")){
+            staffAuthLevel = 2;
+        }
+        else if(stafftype.equals("deanery")){
+            staffAuthLevel = 3;
         }
         else{
-            staffDepId = 3;
+            staffAuthLevel = 4;
         }
 
         Staff staff = new Staff();
-        staff.setName(name);
-        staff.setEmail(email);
-        staff.setDepartmentId(staffDepId);
+        staff.setName(obsPerson.getName());
+        staff.setSurname(obsPerson.getSurname());
+        staff.setEmail(obsPerson.getEmail());
+        staff.setDepartmentId(obsPerson.getDepartmentId());
+        staff.setAuthorizationLevel(staffAuthLevel);
         staff.setPassword(encryptedPassword);
-        staff.setSurname(surname);
         staffDAO.save(staff);
     }
     public Staff getStaffUser(String email){
