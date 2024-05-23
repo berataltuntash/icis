@@ -1,9 +1,8 @@
 package com.icis.demo.Controller;
 
 import com.icis.demo.Entity.*;
-import com.icis.demo.RequestEntities.ApproveDisapproveRequest;
+import com.icis.demo.RequestEntities.*;
 import com.icis.demo.ResponseEntities.*;
-import com.icis.demo.RequestEntities.PostOfferRequest;
 import com.icis.demo.Service.DocumentGeneratorService;
 import com.icis.demo.Service.OfferService;
 import com.icis.demo.Service.UserService;
@@ -39,6 +38,8 @@ public class OfferController {
         this.documentGenerationService = documentGenerationService;
     }
 
+    //#####################################################################################################################
+    //sirket offer yarattigi yer
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/createoffer", consumes = "application/json")
     public ResponseEntity<?> hndCreateOffer(HttpServletRequest request,
@@ -56,7 +57,8 @@ public class OfferController {
             return new ResponseEntity<>("Error occured while creating the offer", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
+    //Ogrenci staj imkanlarini gordugu yer
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/showoffers")
     public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
@@ -99,7 +101,8 @@ public class OfferController {
             return new ResponseEntity<>("Error occured while retrieving the offer details", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
+    //Student staja basvurdugu yer
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/applyinternship/{offerId}")
     public ResponseEntity<?> hndApplyForInternship(HttpServletRequest request,
@@ -120,8 +123,12 @@ public class OfferController {
                 return new ResponseEntity<>("Error occured while retrieving the Student data or Offer not exist", HttpStatus.BAD_REQUEST);
             }
 
-            if(offerService.controlStudentApplication(student)){
+            if(offerService.hasOngoingInternship(student)){
                 return new ResponseEntity<>("You have an ongoing internship", HttpStatus.BAD_REQUEST);
+            }
+
+            if(offerService.hasAppliedToOffer(student, offer)){
+                return new ResponseEntity<>("You have already applied for this internship", HttpStatus.BAD_REQUEST);
             }
 
             Application stuApplication = offerService.createStudentApplication(offer, student);
@@ -137,7 +144,8 @@ public class OfferController {
             return new ResponseEntity<>("Error occured while retrieving the offer details", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
+    //Staff company register onayladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/managecompanyapplication")
     public ResponseEntity<?> hndShowCompanyApplications(HttpServletRequest request){
@@ -160,12 +168,12 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/managecompanyapplication/{companyId}")
+    @PostMapping(path="/managecompanyapplication/{companyId}", consumes = "application/json")
     public ResponseEntity<?> hndApproveCompany(HttpServletRequest request,
-                                               @RequestBody ApproveDisapproveRequest approveDisapproveRequest,
                                                @PathVariable("companyId") int companyId) {
+
+        boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
         try{
-            boolean isApproved = approveDisapproveRequest.isApproved();
             boolean result = false;
             if(isApproved){
                 result = userService.approveCompanyApplication(companyId);
@@ -187,10 +195,11 @@ public class OfferController {
             return new ResponseEntity<>("Error occured while approving the company", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
+    //Staff companylerin yayinladigi offerlari onayladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/manageoffers")
-    public ResponseEntity<?> hndShowDisapprovedCompanyOffers(HttpServletRequest request) {
+    public ResponseEntity<?> hndShowNotApprovedCompanyOffers(HttpServletRequest request) {
         try{
             List<Offer> offers = offerService.getListOfOffers();
             List<NotApprovedOffersResponse> offersNotApproved = new ArrayList<>();
@@ -210,7 +219,8 @@ public class OfferController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/manageoffers/{offerId}")
-    public ResponseEntity<?> hndViewOfferDetailsForApproveDisapprove(HttpServletRequest request, @PathVariable("offerId") int offerId) {
+    public ResponseEntity<?> hndViewOfferDetailsForApproveDisapprove(HttpServletRequest request,
+                                                                     @PathVariable("offerId") int offerId) {
         try{
             Offer offer = offerService.getOfferDetailsById(offerId);
             OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
@@ -230,11 +240,10 @@ public class OfferController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/approverejectoffer/{offerId}")
-    public ResponseEntity<?> hndApproveDisapproveOffer(@RequestBody ApproveDisapproveRequest approveDisapproveRequest,
+    public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request,
                                                        @PathVariable("offerId") int offerId) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApproved();
-            System.out.println(isApproved);
+            boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = false;
             if(isApproved){
                 result = offerService.approveOffer(offerId);
@@ -257,6 +266,8 @@ public class OfferController {
         }
     }
 
+    //#####################################################################################################################
+    //Company kendisine gelen applicationlari onayladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/applicationstocompany")
     public ResponseEntity<?> hndShowApplicationsToCompany(HttpServletRequest request) {
@@ -276,9 +287,6 @@ public class OfferController {
                 ApplicationsToCompanyResponse applicationToCompany = new ApplicationsToCompanyResponse();
                 applicationToCompany.setStudentName(application.getStudentId().getName());
                 applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
-                applicationToCompany.setOfferName(application.getOffer().getName());
-                applicationToCompany.setGrade(String.valueOf(application.getStudentId().getGrade()));
-                applicationsToCompany.add(applicationToCompany);
             }
 
             return new ResponseEntity<>(applicationsToCompany, HttpStatus.ACCEPTED);
@@ -288,23 +296,56 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/approveapplication/{applicationId}")
-    public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
-                                                   @PathVariable("applicationId") int applicationId,
-                                                   @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
+    @GetMapping(path="/applicationstocompany/{applicationId}")
+    public ResponseEntity<?> hndShowApplicationsToCompanyDetails(HttpServletRequest request,
+                                                                 @PathVariable("applicationId") int applicationId) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApproved();
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+            Company company = userService.getCompanyUser(onlineUser.getEmail());
+
+            if (company == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            Application application = offerService.getApplicationDetailsById(applicationId);
+
+            if (application.getStatus() == null) {
+                return new ResponseEntity<>("Error occured while retrieving the application details", HttpStatus.BAD_REQUEST);
+            }
+
+            ApplicationsToCompanyDetailsResponse applicationToCompany = new ApplicationsToCompanyDetailsResponse();
+
+            applicationToCompany.setStudentName(application.getStudentId().getName());
+            applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
+            applicationToCompany.setGrade(String.valueOf(application.getStudentId().getGrade()));
+            applicationToCompany.setOfferName(application.getOffer().getName());
+            applicationToCompany.setId(String.valueOf(application.getId()));
+
+            return new ResponseEntity<>(applicationToCompany, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping(path="/approveapplicationstocompany/{applicationId}")
+    public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
+                                                   @PathVariable("applicationId") int applicationId) {
+        try{
+            boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = offerService.approveApplicationCompany(applicationId, isApproved);
             if (result) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
             } else {
-                return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Application Rejected", HttpStatus.ACCEPTED);
             }
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
+    //Studentin companylerin onayladigi staj basvurularini gordugu ve kendisinin de onayladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/studentapprovedapplications")
     public ResponseEntity<?> hndShowStudentApprovedApplications(HttpServletRequest request) {
@@ -323,10 +364,9 @@ public class OfferController {
             for (Application application : applications) {
                 if (application.getStatus().equals("Approved")) {
                     ApprovedApplicationResponse approvedApplication = new ApprovedApplicationResponse();
+                    approvedApplication.setId(application.getId());
                     approvedApplication.setOfferName(application.getOffer().getName());
                     approvedApplication.setCompanyName(application.getOffer().getCompanyId().getCompanyName());
-                    approvedApplication.setId(application.getId());
-                    approvedApplications.add(approvedApplication);
                 }
             }
 
@@ -339,10 +379,9 @@ public class OfferController {
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(path="/studentapproveapplication/{applicationId}")
     public ResponseEntity<?> hndApproveApplicationStudent(HttpServletRequest request,
-                                                          @PathVariable("applicationId") int applicationId,
-                                                          @RequestBody ApproveDisapproveRequest approveDisapproveRequest) {
+                                                          @PathVariable("applicationId") int applicationId) {
         try{
-            boolean isApproved = approveDisapproveRequest.isApproved();
+            boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             String result = offerService.approveApplicationStudent(applicationId, isApproved);
             if (result.equals("Approved")) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
@@ -356,7 +395,7 @@ public class OfferController {
             return new ResponseEntity<>("Error occured while approving the application", HttpStatus.BAD_REQUEST);
         }
     }
-
+    //#####################################################################################################################
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/downloadapplicationletter")
     public ResponseEntity<?> downloadApplicationLetter(HttpServletRequest request) {
@@ -396,49 +435,6 @@ public class OfferController {
             headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
             return new ResponseEntity<>(contents, headers, HttpStatus.OK);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @GetMapping(path="/downloadpracticeapplicationform")
-    public ResponseEntity<?> downloadPracticeApplicationForm(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String email = userService.getOnlineUser(token).getEmail();
-
-        if (email == null || !email.endsWith("@std.iyte.edu.tr")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        Student student = userService.getStudentUser(email);
-
-        if (student == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            Map<String, String> studentData = new HashMap<>();
-            studentData.put("ADI - SOYADI", student.getName() + " " + student.getSurname());
-            studentData.put("SINIFI", String.valueOf(student.getGrade()));
-            studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
-            studentData.put("E-POSTA", student.getEmail());
-
-            String templatePath = "2_TR_SummerPracticeApplicationForm2023.docx";
-            String outputPath = "practice_application_form_" + student.getId() + ".docx";
-            documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
-
-            File file = new File(outputPath);
-            byte[] contents = new byte[(int) file.length()];
-            try (FileInputStream fis = new FileInputStream(file)) {
-                fis.read(contents);
-            }
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
-            String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
-
-            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

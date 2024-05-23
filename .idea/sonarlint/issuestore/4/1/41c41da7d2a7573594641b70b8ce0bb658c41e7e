@@ -1,0 +1,27 @@
+
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­¬À™ÿÿÿÿÿ8üÎª©ú1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8ıÎª©ú1
+m	java:S116"RRename this field "JWTUtil" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(şÔŞX8ƒÏª©ú1
+C
+java:S1452"&Remove usage of generic wildcard type.(™ÖÓ„8ˆÏª©ú1
+C
+java:S1452%"&Remove usage of generic wildcard type.(Òü›Ş8‰Ïª©ú1
+B
+java:S1452*"&Remove usage of generic wildcard type.(àŸ“u8ŠÏª©ú1
+V
+java:S1128"9Remove this unused import 'com.icis.demo.Entity.Company'.(äƒÊ‘8‹Ïª©ú1
+Z
+java:S1128"8Remove this unused import 'jakarta.servlet.http.Cookie'.(Ê‘¡¹úÿÿÿÿ8‹Ïª©ú1
+Q
+java:S1128"5Remove this unused import 'org.apache.catalina.User'.(›ân8ŒÏª©ú1
+b
+java:S1128
+"@Remove this unused import 'org.springframework.http.HttpStatus'.(íŸ¤Šúÿÿÿÿ8ŒÏª©ú1
+h
+java:S1128"FRemove this unused import 'org.springframework.stereotype.Controller'.(øŠ—Öùÿÿÿÿ8ŒÏª©ú1
+Y
+java:S1128"7Remove this unused import 'java.net.http.HttpResponse'.(’ûÌûÿÿÿÿ8ŒÏª©ú1
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8Ïª©ú1
+Q
+java:S1068"/Remove this unused "userService" private field.(ÇêŞ¢ıÿÿÿÿ8Ïª©ú1

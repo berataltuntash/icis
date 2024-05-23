@@ -147,10 +147,20 @@ public class OfferService {
         return "ErrorOccured";
     }
 
-    public boolean controlStudentApplication(Student student) {
+    public boolean hasOngoingInternship(Student student) {
         List<Application> applications = applicationDAO.findAll();
-        for(Application application : applications) {
-            if(application.getStudentId().getId() == student.getId() && application.getStatus().equals("Student_Approved")) {
+        for (Application application : applications) {
+            if (application.getStudentId().getId() == student.getId() && application.getStatus().equals("Student_Approved")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasAppliedToOffer(Student student, Offer offer) {
+        List<Application> applications = applicationDAO.findAll();
+        for (Application application : applications) {
+            if (application.getStudentId().getId() == student.getId() && application.getOffer().getId() == offer.getId()) {
                 return true;
             }
         }
@@ -164,7 +174,7 @@ public class OfferService {
         studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
         studentData.put("TC", student.getCitizenId());
         studentData.put("TELEFON", student.getTelephone());
-        studentData.put("E-POSTA", student.getEmail());
+        studentData.put("EPOSTA", student.getEmail());
 
         String templatePath;
         if (company.getIsForeign()) {
@@ -183,5 +193,10 @@ public class OfferService {
         }
 
         mailUtil.sendMessageWithAttachment(company.getEmail(),student, company ,file.getName());
+    }
+
+    public Application getApplicationDetailsById(int applicationId) {
+
+        return applicationDAO.findById(applicationId).orElse(new Application());
     }
 }

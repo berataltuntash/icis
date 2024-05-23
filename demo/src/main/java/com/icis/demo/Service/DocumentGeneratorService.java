@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,13 @@ public class DocumentGeneratorService {
 
     public void generateApplicationLetter(Map<String, String> data, String templatePath, String outputPath) throws IOException {
         Resource templateResource = new ClassPathResource(templatePath);
+        if (!templateResource.exists()) {
+            throw new FileNotFoundException("The template file was not found in the classpath: " + templatePath);
+        }
         try (InputStream is = templateResource.getInputStream()) {
+            if (is == null) {
+                throw new IOException("Failed to open template file as input stream.");
+            }
             XWPFDocument document = new XWPFDocument(is);
 
             for (XWPFParagraph paragraph : document.getParagraphs()) {

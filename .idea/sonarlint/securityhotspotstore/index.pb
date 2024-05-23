@@ -89,3 +89,15 @@ v
 Fdemo/src/main/java/com/icis/demo/RequestEntities/PostOfferRequest.java,9\1\91a2a85f00d76ab47df941b9c46c3fc701a715c5
 c
 3demo/src/main/java/com/icis/demo/Utils/OBSUtil.java,f\9\f973c4e4e4db46f59a4f238fe6617aa465833c03
+Ñ
+Tdemo/src/main/java/com/icis/demo/RequestEntities/StaffApproveRejectOfferRequest.java,a\4\a429ced1dd9694815aa2cf441c51e0ec36fcc613
+ê
+`demo/src/main/java/com/icis/demo/RequestEntities/CompanyApproveDisapproveApplicationRequest.java,a\2\a260b0da95c1e6bb1a49051c7b5a15f942a2248d
+ê
+`demo/src/main/java/com/icis/demo/RequestEntities/StudentApplicationApproveDisapproveRequest.java,0\d\0d03b5c0acc77aeb70af2294775cae3ae0cee2ef
+Ö
+Udemo/src/main/java/com/icis/demo/RequestEntities/CompanyApproveDisapproveRequest.java,8\8\887fbae8d33c7d7e1fd3b2bc321bb26c78d3c810
+|
+Ldemo/src/main/java/com/icis/demo/ResponseEntities/ApplicationsToCompany.java,a\d\adf1f3b84cc876dc344f99a3ca0ad5521911dd2f
+ã
+[demo/src/main/java/com/icis/demo/ResponseEntities/ApplicationsToCompanyDetailsResponse.java,5\2\52830c75dd3fd1dca95a7f857de083dcd129a28d

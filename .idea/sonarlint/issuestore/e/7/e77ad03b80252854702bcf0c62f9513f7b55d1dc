@@ -1,49 +1,57 @@
 
 —
-java:S1192p"TDefine a constant instead of duplicating this literal "Unauthorized Access" 3 times.(õİ³ê8ªÚÙ†ú1J$6d36445e-88bb-401c-b6df-6dfe5e587461
+java:S1192o"TDefine a constant instead of duplicating this literal "Unauthorized Access" 4 times.(õİ³ê8ªÚ‚ªú1J$c69205f1-03ff-4371-aa68-e8a6d194ccf7
 ²
-java:S1192­"nDefine a constant instead of duplicating this literal "Error occured while approving the application" 4 times.(È… 8«ÚÙ†ú1J$db8e5868-3a99-430d-9bf6-90afec65611a
+java:S1192É"nDefine a constant instead of duplicating this literal "Error occured while approving the application" 3 times.(È… 8ªÚ‚ªú1J$7f280c6d-0863-4dae-a4fe-78e208fedf35
 –
-java:S1192/"NDefine a constant instead of duplicating this literal "Authorization" 6 times.(°‚é”ıÿÿÿÿ8«ÚÙ†ú1J$5edce77e-a177-440e-a38c-4233c67c17bd
+java:S1192."NDefine a constant instead of duplicating this literal "Authorization" 7 times.(°‚é”ıÿÿÿÿ8ªÚ‚ªú1J$a79218d4-90e7-43c9-87dc-ee4e520c1a23
 ´
-java:S1192c"qDefine a constant instead of duplicating this literal "Error occured while retrieving the offer details" 4 times.(Ä™íƒ8«ÚÙ†ú1J$d1c7310d-f42b-4867-8957-de9e4b3e144b
-œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8­ÚÙ†ú1J$1ebd3794-be62-44b5-bd2c-2a6eabd6815b
+java:S1192b"qDefine a constant instead of duplicating this literal "Error occured while retrieving the offer details" 4 times.(Ä™íƒ8ªÚ‚ªú1J$8c256636-6a9d-411f-a471-614e17ed54ff
+³
+java:S1192š"pDefine a constant instead of duplicating this literal "Error occured while retrieving the applications" 3 times.(¹Ş²38Æ¢‡«ú1J$ddb45930-732f-443f-8cf9-183a0840f696
+“
+java:S1192¦"JDefine a constant instead of duplicating this literal "isApprove" 4 times.(á¿Àáùÿÿÿÿ8ÿÇ‰ªú1J$97fb85a1-b2d7-465f-aa01-b8af8f36d612
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ñÿ©ê8»Ú‚ªú1J$d8705a00-ac05-49bc-b585-b728a068a408
+}
+java:S6856Ÿ"9Bind path variable "applicationId" to a method parameter.(¥ ÂŒ8‚Ğˆ«ú1J$c9cf84fd-ab01-4524-937d-f4829531ff68
 n
-java:S1452,"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8ÛÚÙ†ú1J$6e60239d-f8c6-4393-bc56-3f951e2b0e5a
+java:S1452+"&Remove usage of generic wildcard type.(Ş€ ûÿÿÿÿ8íÚ‚ªú1J$077b43bd-5338-4068-9056-f9024b7defb3
 i
-java:S1452>"&Remove usage of generic wildcard type.(±¿Æ—8İÚÙ†ú1J$b4ebd084-811e-42b2-a364-d5b521438b76
+java:S1452="&Remove usage of generic wildcard type.(±¿Æ—8ğÚ‚ªú1J$c1d8b193-9b47-4d84-8022-f08ef6757f7b
 n
-java:S1452T"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8ßÚÙ†ú1J$84de2aed-6fbe-4770-b2f0-6455fa002480
+java:S1452S"&Remove usage of generic wildcard type.(ß½Ú”ûÿÿÿÿ8òÚ‚ªú1J$fb32ce88-9e59-46fe-8425-2f0815a321a3
 i
-java:S1452i"&Remove usage of generic wildcard type.(˜¡•·8ßÚÙ†ú1J$7c59e531-8c09-45b9-95c7-cee0d68dd7fb
+java:S1452h"&Remove usage of generic wildcard type.(˜¡•·8óÚ‚ªú1J$871c178e-f245-41c4-a740-b6387f0cd47e
 o
-java:S1452"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8äÚÙ†ú1J$a99faf74-2357-40aa-9071-8f01d4ef15cf
+java:S1452"&Remove usage of generic wildcard type.(Ããñêüÿÿÿÿ8ôÚ‚ªú1J$c6f3134c-45d3-4a8d-bd78-db9050cbaa0e
 i
-java:S1452¤"&Remove usage of generic wildcard type.(ÄÔ­*8æÚÙ†ú1J$498b6d86-7fb6-4416-af15-a8d29cd3b625
+java:S1452£"&Remove usage of generic wildcard type.(ÄÔ­*8öÚ‚ªú1J$8b65985f-d3d6-4021-a73d-f64cf6e23ed0
 j
-java:S1452Á"&Remove usage of generic wildcard type.(ô¬ä¾8çÚÙ†ú1J$162c5e96-511f-44a2-8060-e3c4437fad2d
+java:S1452À"&Remove usage of generic wildcard type.(ô¬ä¾8úÚ‚ªú1J$9c754639-a0e1-4544-bef3-349ddbfaa548
 j
-java:S1452Õ"&Remove usage of generic wildcard type.(ËÙ¬™8éÚÙ†ú1J$131db830-ac6b-4a08-9164-1c5f29db2f00
-j
-java:S1452é"&Remove usage of generic wildcard type.(ğŞÄ·8êÚÙ†ú1J$d3a5c232-badd-4f7d-9b5a-e38d06f7a08a
-s	java:S106í"+Replace this use of System.out by a logger.(°´ïüÿÿÿÿ8ëÚÙ†ú1J$81fdde62-8e11-403d-a160-7634c97e3d3b
+java:S1452Ô"&Remove usage of generic wildcard type.(ËÙ¬™8ûÚ‚ªú1J$7cab1cb7-7361-40b3-8236-a4ab2441cdf0
 o
-java:S1452†"&Remove usage of generic wildcard type.(‡º©şùÿÿÿÿ8ìÚÙ†ú1J$db9845fe-b074-4ad1-9025-b8e666758621
-i
-java:S1452¤"&Remove usage of generic wildcard type.(ˆb8íÚÙ†ú1J$ff31b7d1-5fde-438f-a9ce-8df8fb93fdaf
-i
-java:S1452¶"&Remove usage of generic wildcard type.(è°¥28îÚÙ†ú1J$7e338811-b5d7-41ef-a603-c5fc036e2f58
-j
-java:S1452Õ"&Remove usage of generic wildcard type.(š ¡ß8ğÚÙ†ú1J$f602d15a-80d8-4b2f-95b7-ac4bdf67fccf
+java:S1452è"&Remove usage of generic wildcard type.(ÜïÄ®şÿÿÿÿ8üÚ‚ªú1J$76cfec29-e1b1-49c0-aa32-d0b53981b4c6
+s	java:S106ì"+Replace this use of System.out by a logger.(°´ïüÿÿÿÿ8üÚ‚ªú1J$46eb9be2-fdda-4aa2-8eb1-d656175d10fc
 o
-java:S1452ê"&Remove usage of generic wildcard type.(üšêúÿÿÿÿ8ğÚÙ†ú1J$9e5de177-763f-4768-8e76-3f3b5e0cc66b
+java:S1452…"&Remove usage of generic wildcard type.(‡º©şùÿÿÿÿ8ıÚ‚ªú1J$b32ec971-6b08-407d-81a9-2e0cefe05784
+j
+java:S1452 "&Remove usage of generic wildcard type.(ĞöÂ¼8şÚ‚ªú1J$b7f372a3-46a8-4a63-a120-25d66d9b2c3f
+i
+java:S1452¾"&Remove usage of generic wildcard type.(ˆb8ÿÚ‚ªú1J$8bde406c-fb67-49f1-9d12-01bf9b76abfd
+i
+java:S1452Ï"&Remove usage of generic wildcard type.(è°¥28Û‚ªú1J$5f2054ac-78a5-4e22-8cbf-e8dfc342cc51
+j
+java:S1452î"&Remove usage of generic wildcard type.(š ¡ß8Û‚ªú1J$39da4174-4a6a-41c0-b2c6-d0f2c1a40a06
+o
+java:S1452‚"&Remove usage of generic wildcard type.(üšêúÿÿÿÿ8‡Û‚ªú1J$dec02986-3f26-4be7-bb0b-57a9f4092714
 
-java:S2674†"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8òÚÙ†ú1J$2febb5a3-6e79-4270-a31a-d3e86b3c0d9b
+java:S2674"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8„Û‚ªú1J$0a8d42f8-f81c-4424-85b0-b62a53a423ac
 o
-java:S1452•"&Remove usage of generic wildcard type.(ô²¨Äüÿÿÿÿ8ôÚÙ†ú1J$a72f57c7-226b-4196-813e-1daf3342e881
+java:S1452­"&Remove usage of generic wildcard type.(ô²¨Äüÿÿÿÿ8ŠÛ‚ªú1J$6e250a55-3196-41f5-a7a8-ce0d749cfee9
 
-java:S2674±"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8õÚÙ†ú1J$5da4ec5a-7cdc-4d58-852a-9f87c2d2ee03
+java:S2674É"JCheck the return value of the "read" call to see how many bytes were read.(õ‘Äô8‰Û‚ªú1J$0667cc43-486e-4f05-a8a6-66dc75d85cb8
 o
-java:S1452Â"&Remove usage of generic wildcard type.(Óæ€øÿÿÿÿ8öÚÙ†ú1J$a5a0b96c-d793-40dc-93e3-dd52eb4857c8
+java:S1452Ú"&Remove usage of generic wildcard type.(Óæ€øÿÿÿÿ8ĞĞˆ«ú1J$96771079-d3e7-488d-8df0-4b7bd3767deb
 t
-java:S1068",Remove this unused "mailUtil" private field.(Ø óşÿÿÿÿ8úşÚ†ú1J$a8fa909d-2498-4aed-b5ec-217fd46fc659
+java:S1068",Remove this unused "mailUtil" private field.(Ø óşÿÿÿÿ8ŒÛ‚ªú1J$8e32456d-7ba4-4e47-a853-6eb1ed28556a
