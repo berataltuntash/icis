@@ -1,17 +1,19 @@
 package com.icis.demo.ResponseEntities;
 
-public class ApplicationsToCompanyResponse {
+public class StartedInternshipsResponse {
     private int applicationId;
     private String studentName;
     private String studentSurname;
+    private String offerName;
 
-    public ApplicationsToCompanyResponse(int applicationId,String studentName, String studentSurname) {
+    public StartedInternshipsResponse(int applicationId, String studentName, String studentSurname, String offerName) {
         this.applicationId = applicationId;
         this.studentName = studentName;
         this.studentSurname = studentSurname;
+        this.offerName = offerName;
     }
 
-    public ApplicationsToCompanyResponse() {
+    public StartedInternshipsResponse() {
     }
 
     public int getApplicationId() {
@@ -38,4 +40,11 @@ public class ApplicationsToCompanyResponse {
         this.studentSurname = studentSurname;
     }
 
+    public String getOfferName() {
+        return offerName;
+    }
+
+    public void setOfferName(String offerName) {
+        this.offerName = offerName;
+    }
 }

@@ -17,11 +17,15 @@ public class Application {
     @JoinColumn(name = "student_id")
     @ManyToOne(targetEntity = Student.class)
     private Student studentId;
+    @Lob
+    @Column(name = "sgk_document")
+    private byte[] sgkDocument;
 
-    public Application(String status, Offer offer, Student studentId) {
+    public Application(String status, Offer offer, Student studentId, byte[] sgkDocument) {
         this.status = status;
         this.offer = offer;
         this.studentId = studentId;
+        this.sgkDocument = sgkDocument;
     }
 
     public Application() {
@@ -57,5 +61,13 @@ public class Application {
 
     public void setStudentId(Student studentId) {
         this.studentId = studentId;
+    }
+
+    public byte[] getSgkDocument() {
+        return sgkDocument;
+    }
+
+    public void setSgkDocument(byte[] sgkDocument) {
+        this.sgkDocument = sgkDocument;
     }
 }

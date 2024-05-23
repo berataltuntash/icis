@@ -1,21 +1,23 @@
 package com.icis.demo.ResponseEntities;
 
-public class ApplicationsToCompanyDetailsResponse {
+public class StartedInternshipDetailsResponse {
     private String studentId;
     private String studentName;
     private String studentSurname;
     private String offerName;
     private String grade;
+    private String companyName;
 
-    public ApplicationsToCompanyDetailsResponse(String studentId,String studentName, String offerName, String grade, String studentSurname) {
+    public StartedInternshipDetailsResponse(String studentId, String studentName, String studentSurname, String offerName, String grade, String companyName) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.studentSurname = studentSurname;
         this.offerName = offerName;
         this.grade = grade;
+        this.companyName = companyName;
     }
 
-    public ApplicationsToCompanyDetailsResponse() {
+    public StartedInternshipDetailsResponse() {
     }
 
     public String getStudentId() {
@@ -34,6 +36,14 @@ public class ApplicationsToCompanyDetailsResponse {
         this.studentName = studentName;
     }
 
+    public String getStudentSurname() {
+        return studentSurname;
+    }
+
+    public void setStudentSurname(String studentSurname) {
+        this.studentSurname = studentSurname;
+    }
+
     public String getOfferName() {
         return offerName;
     }
@@ -50,11 +60,11 @@ public class ApplicationsToCompanyDetailsResponse {
         this.grade = grade;
     }
 
-    public String getStudentSurname() {
-        return studentSurname;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setStudentSurname(String studentSurname) {
-        this.studentSurname = studentSurname;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

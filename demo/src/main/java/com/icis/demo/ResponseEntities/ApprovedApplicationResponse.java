@@ -14,11 +14,11 @@ public class ApprovedApplicationResponse {
     public ApprovedApplicationResponse() {
     }
 
-    public int getId() {
+    public int getApplicationId() {
         return applicationId;
     }
 
-    public void setId(int id) {
+    public void setApplicationId(int id) {
         this.applicationId = id;
     }
 

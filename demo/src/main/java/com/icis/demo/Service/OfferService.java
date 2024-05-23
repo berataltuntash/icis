@@ -199,4 +199,22 @@ public class OfferService {
 
         return applicationDAO.findById(applicationId).orElse(new Application());
     }
+
+    public List<Application> getListOfApplications() {
+        return applicationDAO.findAll();
+    }
+
+    public Application saveDocumentToTheApplication(byte[] bytes, int applicationId) {
+        Application application = applicationDAO.findById(applicationId).orElse(new Application());
+        if (application.getStudentId()==null) return new Application();
+        application.setSgkDocument(bytes);
+        applicationDAO.save(application);
+        return application;
+    }
+
+    public boolean checkIfSgkDocumentExists(int applicationId) {
+        Application application = applicationDAO.findById(applicationId).orElse(new Application());
+        if(application.getStudentId()==null) return false;
+        return application.getSgkDocument() != null;
+    }
 }

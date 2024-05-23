@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +48,10 @@ public class OfferController {
         try{
             String token = request.getHeader("Authorization");
             OnlineUser onlineUser = userService.getOnlineUser(token);
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             Company company = userService.getCompanyUser(onlineUser.getEmail());
 
             offerService.createOffer(company, offerRequest.getOffername(), offerRequest.getDescription());
@@ -62,8 +67,14 @@ public class OfferController {
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/showoffers")
     public ResponseEntity<?> hndShowAllOffers(HttpServletRequest request) {
-
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             List<Offer> offers = offerService.getListOfOffers();
             List<ActiveOffersResponse> activeOffers = new ArrayList<>();
 
@@ -83,9 +94,15 @@ public class OfferController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/showoffers/{offerId}")
-    public ResponseEntity<?> hndShowOfferDetails(@PathVariable("offerId") int offerId) {
-
+    public ResponseEntity<?> hndShowOfferDetails(HttpServletRequest request,
+                                                 @PathVariable("offerId") int offerId) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
             Offer offer = offerService.getOfferDetailsById(offerId);
             OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
             if(offer == null){
@@ -149,8 +166,14 @@ public class OfferController {
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/managecompanyapplication")
     public ResponseEntity<?> hndShowCompanyApplications(HttpServletRequest request){
-
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             List<Company> companies = userService.getCompanyApplications();
             List<NotApprovedCompaniesResponse> companiesNotApproved = new ArrayList<>();
 
@@ -172,8 +195,15 @@ public class OfferController {
     public ResponseEntity<?> hndApproveCompany(HttpServletRequest request,
                                                @PathVariable("companyId") int companyId) {
 
-        boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = false;
             if(isApproved){
                 result = userService.approveCompanyApplication(companyId);
@@ -201,6 +231,13 @@ public class OfferController {
     @GetMapping(path="/manageoffers")
     public ResponseEntity<?> hndShowNotApprovedCompanyOffers(HttpServletRequest request) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             List<Offer> offers = offerService.getListOfOffers();
             List<NotApprovedOffersResponse> offersNotApproved = new ArrayList<>();
             for (Offer offer : offers) {
@@ -222,6 +259,13 @@ public class OfferController {
     public ResponseEntity<?> hndViewOfferDetailsForApproveDisapprove(HttpServletRequest request,
                                                                      @PathVariable("offerId") int offerId) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             Offer offer = offerService.getOfferDetailsById(offerId);
             OfferDetailsResponse offerDetailsResponse = new OfferDetailsResponse();
             if(offer == null){
@@ -243,6 +287,13 @@ public class OfferController {
     public ResponseEntity<?> hndApproveDisapproveOffer(HttpServletRequest request,
                                                        @PathVariable("offerId") int offerId) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = false;
             if(isApproved){
@@ -284,9 +335,13 @@ public class OfferController {
             List<ApplicationsToCompanyResponse> applicationsToCompany = new ArrayList<>();
 
             for (Application application : applications) {
-                ApplicationsToCompanyResponse applicationToCompany = new ApplicationsToCompanyResponse();
-                applicationToCompany.setStudentName(application.getStudentId().getName());
-                applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
+                if(application.getStatus().equals("Pending")){
+                    ApplicationsToCompanyResponse applicationToCompany = new ApplicationsToCompanyResponse();
+                    applicationToCompany.setApplicationId(application.getId());
+                    applicationToCompany.setStudentName(application.getStudentId().getName());
+                    applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
+                    applicationsToCompany.add(applicationToCompany);
+                }
             }
 
             return new ResponseEntity<>(applicationsToCompany, HttpStatus.ACCEPTED);
@@ -304,7 +359,7 @@ public class OfferController {
             OnlineUser onlineUser = userService.getOnlineUser(token);
             Company company = userService.getCompanyUser(onlineUser.getEmail());
 
-            if (company == null) {
+            if (company.getCompanyName() == null) {
                 return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
             }
 
@@ -319,8 +374,9 @@ public class OfferController {
             applicationToCompany.setStudentName(application.getStudentId().getName());
             applicationToCompany.setStudentSurname(application.getStudentId().getSurname());
             applicationToCompany.setGrade(String.valueOf(application.getStudentId().getGrade()));
+            applicationToCompany.setStudentId(String.valueOf(application.getStudentId().getId()));
             applicationToCompany.setOfferName(application.getOffer().getName());
-            applicationToCompany.setId(String.valueOf(application.getId()));
+
 
             return new ResponseEntity<>(applicationToCompany, HttpStatus.ACCEPTED);
         }catch (Exception e){
@@ -333,6 +389,13 @@ public class OfferController {
     public ResponseEntity<?> hndApproveApplication(HttpServletRequest request,
                                                    @PathVariable("applicationId") int applicationId) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = offerService.approveApplicationCompany(applicationId, isApproved);
             if (result) {
@@ -347,7 +410,7 @@ public class OfferController {
     //#####################################################################################################################
     //Studentin companylerin onayladigi staj basvurularini gordugu ve kendisinin de onayladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/studentapprovedapplications")
+    @GetMapping(path="/studentapprovedapplications")
     public ResponseEntity<?> hndShowStudentApprovedApplications(HttpServletRequest request) {
         try{
             String token = request.getHeader("Authorization");
@@ -362,14 +425,14 @@ public class OfferController {
             List<ApprovedApplicationResponse> approvedApplications = new ArrayList<>();
 
             for (Application application : applications) {
-                if (application.getStatus().equals("Approved")) {
+                if (application.getStatus().equals("Company_Approved")) {
                     ApprovedApplicationResponse approvedApplication = new ApprovedApplicationResponse();
-                    approvedApplication.setId(application.getId());
+                    approvedApplication.setApplicationId(application.getId());
                     approvedApplication.setOfferName(application.getOffer().getName());
                     approvedApplication.setCompanyName(application.getOffer().getCompanyId().getCompanyName());
+                    approvedApplications.add(approvedApplication);
                 }
             }
-
             return new ResponseEntity<>(approvedApplications, HttpStatus.ACCEPTED);
         }catch (Exception e){
             return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
@@ -377,12 +440,20 @@ public class OfferController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping(path="/studentapproveapplication/{applicationId}")
+    @PostMapping(path="/studentapprovedapplications/{applicationId}")
     public ResponseEntity<?> hndApproveApplicationStudent(HttpServletRequest request,
-                                                          @PathVariable("applicationId") int applicationId) {
+                                                          @PathVariable("applicationId") String applicationId) {
         try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+            Student student = userService.getStudentUser(onlineUser.getEmail());
+
+            if (student.getName() == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
-            String result = offerService.approveApplicationStudent(applicationId, isApproved);
+            String result = offerService.approveApplicationStudent(Integer.parseInt(applicationId) , isApproved);
             if (result.equals("Approved")) {
                 return new ResponseEntity<>("Application Approved", HttpStatus.ACCEPTED);
             } else if(result.equals("Rejected")) {
@@ -396,50 +467,104 @@ public class OfferController {
         }
     }
     //#####################################################################################################################
+    //staff sirket student karsilikli kabul edildip staj basladigi yer
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(path="/downloadapplicationletter")
-    public ResponseEntity<?> downloadApplicationLetter(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String email = userService.getOnlineUser(token).getEmail();
+    @GetMapping(path="/staffshowinternshipsstarted")
+    public ResponseEntity<?> hndShowInternshipsStarted(HttpServletRequest request) {
+        try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
 
-        if (email == null || !email.endsWith("@std.iyte.edu.tr")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        Student student = userService.getStudentUser(email);
-
-        if (student == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            Map<String, String> studentData = new HashMap<>();
-            studentData.put("ADI - SOYADI", student.getName() + " " + student.getSurname());
-            studentData.put("SINIFI", String.valueOf(student.getGrade()));
-            studentData.put("OKUL NUMARASI", String.valueOf(student.getId()));
-            studentData.put("E-POSTA", student.getEmail());
-
-            String templatePath = "1_TR_SummerPracticeApplicationLetter2023.docx";
-            String outputPath = "application_letter_" + student.getId() + ".docx";
-            documentGenerationService.generateApplicationLetter(studentData, templatePath, outputPath);
-
-            File file = new File(outputPath);
-            byte[] contents = new byte[(int) file.length()];
-            try (FileInputStream fis = new FileInputStream(file)) {
-                fis.read(contents);
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
             }
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
-            String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
-            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+            List<Application> applications = offerService.getListOfApplications();
+            List<StartedInternshipsResponse> approvedApplications = new ArrayList<>();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            for (Application application : applications) {
+                if (application.getStatus().equals("Student_Approved") && application.getSgkDocument()==null) {
+                    StartedInternshipsResponse startedInternship = new StartedInternshipsResponse();
+                    startedInternship.setApplicationId(application.getId());
+                    startedInternship.setOfferName(application.getOffer().getName());
+                    startedInternship.setStudentName(application.getStudentId().getName());
+                    startedInternship.setStudentSurname(application.getStudentId().getSurname());
+                    approvedApplications.add(startedInternship);
+                }
+            }
+            return new ResponseEntity<>(approvedApplications, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(path="/staffshowinternshipsstarted/{applicationId}")
+    public ResponseEntity<?> hndShowInternshipDetails(HttpServletRequest request,
+                                                      @PathVariable("applicationId") int applicationId) {
+
+        try{
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            Application application = offerService.getApplicationDetailsById(applicationId);
+            if (application.getStudentId() == null) {
+                return new ResponseEntity<>("Error occured while retrieving the application details", HttpStatus.BAD_REQUEST);
+            }
+
+            StartedInternshipDetailsResponse startedInternship = new StartedInternshipDetailsResponse();
+
+            startedInternship.setStudentName(application.getStudentId().getName());
+            startedInternship.setStudentSurname(application.getStudentId().getSurname());
+            startedInternship.setOfferName(application.getOffer().getName());
+            startedInternship.setCompanyName(application.getOffer().getCompanyId().getCompanyName());
+            startedInternship.setGrade(String.valueOf(application.getStudentId().getGrade()));
+            startedInternship.setStudentId(String.valueOf(application.getStudentId().getId()));
+
+            return new ResponseEntity<>(startedInternship, HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error occured while retrieving the applications", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/uploadsgkdocument/{applicationId}")
+    public ResponseEntity<?> hndStaffUploadSgk(HttpServletRequest request,
+                                               @RequestParam("file") MultipartFile file,
+                                               @PathVariable("applicationId") int applicationId) {
+        try {
+            String token = request.getHeader("Authorization");
+            OnlineUser onlineUser = userService.getOnlineUser(token);
+            if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            Staff staff = userService.getStaffUser(onlineUser.getEmail());
+            if(staff.getAuthorizationLevel()!= 2){
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            boolean result = offerService.checkIfSgkDocumentExists(applicationId);
+            if (result) {
+                return new ResponseEntity<>("SGK Document already exists", HttpStatus.BAD_REQUEST);
+            }
+
+            byte[] bytes = file.getBytes();
+            Application application = offerService.saveDocumentToTheApplication(bytes, applicationId);
+
+            if (application.getStudentId() == null) {
+                return new ResponseEntity<>("Error occured while uploading file", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("File Uploaded Successfully", HttpStatus.ACCEPTED);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error occured while uploading file", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="/announcements")
