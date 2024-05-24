@@ -4,12 +4,14 @@ public class AuthenticationRequestCompany {
     private String name;
     private String email;
     private String password;
+    private String isForeign;
 
 
-    public AuthenticationRequestCompany(String name, String email, String password) {
+    public AuthenticationRequestCompany(String isForeign,String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.isForeign = isForeign;
     }
 
     public AuthenticationRequestCompany() {
@@ -39,5 +41,11 @@ public class AuthenticationRequestCompany {
         this.password = password;
     }
 
-    // getters and setters
+    public String getIsForeign() {
+        return isForeign;
+    }
+
+    public void setIsForeign(String isForeign) {
+        this.isForeign = isForeign;
+    }
 }

@@ -28,13 +28,23 @@ public class MailUtil {
         mailSender.send(message);
     }
 
-    public void sendInternshipApplicationMail(String to, String studentName, String companyName, String offerName){
-        String subject = "Internship Application";
+    public void sendOfferAcceptedMailToTheCompany(String to, String companyName, String offerName){
+        String subject = "Internship Offer Accepted";
         String body = "Dear " + companyName + ",\n\n" +
-                "A new application has been submitted by " + studentName + " for the " + offerName + " internship.\n\n" +
-                "Please log in to the portal to view the application.\n\n" +
+                "Your offer " + offerName + " has been accepted.\n\n" +
+                "Please log in to the website to view the application.\n\n" +
                 "Best regards,\n" +
-                "Internship Portal";
+                "IZTECH Ceng Internship System";
+        sendMail(to, subject, body);
+    }
+
+    public void sendOfferRejectedMailToTheCompany(String to, String companyName, String offerName){
+        String subject = "Internship Offer Rejected";
+        String body = "Dear " + companyName + ",\n\n" +
+                "Your offer " + offerName + " has been rejected.\n\n" +
+                "Please log in to the website to view the application.\n\n" +
+                "Best regards,\n" +
+                "IZTECH Ceng Internship System";
         sendMail(to, subject, body);
     }
 

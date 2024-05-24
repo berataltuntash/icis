@@ -56,7 +56,7 @@ public class OfferController {
 
             offerService.createOffer(company, offerRequest.getOffername(), offerRequest.getDescription());
 
-            return new ResponseEntity<>("Offer posted", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Offer is sent for approval.", HttpStatus.ACCEPTED);
         }
         catch(Exception e){
             return new ResponseEntity<>("Error occured while creating the offer", HttpStatus.BAD_REQUEST);
@@ -298,9 +298,12 @@ public class OfferController {
             boolean result = false;
             if(isApproved){
                 result = offerService.approveOffer(offerId);
+                Offer offer = offerService.getOfferDetailsById(offerId);
                 if (result) {
+                    mailUtil.sendOfferAcceptedMailToTheCompany(offer.getCompanyId().getEmail(), offer.getCompanyId().getCompanyName(),offer.getName());
                     return new ResponseEntity<>("Offer Approved", HttpStatus.ACCEPTED);
                 } else {
+                    mailUtil.sendOfferRejectedMailToTheCompany(offer.getCompanyId().getEmail(), offer.getCompanyId().getCompanyName(),offer.getName());
                     return new ResponseEntity<>("Error occured while approving the offer", HttpStatus.BAD_REQUEST);
                 }
             }

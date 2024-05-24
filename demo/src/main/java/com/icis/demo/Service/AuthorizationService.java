@@ -183,7 +183,7 @@ public class AuthorizationService {
         Company company = userService.getCompanyUser(email);
         if (company.getCompanyName() == null) {
             authResponse.setSuccess(false);
-            authResponse.setMessage("No company found with the given email.");
+            authResponse.setMessage("Email is not registered to the system.");
             return authResponse;
         }
 
@@ -293,5 +293,9 @@ public class AuthorizationService {
             throw new RuntimeException(e);
         }
         userService.changePassword(email, encryptedPassword);
+    }
+
+    public boolean ifUserExists(String email){
+        return userService.existsByEmail(email);
     }
 }

@@ -5,6 +5,7 @@ import com.icis.demo.RequestEntities.*;
 import com.icis.demo.ResponseEntities.AccessResponse;
 import com.icis.demo.ResponseEntities.LoginResponse;
 import com.icis.demo.Service.AuthorizationService;
+import com.icis.demo.Service.UserService;
 import com.icis.demo.System.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class SessionController {
     private final AuthorizationService authorizationService;
+    private final UserService userService;
 
     @Autowired
-    public SessionController(AuthorizationService authorizationService) {
+    public SessionController(AuthorizationService authorizationService, UserService userService) {
         this.authorizationService = authorizationService;
+        this.userService = userService;
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
@@ -87,7 +90,7 @@ public class SessionController {
         String name = request.getName();
         String email = request.getEmail();
         String password = request.getPassword();
-        boolean isForeign = false;
+        boolean isForeign = Boolean.parseBoolean(request.getIsForeign());
 
         result = authorizationService.isAuthorizedSignUpCompany(name, email, isForeign, password);
 
@@ -102,6 +105,12 @@ public class SessionController {
     @PostMapping(path="/resetpassword",consumes = "application/json")
     public ResponseEntity<?> hndResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
         String email = resetPasswordRequest.getEmail();
+
+        boolean emailExist = authorizationService.ifUserExists(email);
+        if (!emailExist) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is incorrect.");
+        }
+
         int codeFromEmail = resetPasswordRequest.getEmailCode();
         String password = resetPasswordRequest.getPassword();
 
@@ -144,18 +153,22 @@ public class SessionController {
         }
 
         String email = result.getEmail();
+        String name = "";
 
         if(email.endsWith("@std.iyte.edu.tr")){
             userType = "Student";
+            name = userService.getStudentUser(email).getName() + " " + userService.getStudentUser(email).getSurname();
         }
         else if(email.endsWith("@iyte.edu.tr")){
             userType = "Staff";
+            name = userService.getStaffUser(email).getName() + " " + userService.getStaffUser(email).getSurname();
         }
         else{
             userType = "Company";
+            name = userService.getCompanyUser(email).getCompanyName();
         }
 
-        AccessResponse accessResponse = new AccessResponse(userType,email.substring(0, email.indexOf("@")));
+        AccessResponse accessResponse = new AccessResponse(userType, name);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(accessResponse);
     }
 }
