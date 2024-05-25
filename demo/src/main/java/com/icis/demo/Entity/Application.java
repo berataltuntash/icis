@@ -20,12 +20,16 @@ public class Application {
     @Lob
     @Column(name = "sgk_document")
     private byte[] sgkDocument;
+    @Lob
+    @Column(name = "application_form")
+    private byte[] applicationForm;
 
-    public Application(String status, Offer offer, Student studentId, byte[] sgkDocument) {
+    public Application(String status, Offer offer, Student studentId, byte[] sgkDocument, byte[] applicationForm) {
         this.status = status;
         this.offer = offer;
         this.studentId = studentId;
         this.sgkDocument = sgkDocument;
+        this.applicationForm = applicationForm;
     }
 
     public Application() {
@@ -69,5 +73,13 @@ public class Application {
 
     public void setSgkDocument(byte[] sgkDocument) {
         this.sgkDocument = sgkDocument;
+    }
+
+    public byte[] getApplicationForm() {
+        return applicationForm;
+    }
+
+    public void setApplicationForm(byte[] applicationForm) {
+        this.applicationForm = applicationForm;
     }
 }

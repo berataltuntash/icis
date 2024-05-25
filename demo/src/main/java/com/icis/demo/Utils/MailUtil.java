@@ -1,5 +1,6 @@
 package com.icis.demo.Utils;
 
+import com.icis.demo.Entity.Application;
 import com.icis.demo.Entity.Company;
 import com.icis.demo.Entity.Student;
 import jakarta.mail.MessagingException;
@@ -28,6 +29,26 @@ public class MailUtil {
         mailSender.send(message);
     }
 
+    public void sendCompanyVerificationMail(String to, String companyName) {
+        String subject = "Company Verification";
+        String body = "Dear " + companyName + ",\n\n" +
+                "Your company has been verified by the system.\n\n" +
+                "Please log in to the website to view the application.\n\n" +
+                "Best regards,\n" +
+                "IZTECH Ceng Internship System";
+        sendMail(to, subject, body);
+    }
+
+    public void sendCompanyRejectionMail(String to, String companyName) {
+        String subject = "Company Rejection";
+        String body = "Dear " + companyName + ",\n\n" +
+                "Your company has been rejected by the system.\n\n" +
+                "Please log in to the website to view the application.\n\n" +
+                "Best regards,\n" +
+                "IZTECH Ceng Internship System";
+        sendMail(to, subject, body);
+    }
+
     public void sendOfferAcceptedMailToTheCompany(String to, String companyName, String offerName){
         String subject = "Internship Offer Accepted";
         String body = "Dear " + companyName + ",\n\n" +
@@ -42,6 +63,22 @@ public class MailUtil {
         String subject = "Internship Offer Rejected";
         String body = "Dear " + companyName + ",\n\n" +
                 "Your offer " + offerName + " has been rejected.\n\n" +
+                "Please log in to the website to view the application.\n\n" +
+                "Best regards,\n" +
+                "IZTECH Ceng Internship System";
+        sendMail(to, subject, body);
+    }
+
+    public void sendStudentIsRejectedTheOfferToCompany(Application application){
+        String to = application.getOffer().getCompanyId().getEmail();
+        String companyName = application.getOffer().getCompanyId().getCompanyName();
+        String studentName = application.getStudentId().getName();
+        String studentSurname = application.getStudentId().getSurname();
+        String offerName = application.getOffer().getName();
+
+        String subject = "Internship Offer Rejected";
+        String body = "Dear " + companyName + ",\n\n" +
+                studentName + " " + studentSurname + " has rejected your offer " + offerName + ".\n\n" +
                 "Please log in to the website to view the application.\n\n" +
                 "Best regards,\n" +
                 "IZTECH Ceng Internship System";
