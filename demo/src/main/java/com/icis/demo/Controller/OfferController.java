@@ -200,6 +200,11 @@ public class OfferController {
                 return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
             }
 
+            Staff staff = userService.getStaffUser(onlineUser.getEmail());
+            if (staff.getAuthorizationLevel() != 1) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
             boolean isApproved = Boolean.parseBoolean(request.getHeader("isApprove"));
             boolean result = false;
             Company company = userService.getCompanyUser(onlineUser.getEmail());
@@ -288,6 +293,11 @@ public class OfferController {
             OnlineUser onlineUser = userService.getOnlineUser(token);
 
             if (onlineUser == null) {
+                return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
+            }
+
+            Staff staff = userService.getStaffUser(onlineUser.getEmail());
+            if (staff.getAuthorizationLevel() != 1) {
                 return new ResponseEntity<>("Unauthorized Access", HttpStatus.BAD_REQUEST);
             }
 
